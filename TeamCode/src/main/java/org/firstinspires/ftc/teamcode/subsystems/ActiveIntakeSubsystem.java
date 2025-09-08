@@ -11,38 +11,36 @@ import Ori.Coval.Logging.AutoLog;
 
 @Config
 @AutoLog
-public class ShooterSubsystem extends VelocityPidSubsystem {
+public class ActiveIntakeSubsystem extends VelocityPidSubsystem {
 
     //TODO: generic values
 
-    public static double KP = 1;
-    public static double KI = 0.0;
-    public static double KD = 0.0;
+    public static double KP = 0.09;
+    public static double KI = 0.001;
+    public static double KD = 0.002;
 
-    public static double KS = 0.0;
-    public static double KV = 0.0;
-    public static double KA = 0.0;
+    public static double KS = 0.045;
+    public static double KV = 0.047;
+    public static double KA = 0.1;
 
-    public static double VelTol = 0.0;
+    public static double VelTol = 2;
 
-    public static ShooterSubsystemAutoLogged instance;
+    public static ActiveIntakeSubsystemAutoLogged instance;
 
-    public static synchronized ShooterSubsystemAutoLogged getInstance() {
+    public static synchronized ActiveIntakeSubsystemAutoLogged getInstance() {
         if (instance == null) {
-            instance = new ShooterSubsystemAutoLogged("ShooterSubsystem");
+            instance = new ActiveIntakeSubsystemAutoLogged("ActiveIntakeSubsystem");
         }
         return instance;
     }
 
-    public ShooterSubsystem(String subsystemName) {
+    public ActiveIntakeSubsystem(String subsystemName) {
         super(subsystemName);
-
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.expansionHub,1, Direction.REVERSE);
-        withMotor(mmRobot.expansionHub,0, Direction.FORWARD);
+        withMotor(mmRobot.controlHub,3, Direction.FORWARD);
 
-        withEncoder(mmRobot.expansionHub,1,100,Direction.FORWARD);
+        withEncoder(mmRobot.controlHub,2,100,Direction.REVERSE);
 
         withPid(KP,KI,KD);
 
@@ -67,5 +65,4 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         );
 
     }
-
 }
