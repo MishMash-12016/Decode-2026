@@ -18,10 +18,10 @@ import Ori.Coval.Logging.AutoLog;
 @TeleOp
 @Config
 @AutoLog
-public class TestOpMode extends MMOpMode {
+public class TestOpModeDriveOnly extends MMOpMode {
 
-    public TestOpMode() {
-            super(OpModeType.NonCompetition.DEBUG);
+    public TestOpModeDriveOnly() {
+        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
     }
 
     @Override
@@ -31,12 +31,6 @@ public class TestOpMode extends MMOpMode {
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 new InstantCommand(() -> MMDrivetrain.getInstance().follower.getPose().getHeading())
         );
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(1));
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(-1));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(  );
-
     }
 
     @Override
@@ -46,16 +40,11 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onPlay() {
-
     }
-
     @Override
     public void onPlayLoop() {
-
     }
-
     @Override
     public void onEnd() {
-
     }
 }
