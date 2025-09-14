@@ -38,15 +38,16 @@ public class Constants {
             .leftRearMotorName("bl")
             .rightFrontMotorName("fr")
             .rightRearMotorName("br")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
             .xVelocity(73)
             .yVelocity(56);
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
-            .forwardPodY(57 / 2.54)
+            //           mm
+            .forwardPodY(66 / 2.54)
             .strafePodX(25  / 2.54)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
