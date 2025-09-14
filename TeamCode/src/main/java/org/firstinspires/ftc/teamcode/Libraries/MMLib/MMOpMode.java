@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceSide;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,13 +76,13 @@ public abstract class MMOpMode extends LinearOpMode {
             MMRobot.getInstance().expansionHub.pullBulkData();  //updates the expansionHub sensors
         }
 
-        MMDrivetrain.getInstance().update();
-
         telemetry.update();                                       //updates the telemetry
 
         FtcDashboard.getInstance().getTelemetry().update();       //updates the dashboard
 
         AutoLogManager.periodic();
+
+        //MMDrivetrain.getInstance().update();
     }
 
     public abstract void onPlayLoop();
@@ -93,6 +94,7 @@ public abstract class MMOpMode extends LinearOpMode {
      */
     public void reset() {
         CommandScheduler.getInstance().cancelAll();
+        TurretSubsystem.instance = null; //todo remove
     }
 
     public void addRunnableOnInit(Runnable... runOnInit) {

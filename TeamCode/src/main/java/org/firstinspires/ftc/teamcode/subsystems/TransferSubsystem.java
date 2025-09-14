@@ -14,7 +14,6 @@ import Ori.Coval.Logging.AutoLog;
 public class TransferSubsystem extends VelocityPidSubsystem {
 
     //TODO: generic values
-
     public static double KP = 0.09;
     public static double KI = 0.08;
     public static double KD = 0.006;
@@ -38,7 +37,10 @@ public class TransferSubsystem extends VelocityPidSubsystem {
 
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.controlHub,1, Direction.REVERSE);
+        //TODO: Ports Not Correct
+
+        withCrServo(mmRobot.controlHub, 2,Direction.FORWARD);
+        withCrServo(mmRobot.controlHub, 3,Direction.FORWARD);
 
         withEncoder(mmRobot.controlHub,7,100,Direction.FORWARD);
 

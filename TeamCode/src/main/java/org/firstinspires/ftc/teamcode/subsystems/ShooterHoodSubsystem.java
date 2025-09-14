@@ -1,12 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.seattlesolvers.solverslib.hardware.motors.CRServo;
 
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Position.PositionPidSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Servo.ServoSubsystem;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
@@ -21,9 +17,6 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
     public static double hoodUp = 0.09;
     public static double hoodDown = 0.001;
 
-    public static double KP = 0.09;
-    public static double KI = 0.001;
-    public static double KD = 0.002;
 
     public static double POSITION_TOLERANCE = 1;
 

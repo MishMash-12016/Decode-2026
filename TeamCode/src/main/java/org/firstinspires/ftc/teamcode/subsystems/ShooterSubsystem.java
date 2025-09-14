@@ -14,7 +14,6 @@ import Ori.Coval.Logging.AutoLog;
 public class ShooterSubsystem extends VelocityPidSubsystem {
 
     //TODO: generic values
-
     public static double KP = 1;
     public static double KI = 0.0;
     public static double KD = 0.0;
@@ -39,10 +38,12 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
 
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.expansionHub,1, Direction.REVERSE);
-        withMotor(mmRobot.expansionHub,0, Direction.FORWARD);
+        //TODO: Ports Not Correct
 
-        withEncoder(mmRobot.expansionHub,1,100,Direction.FORWARD);
+        withMotor(mmRobot.controlHub,1, Direction.REVERSE);
+        withMotor(mmRobot.controlHub,0, Direction.FORWARD);
+
+        withEncoder(mmRobot.controlHub,1,100,Direction.FORWARD);
 
         withPid(KP,KI,KD);
 
