@@ -75,7 +75,7 @@ public abstract class MMOpMode extends LinearOpMode {
             MMRobot.getInstance().expansionHub.pullBulkData();  //updates the expansionHub sensors
         }
 
-        MMDrivetrain.getInstance().update();
+//        MMDrivetrain.getInstance().update();
 
         telemetry.update();                                       //updates the telemetry
 
