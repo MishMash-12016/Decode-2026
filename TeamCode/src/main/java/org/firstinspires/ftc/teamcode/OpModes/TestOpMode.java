@@ -41,11 +41,11 @@ public class TestOpMode extends MMOpMode {
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
 //        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(TurretSubsystem.getInstance().getToSetpointCommand());
 
-        TurretSubsystem.getInstance().withSetDefaultCommand(
-                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(
-                        () -> MMRobot.getInstance().gamepadEx1.getLeftY() * 180
-                )
-        );
+//        TurretSubsystem.getInstance().withSetDefaultCommand();
+//                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(
+//                        () -> MMRobot.getInstance().gamepadEx1.getLeftY() * 180
+//                )
+//        );
 
 //        ShooterHoodSubsystem.getInstance().withDefaultCommand(ShooterHoodSubsystem.getInstance().setPositionCommand(
 //                () -> Math.abs(MMRobot.getInstance().gamepadEx1.getRightY())));
@@ -63,8 +63,8 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("encoder", TurretSubsystem.getInstance().getPose());
-        telemetry.addData("serosPower", TurretSubsystem.getInstance().getPower());
+//        telemetry.addData("encoder", TurretSubsystem.getInstance().getPose());
+//        telemetry.addData("serosPower", TurretSubsystem.getInstance().getPower());
     }
 
     @Override
