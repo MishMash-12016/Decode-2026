@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import java.util.List;
 @TeleOp
 @Config
-public class AprilTagOpMode extends MMOpMode {
-    public AprilTagOpMode() {
+public class LimelightOpMode extends MMOpMode {
+    public LimelightOpMode() {
         super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
     }
     private Limelight3A limelight3A;
