@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Position.PositionPidSubsystem;
@@ -10,7 +9,7 @@ import Ori.Coval.Logging.AutoLog;
 
 @Config
 @AutoLog
-public class TurretSubsystem extends PositionPidSubsystem {
+public class SpindexerSubsystem extends PositionPidSubsystem {
 
     //TODO: generic values
     public static double KP = 1;
@@ -20,25 +19,25 @@ public class TurretSubsystem extends PositionPidSubsystem {
     public static double POSITION_TOLERANCE = 0.05;
     public static double VELOCITY_TOLERANCE = 0.0;
 
+    //ToDo: adjust ratio
     public static double RATIO = 3.30 / 1;
     public static double RESOLUTION = 8192;
 
 
     // Singleton instance
-    public static TurretSubsystemAutoLogged instance;
+    public static SpindexerSubsystem instance;
 
     /**
      * Get the singleton instance of ElevatorSubsystem.
      */
-    public static synchronized TurretSubsystemAutoLogged getInstance() {
+    public static synchronized SpindexerSubsystem getInstance() {
         if (instance == null) {
-            instance = new TurretSubsystemAutoLogged("SpindexerSubsystem");
+            instance = new SpindexerSubsystemAutoLogged("SpindexerSubsystem");
         }
         return instance;
     }
 
-
-    public TurretSubsystem(String subsystemName) {
+    public SpindexerSubsystem(String subsystemName) {
         super(subsystemName);
 
         MMRobot mmRobot = MMRobot.getInstance();

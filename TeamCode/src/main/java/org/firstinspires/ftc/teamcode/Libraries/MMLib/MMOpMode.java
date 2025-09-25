@@ -11,13 +11,12 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceSide;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.AutoLogManager;
 import Ori.Coval.Logging.Logger.KoalaLog;
 
@@ -94,7 +93,7 @@ public abstract class MMOpMode extends LinearOpMode {
      */
     public void reset() {
         CommandScheduler.getInstance().cancelAll();
-        TurretSubsystem.instance = null; //todo remove
+        SpindexerSubsystem.instance = null; //todo remove
     }
 
     public void addRunnableOnInit(Runnable... runOnInit) {
