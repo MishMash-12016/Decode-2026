@@ -1,27 +1,27 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 
-@Autonomous
-public class PedroAutoSample extends MMOpMode {
-    private Follower follower;
-//    TelemetryData telemetryData = new TelemetryData(telemetry);
+import Ori.Coval.Logging.AutoLog;
 
-    // Poses
+@AutoLog
+@Autonomous
+@Config
+public class TestAutoOpMode extends MMOpMode {
+    private Follower follower;
     private final Pose startPose = new Pose(9, 111, Math.toRadians(-90));
     private final Pose scorePose = new Pose(16, 128, Math.toRadians(-45));
     private final Pose pickup1Pose = new Pose(30, 121, Math.toRadians(0));
@@ -33,12 +33,8 @@ public class PedroAutoSample extends MMOpMode {
     private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3;
     private PathChain scorePickup1, scorePickup2, scorePickup3, park;
 
-    /**
-     * use this to choose a {@link OpModeType.NonCompetition NonComp} opmode.
-     *
-     */
-    public PedroAutoSample() {
-        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
+    public TestAutoOpMode() {
+        super(OpModeType.NonCompetition.DEBUG);
     }
 
     public void buildPaths() {
@@ -87,70 +83,26 @@ public class PedroAutoSample extends MMOpMode {
                 .build();
     }
 
-    // Mechanism commands - replace these with your actual subsystem commands
-    private InstantCommand openOuttakeClaw() {
-        return new InstantCommand(() -> {
-            // Example: outtakeSubsystem.openClaw();
-        });
-    }
-
-    private InstantCommand grabSample() {
-        return new InstantCommand(() -> {
-            // Example: intakeSubsystem.grabSample();
-        });
-    }
-
-    private InstantCommand scoreSample() {
-        return new InstantCommand(() -> {
-            // Example: outtakeSubsystem.scoreSample();
-        });
-    }
-
-    private InstantCommand level1Ascent() {
-        return new InstantCommand(() -> {
-            // Example: hangSubsystem.level1Ascent();
-        });
-    }
-
     @Override
     public void onInit() {
         super.reset();
 
-        // Initialize follower
         follower = MMDrivetrain.getInstance().getFollower();
         follower.setStartingPose(startPose);
         buildPaths();
 
-        // Create the autonomous command sequence
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 // Score preload
                 new FollowPathCommand(follower, scorePreload),
-                openOuttakeClaw(),
                 new WaitCommand(1000), // Wait 1 second
-
-                // First pickup cycle
-                new FollowPathCommand(follower, grabPickup1).setGlobalMaxPower(0.5), // Sets globalMaxPower to 50% for all future paths
-                // (unless a custom maxPower is given)
-                grabSample(),
+                new FollowPathCommand(follower, grabPickup1).setGlobalMaxPower(0.5),
                 new FollowPathCommand(follower, scorePickup1),
-                scoreSample(),
-
-                // Second pickup cycle
                 new FollowPathCommand(follower, grabPickup2),
-                grabSample(),
-                new FollowPathCommand(follower, scorePickup2, 1.0), // Overrides maxPower to 100% for this path only
-                scoreSample(),
-
-                // Third pickup cycle
+                new FollowPathCommand(follower, scorePickup2, 1.0),
                 new FollowPathCommand(follower, grabPickup3),
-                grabSample(),
                 new FollowPathCommand(follower, scorePickup3),
-                scoreSample(),
-
-                // Park
-                new FollowPathCommand(follower, park, false), // park with holdEnd false
-                level1Ascent()
-        );
+                new FollowPathCommand(follower, park, false)
+                );
 
         // Schedule the autonomous sequence
         autonomousSequence.schedule();
