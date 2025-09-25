@@ -2,16 +2,24 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.RunCommand;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
+
+import java.util.function.DoubleSupplier;
 
 import Ori.Coval.Logging.AutoLog;
 
 @Config
 @AutoLog
 public class ShooterSubsystem extends VelocityPidSubsystem {
+
+    ExterpolationMap exterpolationMap = new ExterpolationMap()
+            .put(1,6);
 
     //TODO: generic values
     public static double KP = 1;
@@ -69,4 +77,9 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
 
     }
 
+    public Command aimSpeedToShut(DoubleSupplier distance) {
+        return getToSetpointCommand(
+                ()-> exterpolationMap.exterpolate(distance.getAsDouble()));
+    }
 }
+
