@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -33,13 +34,13 @@ public class TestOpMode extends MMOpMode {
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(1));
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(TurretSubsystem.getInstance().getToSetpointCommand());
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(SpindexerSubsystem.getInstance().getToSetpointCommand());
 
-//        TurretSubsystem.getInstance().withSetDefaultCommand();
-//                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(
-//                        () -> MMRobot.getInstance().gamepadEx1.getLeftY() * 180
-//                )
-//        );
+        SpindexerSubsystem.getInstance().withSetDefaultCommand(
+                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(
+                        () -> MMRobot.getInstance().gamepadEx1.getLeftY() * 180
+                )
+        );
 
 //        ShooterHoodSubsystem.getInstance().withDefaultCommand(ShooterHoodSubsystem.getInstance().setPositionCommand(
 //                () -> Math.abs(MMRobot.getInstance().gamepadEx1.getRightY())));
@@ -57,8 +58,8 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-//        telemetry.addData("encoder", TurretSubsystem.getInstance().getPose());
-//        telemetry.addData("serosPower", TurretSubsystem.getInstance().getPower());
+        telemetry.addData("encoder", SpindexerSubsystem.getInstance().getPose());
+        telemetry.addData("serosPower", SpindexerSubsystem.getInstance().getPower());
     }
 
     @Override
