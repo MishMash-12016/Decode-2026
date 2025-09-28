@@ -35,7 +35,7 @@ public class Lamlam extends MMOpMode {
         MMDrivetrain.getInstance().setPose(0, 0, Math.toRadians(0));
         KoalaLog.setup(hardwareMap);
 
-//        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05);
 
         //The camera intake:
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
