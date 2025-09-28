@@ -33,6 +33,10 @@ public class MMDrivetrain extends MMSubsystem {
         if (instance == null) {
             instance = new MMDrivetrain();
         }
+
+        if (follower == null){
+            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
+        }
         return instance;
     }
 
