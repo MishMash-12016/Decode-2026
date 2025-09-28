@@ -16,6 +16,10 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.AutoLogOutput;
+
+@AutoLog
 public class WebcamSubsystem extends SubsystemBase {
 
     private Position cameraPosition = new Position(DistanceUnit.INCH,
@@ -24,11 +28,14 @@ public class WebcamSubsystem extends SubsystemBase {
             0, -90, 0, 0);
 
     private AprilTagProcessor aprilTag;
-    private VisionPortal visionPortal;
+    public VisionPortal visionPortal;
     private double distance = 0;
     private double angle = 0;
+    public WebcamSubsystem(){
+        initAprilTag();
+    }
 
-    private void update(){
+    public void update(){
             for (AprilTagDetection detection : aprilTag.getDetections()) {
                 distance = detection.ftcPose.range;
                 angle = detection.ftcPose.bearing;
@@ -38,10 +45,9 @@ public class WebcamSubsystem extends SubsystemBase {
 
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
-
-                //.setDrawAxes(false)
-                //.setDrawCubeProjection(false)
-                //.setDrawTagOutline(true)
+                .setDrawAxes(true)
+                .setDrawCubeProjection(true)
+                .setDrawTagOutline(true)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
                 .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
                 .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
@@ -57,7 +63,7 @@ public class WebcamSubsystem extends SubsystemBase {
 
         builder.setCameraResolution(new Size(640, 480));
         builder.enableLiveView(true);
-        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+        builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
 
         builder.setAutoStopLiveView(false);
 
@@ -65,13 +71,22 @@ public class WebcamSubsystem extends SubsystemBase {
 
         visionPortal = builder.build();
         visionPortal.setProcessorEnabled(aprilTag, true);
-
+        visionPortal.resumeStreaming();
+        visionPortal.resumeLiveView();
     }
 
+    @Override
+    public void periodic() {
+        super.periodic();
+        update();
+    }
+
+    @AutoLogOutput
     public double getDistance() {
         return distance;
     }
 
+    @AutoLogOutput
     public double getAngle() {
         return angle;
     }
