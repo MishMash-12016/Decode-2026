@@ -22,19 +22,19 @@ import Ori.Coval.Logging.AutoLog;
 @Config
 public class TestAutoOpMode extends MMOpMode {
     private Follower follower;
-    private final Pose startPose = new Pose(9, 111, Math.toRadians(-90));
-    private final Pose scorePose = new Pose(16, 128, Math.toRadians(-45));
-    private final Pose pickup1Pose = new Pose(30, 121, Math.toRadians(0));
-    private final Pose pickup2Pose = new Pose(30, 131, Math.toRadians(0));
-    private final Pose pickup3Pose = new Pose(45, 128, Math.toRadians(90));
-    private final Pose parkPose = new Pose(68, 96, Math.toRadians(-90));
+    private final Pose startPose = new Pose(9, 40, Math.toRadians(-90));
+    private final Pose scorePose = new Pose(40, 50, Math.toRadians(-45));
+    private final Pose pickup1Pose = new Pose(30, 10, Math.toRadians(0));
+    private final Pose pickup2Pose = new Pose(30, 20, Math.toRadians(0));
+    private final Pose pickup3Pose = new Pose(45, 30, Math.toRadians(90));
+    private final Pose parkPose = new Pose(68, 10, Math.toRadians(-90));
 
     // Path chains
     private PathChain scorePreload, grabPickup1, grabPickup2, grabPickup3;
     private PathChain scorePickup1, scorePickup2, scorePickup3, park;
 
     public TestAutoOpMode() {
-        super(OpModeType.NonCompetition.DEBUG);
+        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
     }
 
     public void buildPaths() {
@@ -88,7 +88,7 @@ public class TestAutoOpMode extends MMOpMode {
         super.reset();
 
         follower = MMDrivetrain.getInstance().getFollower();
-        follower.setStartingPose(startPose);
+        follower.setPose(startPose);
         buildPaths();
 
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
@@ -112,5 +112,6 @@ public class TestAutoOpMode extends MMOpMode {
     public void onPlayLoop() {
         MMDrivetrain.getInstance().update();
     }
+
 
 }
