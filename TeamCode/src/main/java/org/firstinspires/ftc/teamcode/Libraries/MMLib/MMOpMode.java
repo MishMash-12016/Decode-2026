@@ -81,8 +81,7 @@ public abstract class MMOpMode extends LinearOpMode {
 
         AutoLogManager.periodic();
 
-        MMDrivetrain.getInstance().update();
-        //TODO:only update if drive is used
+        MMDrivetrain.update();
     }
 
     public abstract void onPlayLoop();

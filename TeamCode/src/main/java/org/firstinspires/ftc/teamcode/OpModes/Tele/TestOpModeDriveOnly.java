@@ -26,7 +26,7 @@ public class TestOpModeDriveOnly extends MMOpMode {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05);
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
-                new InstantCommand(() -> MMDrivetrain.getInstance().follower.getPose().getHeading())
+                new InstantCommand(() -> MMDrivetrain.getInstance().getFollower().getPose().getHeading())
         );
     }
 

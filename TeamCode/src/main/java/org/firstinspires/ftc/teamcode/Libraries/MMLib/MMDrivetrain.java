@@ -27,7 +27,7 @@ public class MMDrivetrain extends MMSubsystem {
 
     @IgnoreConfigurable
     private static MMDrivetrain instance;
-    public static Follower follower;
+    private static Follower follower;
 
     public static synchronized MMDrivetrain getInstance() {
         if (instance == null) {
@@ -47,7 +47,7 @@ public class MMDrivetrain extends MMSubsystem {
         return follower;
     }
 
-    public void update() {
+    public static void update() {
         if (instance != null) {
             follower.update();             //updates the follower
             Drawing.drawDebug(follower);
