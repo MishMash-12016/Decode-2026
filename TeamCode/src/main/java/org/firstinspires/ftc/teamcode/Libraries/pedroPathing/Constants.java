@@ -45,7 +45,7 @@ public class Constants {
             .xVelocity(73)
             .yVelocity(56);
 
-    public static PinpointConstants localizerConstants = new PinpointConstants()
+    public static PinpointVisionConstants localizerConstants = new PinpointVisionConstants()
             .forwardPodY(-10 / 2.54)
             .strafePodX(0)
             .distanceUnit(DistanceUnit.INCH)
@@ -53,7 +53,9 @@ public class Constants {
             .yawScalar(1.0)
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .odometryStdDevs(0.05, 0.05, 0.02)
+            .visionMeasurementStdDevs(0.5, 0.5, 0.2);
 
     public static PathConstraints pathConstraints = new PathConstraints(
             0.995,
@@ -65,7 +67,7 @@ public class Constants {
     public static Follower createFollower(HardwareMap hardwareMap) {
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
-                .pinpointLocalizer(localizerConstants)
+                .setLocalizer(new PinpointVisionLocalizer(hardwareMap, localizerConstants))
                 .pathConstraints(pathConstraints)
                 .build();
     }
