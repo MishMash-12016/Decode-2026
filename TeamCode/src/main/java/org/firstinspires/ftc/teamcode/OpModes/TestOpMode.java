@@ -38,7 +38,7 @@ public class TestOpMode extends MMOpMode {
 
         SpindexerSubsystem.getInstance().withSetDefaultCommand(
                 SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(
-                        () -> MMRobot.getInstance().gamepadEx1.getLeftY() * 180
+                        () -> MMRobot.getInstance().gamepadEx1.getLeftY()
                 )
         );
 

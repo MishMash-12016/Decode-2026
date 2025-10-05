@@ -11,37 +11,35 @@ import Ori.Coval.Logging.AutoLog;
 
 @Config
 @AutoLog
-public class ActiveIntakeSubsystem extends VelocityPidSubsystem {
+public class IntakeSubsystem extends VelocityPidSubsystem {
 
     //TODO: generic values
 
-    public static double KP = 0.09;
-    public static double KI = 0.001;
-    public static double KD = 0.002;
+    public static double KP = 1;
+    public static double KI = 0.0;
+    public static double KD = 0.0;
 
-    public static double KS = 0.045;
-    public static double KV = 0.047;
-    public static double KA = 0.1;
+    public static double KS = 0.0;
+    public static double KV = 0.0;
+    public static double KA = 0.0;
 
     public static double VelTol = 2;
 
-    public static ActiveIntakeSubsystemAutoLogged instance;
+    public static IntakeSubsystemAutoLogged instance;
 
-    public static synchronized ActiveIntakeSubsystemAutoLogged getInstance() {
+    public static synchronized IntakeSubsystemAutoLogged getInstance() {
         if (instance == null) {
-            instance = new ActiveIntakeSubsystemAutoLogged("ActiveIntakeSubsystem");
+            instance = new IntakeSubsystemAutoLogged("IntakeSubsystem");
         }
         return instance;
     }
 
-    public ActiveIntakeSubsystem(String subsystemName) {
+    public IntakeSubsystem(String subsystemName) {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.controlHub,3, Direction.FORWARD);
-
-        withEncoder(mmRobot.controlHub,2,100,Direction.REVERSE);
-
+        withMotor(mmRobot.expansionHub,2, Direction.FORWARD);
+        withEncoder(mmRobot.expansionHub,0,0,Direction.FORWARD);
         withPid(KP,KI,KD);
 
         withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

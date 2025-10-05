@@ -49,9 +49,8 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
 
         withEncoder(mmRobot.controlHub,3,(RESOLUTION*RATIO)/360, Direction.REVERSE);
 
-        withCrServo(mmRobot.controlHub, 2,Direction.FORWARD);
-//        withCrServo(mmRobot.controlHub, 1,Direction.FORWARD);
-
+        withCrServo(mmRobot.controlHub, 0,Direction.FORWARD);
+        withCrServo(mmRobot.controlHub, 1,Direction.FORWARD);
 
         withPid(KP, KI, KD);
     }

@@ -33,7 +33,7 @@ public class OpModeTry extends MMOpMode {
     @Override
     public void onPlayLoop() {
         left.setPower(gamepad1.left_stick_x);
-        right.setPower(gamepad1.right_stick_x);
+        right.setPower(gamepad1.left_stick_x);
         telemetry.addData("left",gamepad1.left_stick_x);
         telemetry.addData("right",gamepad1.right_stick_x);
         telemetry.addData("encoder",encoder.getCurrentPosition());

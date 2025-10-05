@@ -40,10 +40,10 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
 
         //TODO: Ports Not Correct
 
-        withMotor(mmRobot.controlHub,1, Direction.REVERSE);
-        withMotor(mmRobot.controlHub,0, Direction.FORWARD);
+        withMotor(mmRobot.expansionHub,1, Direction.REVERSE);
+        withMotor(mmRobot.expansionHub,0, Direction.FORWARD);
 
-        withEncoder(mmRobot.controlHub,1,100,Direction.FORWARD);
+        withEncoder(mmRobot.controlHub,0,100,Direction.FORWARD);
 
         withPid(KP,KI,KD);
 
