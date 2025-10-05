@@ -21,7 +21,6 @@ import Ori.Coval.Logging.AutoLog;
 @Autonomous
 @Config
 public class TestAutoOpMode extends MMOpMode {
-    private Follower follower;
 
 
     // Path chains
@@ -33,28 +32,27 @@ public class TestAutoOpMode extends MMOpMode {
 
     public void buildPaths() {
 
-
-        path1 = follower.pathBuilder()
+        path1 = MMDrivetrain.follower.pathBuilder()
                 .addPath(new BezierLine(new Pose(56.000, 8.000), new Pose(56.000, 90.000)))
-                .setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(135))
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
                 .build();
-        path2 = follower.pathBuilder()
-                .addPath(
-                        new BezierLine(new Pose(56.000, 90.000), new Pose(30.000, 115.000)))
-                .setLinearHeadingInterpolation(Math.toRadians(135), Math.toRadians(135))
+        path2 = MMDrivetrain.follower.pathBuilder()
+                .addPath(new BezierLine(new Pose(56.000, 90.000), new Pose(30.000, 115.000)))
+                .setTangentHeadingInterpolation()
                 .build();
     }
 
 
     @Override
     public void onInit() {
-        super.reset();
-        follower.setStartingPose(new Pose(56.000, 8.000, 270));
+//        super.reset();
+        MMDrivetrain.getInstance().update();
+        MMDrivetrain.follower.setPose(new Pose(56.000, 8.000, Math.toRadians(90)));
         buildPaths();
 
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
-                new FollowPathCommand(follower, path1),
-                new FollowPathCommand(follower, path2)
+                new FollowPathCommand(MMDrivetrain.follower, path1),
+                new FollowPathCommand(MMDrivetrain.follower, path2)
                 );
 
         autonomousSequence.schedule();
