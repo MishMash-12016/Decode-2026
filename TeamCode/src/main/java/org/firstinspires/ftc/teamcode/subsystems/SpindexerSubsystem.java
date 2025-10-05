@@ -23,6 +23,10 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     public static double RATIO = 3.30 / 1;
     public static double RESOLUTION = 8192;
 
+    public static final double FIRSTPOS = 0.0;
+    public static final double SCNDPOS = 0.0;
+    public static final double THIRDPOS = 0.0;
+
 
     // Singleton instance
     public static SpindexerSubsystem instance;

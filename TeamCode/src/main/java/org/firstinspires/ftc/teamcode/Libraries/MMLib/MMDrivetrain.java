@@ -5,7 +5,6 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.RunCommand;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Constants;
@@ -17,6 +16,8 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.AutoLogPose2d;
+import Ori.Coval.Logging.Logger.KoalaLog;
 
 @AutoLog
 public class MMDrivetrain extends MMSubsystem {
@@ -27,11 +28,19 @@ public class MMDrivetrain extends MMSubsystem {
 
     @IgnoreConfigurable
     private static MMDrivetrain instance;
-    public static Follower follower;
+    private static Follower follower;
 
     public static synchronized MMDrivetrain getInstance() {
         if (instance == null) {
-            instance = new MMDrivetrain();
+            instance = new MMDrivetrainAutoLogged();
+        }
+
+        if (follower == null){
+            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
+        }
+
+        if (follower == null){
+            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
         }
         return instance;
     }
@@ -43,7 +52,7 @@ public class MMDrivetrain extends MMSubsystem {
         return follower;
     }
 
-    public void update() {
+    public static void update() {
         if (instance != null) {
             follower.update();             //updates the follower
             Drawing.drawDebug(follower);
@@ -107,6 +116,18 @@ public class MMDrivetrain extends MMSubsystem {
         Pose pose = follower.getPose();
         pose.setHeading(0);
         follower.setPose(pose);
+    }
+
+    @AutoLogPose2d
+    public double[] getAScopeTargetPose(){
+        Pose TargetPose = follower.getClosestPose().getPose();
+        return new double[]{TargetPose.getX(), TargetPose.getY(), TargetPose.getHeading()};
+    }
+
+    @AutoLogPose2d
+    public double[] getAScopePose(){
+        Pose pose = follower.getPose();
+        return new double[]{pose.getX(), pose.getY(), pose.getHeading()};
     }
 
     /**
