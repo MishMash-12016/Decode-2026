@@ -46,7 +46,7 @@ public class TestAutoOpMode extends MMOpMode {
     @Override
     public void onInit() {
 //        super.reset();
-        MMDrivetrain.getInstance().update();
+        MMDrivetrain.update();
         MMDrivetrain.follower.setPose(new Pose(56.000, 8.000, Math.toRadians(90)));
         buildPaths();
 
@@ -60,7 +60,7 @@ public class TestAutoOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.getInstance().update();
+        MMDrivetrain.update();
     }
 
 

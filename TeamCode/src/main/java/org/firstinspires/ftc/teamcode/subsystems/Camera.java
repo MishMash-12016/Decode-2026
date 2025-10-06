@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
@@ -148,10 +149,6 @@ public class Camera extends MMSubsystem {
         previousResultDetector = camera.getLatestResult();
     }
 
-    public void resetPreviousResult() {
-        previousResultDetector = null;
-    }
-
     public void trackGreen() {
         currentPipeline = 0;
         detectorPipeline = 0;
@@ -198,5 +195,7 @@ public class Camera extends MMSubsystem {
 
         KoalaLog.log("distanceX periodic",dx,true);
         KoalaLog.log("distanceY periodic",dy,true);
+        FtcDashboard.getInstance().getTelemetry().addData("distanceX periodic dash", dx);
+        FtcDashboard.getInstance().getTelemetry().addData("distanceY periodic dash", dy);
     }
 }

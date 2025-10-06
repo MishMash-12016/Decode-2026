@@ -38,11 +38,11 @@ public class CameraCommands {
                 double dx = Camera.dx + plusXdis;
                 double dy = Camera.dy + plusYdis;
 
-                MMDrivetrain dt = MMDrivetrain.getInstance();
-                dt.follower.updatePose();
-                dt.follower.update();
+                MMDrivetrain.follower.updatePose();
+                MMDrivetrain.follower.update();
+                MMDrivetrain.update();
 
-                Pose p = dt.follower.getPose();
+                Pose p = MMDrivetrain.follower.getPose();
                 double h = p.getHeading();
 
                 double dxf = dx * Math.cos(h + Math.PI/2.0) + dy * Math.cos(h);
@@ -50,6 +50,7 @@ public class CameraCommands {
 
                 double endX = p.getX() + dxf;
                 double endY = p.getY() + dyf;
+                endY *= -1;
 
                 Path path = new Path(new BezierLine(
                         new Pose(p.getX(), p.getY()),
@@ -57,7 +58,7 @@ public class CameraCommands {
                 path.setConstantHeadingInterpolation(h);
 
                 // Schedule the actual followPath command now that we have live data
-                strafeCommand = new FollowPathCommand(MMDrivetrain.getInstance().getFollower(), path);
+                strafeCommand = new FollowPathCommand(MMDrivetrain.follower, path);
                 strafeCommand.schedule();
             }
 

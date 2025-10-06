@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 
+import org.firstinspires.ftc.teamcode.Camera.CameraCommandGroups;
 import org.firstinspires.ftc.teamcode.Camera.CameraCommands;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
@@ -31,15 +32,18 @@ public class Lamlam extends MMOpMode {
 
     @Override
     public void onInit() {
+
         Camera.getInstance().trackGreen();
+        MMDrivetrain.update();
         MMDrivetrain.getInstance().setPose(0, 0, Math.toRadians(0));
         KoalaLog.setup(hardwareMap);
+        MMDrivetrain.update();
 
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05);
 
         //The camera intake:
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                CameraCommands.StrafeToArtifact()
+                CameraCommandGroups.StrafeToArtifactCommand()
         );
 
         //Other shit:
@@ -59,7 +63,7 @@ public class Lamlam extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-
+        MMDrivetrain.update();
     }
 
     @Override
