@@ -11,12 +11,11 @@ import Ori.Coval.Logging.AutoLog;
 @AutoLog
 public class SpindexerSubsystem extends PositionPidSubsystem {
 
-    //TODO: generic values
     public static double KP = 1;
     public static double KI = 0.0;
     public static double KD = 0.0;
 
-    public static double POSITION_TOLERANCE = 0.05;
+    public static double POSITION_TOLERANCE = 0.0;
     public static double VELOCITY_TOLERANCE = 0.0;
 
     //ToDo: adjust ratio
@@ -28,12 +27,8 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     public static final double THIRDPOS = 0.0;
 
 
-    // Singleton instance
     public static SpindexerSubsystem instance;
 
-    /**
-     * Get the singleton instance of ElevatorSubsystem.
-     */
     public static synchronized SpindexerSubsystem getInstance() {
         if (instance == null) {
             instance = new SpindexerSubsystemAutoLogged("SpindexerSubsystem");

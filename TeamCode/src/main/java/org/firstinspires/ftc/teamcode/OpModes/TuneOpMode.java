@@ -3,20 +3,15 @@ package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
-import org.firstinspires.ftc.teamcode.MMRobot;
-
-import java.security.spec.EncodedKeySpec;
 
 @TeleOp
-public class OpModeTry extends MMOpMode {
+public class TuneOpMode extends MMOpMode {
 
-    public OpModeTry() {
+    public TuneOpMode() {
         super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
     }
 
@@ -32,8 +27,8 @@ public class OpModeTry extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        left.setPower(gamepad1.left_stick_x);
-        right.setPower(gamepad1.left_stick_x);
+        left.setPower(gamepad1.left_stick_x/2);
+        right.setPower(gamepad1.left_stick_x/2);
         telemetry.addData("left",gamepad1.left_stick_x);
         telemetry.addData("right",gamepad1.right_stick_x);
         telemetry.addData("encoder",encoder.getCurrentPosition());
