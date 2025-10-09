@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Position.PositionPidSubsystem;
 import org.firstinspires.ftc.teamcode.MMRobot;
@@ -23,9 +24,9 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     public static double RATIO = 3.30 / 1;
     public static double RESOLUTION = 8192;
 
-    public static final double FIRSTPOS = 0.0;
-    public static final double SCNDPOS = 0.0;
-    public static final double THIRDPOS = 0.0;
+    public static final double FIRSTPOS = 0;
+    public static final double SCNDPOS = 120;
+    public static final double THIRDPOS = 240;
 
 
     // Singleton instance
@@ -43,7 +44,6 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
 
     public SpindexerSubsystem(String subsystemName) {
         super(subsystemName);
-
         MMRobot mmRobot = MMRobot.getInstance();
         //TODO: Ports Not Correct
 
