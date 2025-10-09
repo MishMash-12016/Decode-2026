@@ -23,14 +23,10 @@ public class TuneOpMode extends MMOpMode {
 
     CRServo left;
     CRServo right;
-//    NormalizedColorSensor colorSensor;
-
     @Override
     public void onInit() {
         left = hardwareMap.get(CRServo.class,"left");
         right = hardwareMap.get(CRServo.class,"right");
-//        colorSensor = hardwareMap.get(NormalizedColorSensor.class,"pooky");
-
     }
 
     @Override
@@ -39,11 +35,6 @@ public class TuneOpMode extends MMOpMode {
         right.setPower(gamepad1.left_stick_x/2);
         telemetry.addData("left",gamepad1.left_stick_x);
         telemetry.addData("right",gamepad1.right_stick_x);
-//        telemetry.addData("encoder",encoder.getCurrentPosition());
-//        NormalizedRGBA colors = colorSensor.getNormalizedColors();
-//        telemetry.addData("red",colors.red*100);
-//        telemetry.addData("green",colors.green*100);
-//        telemetry.addData("blue",colors.blue*100);
         telemetry.update();
     }
 }

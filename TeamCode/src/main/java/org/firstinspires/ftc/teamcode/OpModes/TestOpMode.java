@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
 
+import java.util.function.BooleanSupplier;
+
 import Ori.Coval.Logging.AutoLog;
 
 @TeleOp
@@ -29,7 +31,7 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
         MMDrivetrain.getInstance().update();
 
         left = hardwareMap.get(CRServo.class,"left");
