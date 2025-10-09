@@ -134,7 +134,7 @@ public class MMDrivetrain extends MMSubsystem {
                 () -> mmRobot.gamepadEx1.getLeftY(),
                 () -> -mmRobot.gamepadEx1.getLeftX(),
                 () -> -mmRobot.gamepadEx1.getRightX(),
-                false, slowMode)
+                true, slowMode)
         );
     }
 

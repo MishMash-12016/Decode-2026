@@ -2,13 +2,18 @@ package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
+
+import java.util.function.BooleanSupplier;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -18,48 +23,45 @@ import Ori.Coval.Logging.AutoLog;
 public class TestOpMode extends MMOpMode {
 
     public TestOpMode() {
-        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
+        super(OpModeType.NonCompetition.DEBUG);
     }
+
+    CRServo left;
+    CRServo right;
 
     @Override
     public void onInit() {
-        /*
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
+        MMDrivetrain.getInstance().update();
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
-                new InstantCommand(() -> MMDrivetrain.getInstance().follower.getPose().getHeading())
-        );
+        left = hardwareMap.get(CRServo.class,"left");
+        right = hardwareMap.get(CRServo.class,"right");
 
-         */
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(IntakeSubsystem.getInstance().setPowerInstantCommand(1));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(IntakeSubsystem.getInstance().setPowerInstantCommand(0));
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(1));
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(SpindexerSubsystem.getInstance().getToSetpointCommand());
-
-        SpindexerSubsystem.getInstance().withSetDefaultCommand(
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(
-                        () -> MMRobot.getInstance().gamepadEx1.getLeftY() * 180
-                )
-        );
-
-//        ShooterHoodSubsystem.getInstance().withDefaultCommand(ShooterHoodSubsystem.getInstance().setPositionCommand(
-//                () -> Math.abs(MMRobot.getInstance().gamepadEx1.getRightY())));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(1));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
     }
 
     @Override
     public void onInitLoop() {
-//        FtcDashboard.getInstance().getTelemetry().addData("",MMDrivetrain.getInstance().);
+
     }
 
     @Override
     public void onPlay() {
 
+
     }
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("encoder", SpindexerSubsystem.getInstance().getPose());
-        telemetry.addData("serosPower", SpindexerSubsystem.getInstance().getPower());
+        MMDrivetrain.getInstance().update();
+
+        left.setPower(gamepad1.left_trigger-gamepad1.right_trigger);
+        right.setPower(gamepad1.left_trigger-gamepad1.right_trigger);
+
     }
 
     @Override
