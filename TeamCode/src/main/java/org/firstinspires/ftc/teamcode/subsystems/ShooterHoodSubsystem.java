@@ -13,12 +13,11 @@ import Ori.Coval.Logging.AutoLog;
 
 public class ShooterHoodSubsystem extends ServoSubsystem {
 
-    //TODO: generic values
-    public static double hoodUp = 0.09;
-    public static double hoodDown = 0.001;
+    public static double hoodMax = 0.65;
+    public static double hoodMin = 0.0;
 
 
-    public static double POSITION_TOLERANCE = 1;
+    public static double POSITION_TOLERANCE = 0.1;
 
     public static ShooterHoodSubsystemAutoLogged instance;
 
