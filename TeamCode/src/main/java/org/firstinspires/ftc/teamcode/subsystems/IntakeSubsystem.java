@@ -29,6 +29,6 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
 
         withMotor(mmRobot.expansionHub,2, Direction.FORWARD);
 
-        withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }

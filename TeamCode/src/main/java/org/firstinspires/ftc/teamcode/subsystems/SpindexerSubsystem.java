@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Position.PositionPidSubsystem;
@@ -12,21 +15,23 @@ import Ori.Coval.Logging.AutoLog;
 @AutoLog
 public class SpindexerSubsystem extends PositionPidSubsystem {
 
-    public static double KP = 1;
+    CuttleDigital zeroSwitch =  new CuttleDigital(MMRobot.getInstance().expansionHub, 0);
+    ColorSensor colorSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(ColorSensor.class,"spinColor");
+    // the lowest value of light without a ball in
+    public static final double ALPHA_TOLERANCE = 0.01;
+
+    public static double KP = 0.5;
     public static double KI = 0.0;
     public static double KD = 0.0;
 
-    public static double POSITION_TOLERANCE = 0.0;
-    public static double VELOCITY_TOLERANCE = 0.0;
+    public static double POSITION_TOLERANCE = 5;
 
     //ToDo: adjust ratio
-    public static double RATIO = 3.30 / 1;
     public static double RESOLUTION = 8192;
 
     public static final double FIRSTPOS = 0;
-    public static final double SCNDPOS = 120;
-    public static final double THIRDPOS = 240;
-
+    public static final double SCNDPOS = FIRSTPOS+120;
+    public static final double THIRDPOS = SCNDPOS+120;
 
     public static SpindexerSubsystem instance;
 
@@ -42,13 +47,19 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
         MMRobot mmRobot = MMRobot.getInstance();
         //TODO: Ports Not Correct
 
-        withEncoder(mmRobot.controlHub,3,(RESOLUTION*RATIO)/360, Direction.REVERSE);
+        withEncoder(mmRobot.controlHub,3,RESOLUTION/360, Direction.REVERSE);
 
         withCrServo(mmRobot.controlHub, 0,Direction.FORWARD);
         withCrServo(mmRobot.controlHub, 1,Direction.FORWARD);
 
-
+        withZeroSwitch(zeroSwitch,5);
 
         withPid(KP, KI, KD);
+    }
+    public float getAlphaColor(){
+        return colorSensor.alpha();
+    }
+    public boolean getZeroSwitch(){
+        return zeroSwitch.getState();
     }
 }
