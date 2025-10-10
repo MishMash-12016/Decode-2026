@@ -26,14 +26,15 @@ public class MainOpMode extends MMOpMode {
 
     @Override
     public void onInit() {
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(IntakeCommandGroup.FeedIntake());
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
+        MMDrivetrain.getInstance().update();
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(IntakeCommandGroup.FeedOneIntake());
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(IntakeCommandGroup.FeedIntake());
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(ShootCommandGroup.ShootAll());
     }
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("zeroSwitch",SpindexerSubsystem.getInstance().getZeroSwitch());
         telemetry.update();
     }
 }

@@ -20,17 +20,17 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     // the lowest value of light without a ball in
     public static final double ALPHA_TOLERANCE = 0.01;
 
-    public static double KP = 0.5;
+    public static double KP = 0.002;
     public static double KI = 0.0;
     public static double KD = 0.0;
 
-    public static double POSITION_TOLERANCE = 5;
+    public static double POSITION_TOLERANCE = 3.5;
 
     //ToDo: adjust ratio
     public static double RESOLUTION = 8192;
 
     public static final double FIRSTPOS = 0;
-    public static final double SCNDPOS = FIRSTPOS+120;
+    public static final double SCNDPOS = FIRSTPOS+100;
     public static final double THIRDPOS = SCNDPOS+120;
 
     public static SpindexerSubsystem instance;
@@ -52,10 +52,19 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
         withCrServo(mmRobot.controlHub, 0,Direction.FORWARD);
         withCrServo(mmRobot.controlHub, 1,Direction.FORWARD);
 
-        withZeroSwitch(zeroSwitch,5);
+        withZeroSwitch(zeroSwitch,0);
 
         withPid(KP, KI, KD);
-    }
+        withDebugPidSuppliers(
+                ()-> KP,
+                ()->KI,
+                ()->KD,
+                null,
+                null,
+                null,
+                null,
+                null
+        );    }
     public float getAlphaColor(){
         return colorSensor.alpha();
     }
