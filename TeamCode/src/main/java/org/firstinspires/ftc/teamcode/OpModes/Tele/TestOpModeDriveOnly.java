@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
 
 @TeleOp
 @Config
@@ -25,7 +27,9 @@ public class TestOpModeDriveOnly extends MMOpMode {
     public void onInit() {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05);
 
-
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
+                new InstantCommand(() -> MMDrivetrain.getInstance().resetYaw())
+        );
     }
 
     @Override
@@ -38,6 +42,9 @@ public class TestOpModeDriveOnly extends MMOpMode {
     }
     @Override
     public void onPlayLoop() {
+        FtcDashboard.getInstance().getTelemetry().addData("x", (int)MMDrivetrain.getInstance().getPose().getX());
+        FtcDashboard.getInstance().getTelemetry().addData("y", (int)MMDrivetrain.getInstance().getPose().getY());
+        FtcDashboard.getInstance().getTelemetry().addData("yaw", (int)Math.toDegrees(MMDrivetrain.getInstance().getPose().getHeading()));
     }
     @Override
     public void onEnd() {

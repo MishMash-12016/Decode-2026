@@ -28,7 +28,7 @@ public class MMDrivetrain extends MMSubsystem {
 
     @IgnoreConfigurable
     private static MMDrivetrain instance;
-    private static Follower follower;
+    public static Follower follower;
 
     public static synchronized MMDrivetrain getInstance() {
         if (instance == null) {
@@ -45,12 +45,12 @@ public class MMDrivetrain extends MMSubsystem {
         return instance;
     }
 
-    public Follower getFollower() {
-        if (instance != null) {
-            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
-        }
-        return follower;
-    }
+//    public Follower getFollower() {
+//        if (instance != null) {
+//            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
+//        }
+//        return follower;
+//    }
 
     public static void update() {
         if (instance != null) {
@@ -113,8 +113,7 @@ public class MMDrivetrain extends MMSubsystem {
     }
 
     public void resetYaw() {
-        Pose pose = follower.getPose();
-        pose.setHeading(0);
+        Pose pose = follower.getPose().setHeading(0);
         follower.setPose(pose);
     }
 
@@ -145,6 +144,9 @@ public class MMDrivetrain extends MMSubsystem {
 
     public void setPose(Pose pose) {
         follower.setPose(pose);
+    }
+    public Pose getPose() {
+        return follower.getPose();
     }
 
     public void setPose(double x, double y, double heading) {
