@@ -14,6 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystemAutoLogged;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -26,6 +28,15 @@ import Ori.Coval.Logging.AutoLogPose2d;
 @AutoLog
 public class WebcamSubsystem extends SubsystemBase {
 
+    public static WebcamSubsystem instance;
+
+    public static synchronized WebcamSubsystem getInstance() {
+        if (instance == null) {
+            instance = new WebcamSubsystemAutoLogged();
+        }
+        return instance;
+    }
+
     private Position cameraPosition = new Position(DistanceUnit.INCH,
             0, 0, 0, 0);
     private YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
@@ -33,6 +44,7 @@ public class WebcamSubsystem extends SubsystemBase {
 
     private AprilTagProcessor aprilTag;
     public VisionPortal visionPortal;
+    private int aprilTagID = 21;
     private double distance = 0;
     private double angle = 0;
     private Pose3D robotPose = new Pose3D(new Position(), new YawPitchRollAngles(AngleUnit.DEGREES, 0,0,0,0));
@@ -47,6 +59,7 @@ public class WebcamSubsystem extends SubsystemBase {
                 robotPose = detection.robotPose;
             }
     }
+
     private void initAprilTag() {
 
         // Create the AprilTag processor.
@@ -110,5 +123,13 @@ public class WebcamSubsystem extends SubsystemBase {
     @AutoLogOutput
     public double getAngle() {
         return angle;
+    }
+
+    @AutoLogOutput
+    public int getAprilTagID(){
+        for (AprilTagDetection detection : aprilTag.getDetections()){
+            aprilTagID = detection.id;
+        }
+        return aprilTagID;
     }
 }

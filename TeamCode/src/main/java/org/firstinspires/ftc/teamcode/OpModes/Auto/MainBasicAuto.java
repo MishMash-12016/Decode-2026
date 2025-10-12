@@ -5,11 +5,14 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
@@ -48,7 +51,8 @@ public class MainBasicAuto extends MMOpMode {
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 new FollowPathCommand(follower, FROM_START_TO_SCORE),
                 ShootCommandGroup.ShootAll(),
-                new FollowPathCommand(follower, FROM_SCORE_TO_PARKING)
+                new FollowPathCommand(follower, FROM_SCORE_TO_PARKING),
+                new RunCommand(()-> WebcamSubsystem.getInstance().getAprilTagID())
         );
         autonomousSequence.schedule();
     }

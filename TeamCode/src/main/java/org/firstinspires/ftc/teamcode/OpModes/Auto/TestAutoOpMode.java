@@ -63,5 +63,4 @@ public class TestAutoOpMode extends MMOpMode {
         MMDrivetrain.getInstance().update();
     }
 
-
 }
