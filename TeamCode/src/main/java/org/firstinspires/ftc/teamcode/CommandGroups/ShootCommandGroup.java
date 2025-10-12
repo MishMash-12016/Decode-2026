@@ -12,8 +12,13 @@ import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
 public class ShootCommandGroup {
     public static Command ShootAll(){
         return new SequentialCommandGroup(
-                ShooterSubsystem.  getInstance().getToAndHoldSetPointCommand(40).withTimeout(600),
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(-1),
+                ShooterSubsystem.  getInstance().getToAndHoldSetPointCommand(40).withTimeout(700),
+                new WaitCommand(1500),
+                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS),
+                new WaitCommand(800),
+                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS),
+                new WaitCommand(800),
+                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS),
                 new WaitCommand(5000),
                 ShooterSubsystem.getInstance().setPowerInstantCommand(0)
         );

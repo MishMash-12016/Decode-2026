@@ -11,23 +11,17 @@ import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
 public class IntakeCommandGroup {
     public static Command FeedIntake(){
         return new SequentialCommandGroup(
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.3),
-                new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))),
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS).withTimeout(500),
-                new WaitCommand(300),
+                SpindexerSubsystem.reset(),
+                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS).withTimeout(700),
+                new WaitCommand(500),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                new WaitUntilCommand(()->SpindexerSubsystem.getInstance().getAlphaColor()<SpindexerSubsystem.ALPHA_TOLERANCE),
+                new WaitUntilCommand(()->(20 > SpindexerSubsystem.getInstance().getDistance())),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(0),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS).withTimeout(500),
-                new WaitCommand(300),
+                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS).withTimeout(700),
+                new WaitCommand(500),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                new WaitUntilCommand(()->SpindexerSubsystem.getInstance().getAlphaColor()<SpindexerSubsystem.ALPHA_TOLERANCE),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS).withTimeout(500),
-                new WaitCommand(300),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                new WaitUntilCommand(()->SpindexerSubsystem.getInstance().getAlphaColor()<SpindexerSubsystem.ALPHA_TOLERANCE),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(0)
+                new WaitUntilCommand(()->(20 > SpindexerSubsystem.getInstance().getDistance())),
+                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS).withTimeout(700)
         );
     }
 
@@ -37,7 +31,7 @@ public class IntakeCommandGroup {
                 new WaitUntilCommand(()->SpindexerSubsystem.getInstance().getZeroSwitch()),
                 SpindexerSubsystem.getInstance().setPowerInstantCommand(0),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                new WaitUntilCommand(()->SpindexerSubsystem.getInstance().getAlphaColor()<SpindexerSubsystem.ALPHA_TOLERANCE),
+//                new WaitUntilCommand(()->SpindexerSubsystem.getInstance().getDistance()),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(0),
                 SpindexerSubsystem.getInstance().setPowerInstantCommand(0.8),
                 new WaitCommand(165)
