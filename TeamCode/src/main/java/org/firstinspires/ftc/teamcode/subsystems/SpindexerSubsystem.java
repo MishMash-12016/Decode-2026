@@ -33,6 +33,8 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     public static double KI = 0.0000001;
     public static double KD = 0.0001;
 
+    public static double IZONE = 20;
+
     public static double POSITION_TOLERANCE = 3.5;
 
     //ToDo: adjust ratio
@@ -64,12 +66,15 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
         withAngleRange(360);
 
         withPid(KP, KI, KD);
+        withIZone(IZONE);
+        withPositionTolerance(POSITION_TOLERANCE);
+
         withDebugPidSuppliers(
                 ()-> KP,
                 ()->KI,
                 ()->KD,
-                null,
-                null,
+                ()->IZONE,
+                ()->POSITION_TOLERANCE,
                 null,
                 null,
                 null
@@ -94,6 +99,5 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
                 setPosition(0),
                 setPowerInstantCommand(0)
         );
-
     }
 }

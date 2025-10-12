@@ -19,7 +19,7 @@ public class ShootCommandGroup {
             ShooterSubsystem.getInstance().setPowerRunCommand(1),
             new SequentialCommandGroup(
                     new InstantCommand(() -> SpindexerTempStartPose = SpindexerSubsystem.getInstance().getRawPose()),
-                    new WaitCommand(3000),
+                    new WaitCommand(7000),
                     SpindexerSubsystem.getInstance().setPowerRunCommand(-1)
             ).interruptOn(() -> SpindexerTempStartPose -
                     SpindexerSubsystem.getInstance().getRawPose() > 360))

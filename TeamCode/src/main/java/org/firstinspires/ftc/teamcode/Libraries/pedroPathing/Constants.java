@@ -17,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Constants {
 
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(15)
+            .mass(10)
             .forwardZeroPowerAcceleration(-36.84)
             .lateralZeroPowerAcceleration(-78.68)
             .useSecondaryTranslationalPIDF(false)
@@ -33,22 +33,22 @@ public class Constants {
             .leftRearMotorName("bl")
             .rightFrontMotorName("fr")
             .rightRearMotorName("br")
-            .leftFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .leftRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
-            .xVelocity(62.53)
+            .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
+            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
+            .useBrakeModeInTeleOp(true)
+            .xVelocity(79.71)
             .yVelocity(36.125);
 
     public static PinpointVisionConstants localizerConstants = new PinpointVisionConstants()
             .forwardPodY(-10 / 2.54)
-            .strafePodX(0)
+            .strafePodX(-14 / 2.54)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
-            .yawScalar(1.0)
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .odometryStdDevs(0.05, 0.05, 0.02)
             .visionMeasurementStdDevs(0.5, 0.5, 0.2);
 
