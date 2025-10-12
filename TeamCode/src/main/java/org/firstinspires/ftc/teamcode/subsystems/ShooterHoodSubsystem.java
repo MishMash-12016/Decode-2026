@@ -17,6 +17,8 @@ import Ori.Coval.Logging.AutoLog;
 
 public class ShooterHoodSubsystem extends ServoSubsystem {
 
+    public static double hoodMax = 0.65;
+    public static double hoodMin = 0.0;
     ExterpolationMap exterpolationMap = new ExterpolationMap()
             .put(5,5);
 
@@ -25,7 +27,7 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
     public static double hoodDown = 0.001;
 
 
-    public static double POSITION_TOLERANCE = 1;
+    public static double POSITION_TOLERANCE = 0.1;
 
     public static ShooterHoodSubsystemAutoLogged instance;
 
