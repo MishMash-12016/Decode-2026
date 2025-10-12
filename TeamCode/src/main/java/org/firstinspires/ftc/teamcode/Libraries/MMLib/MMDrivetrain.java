@@ -46,12 +46,12 @@ public class MMDrivetrain extends MMSubsystem {
         return instance;
     }
 
-//    public Follower getFollower() {
-//        if (instance != null) {
-//            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
-//        }
-//        return follower;
-//    }
+    public Follower getFollower() {
+        if (instance != null) {
+            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
+        }
+        return follower;
+    }
 
     public static void update() {
         if (instance != null) {
