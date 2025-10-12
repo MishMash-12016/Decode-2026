@@ -2,6 +2,10 @@ package org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils;
 
 import static java.util.Objects.requireNonNull;
 
+import com.pedropathing.geometry.Pose;
+import com.seattlesolvers.solverslib.geometry.Pose2d;
+import com.seattlesolvers.solverslib.geometry.Rotation2d;
+
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 
@@ -146,5 +150,17 @@ public abstract class MMUtils {
         input -= numMin * modulus;
 
         return input;
+    }
+
+    public static Pose2d PedroPoseToSolversPose2d(Pose pedroPose){
+        return new Pose2d(pedroPose.getX(),
+                pedroPose.getY(),
+                new Rotation2d(pedroPose.getHeading()));
+    }
+
+    public static Pose Pose2dToPedro(Pose2d pose2d){
+        return new Pose(pose2d.getX(),
+                pose2d.getY(),
+                pose2d.getHeading());
     }
 }

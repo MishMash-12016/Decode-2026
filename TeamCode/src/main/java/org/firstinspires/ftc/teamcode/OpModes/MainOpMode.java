@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -21,7 +22,7 @@ import Ori.Coval.Logging.AutoLog;
 public class MainOpMode extends MMOpMode {
 
     public MainOpMode() {
-        super(OpModeType.NonCompetition.DEBUG);
+        super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
     }
 
     @Override
