@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
@@ -38,7 +39,7 @@ public class MainBasicAuto extends MMOpMode {
 
 
     public MainBasicAuto() {
-        super(OpModeType.NonCompetition.DEBUG);
+        super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
     }
 
     @Override

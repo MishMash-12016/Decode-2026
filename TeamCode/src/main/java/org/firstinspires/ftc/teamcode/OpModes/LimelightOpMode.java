@@ -7,6 +7,7 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 @Config
 public class LimelightOpMode extends MMOpMode {
     public LimelightOpMode() {
-        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
+        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION, AllianceColor.BLUE);
     }
     private Limelight3A limelight3A;
 

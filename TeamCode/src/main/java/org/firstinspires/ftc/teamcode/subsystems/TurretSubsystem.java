@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.seattlesolvers.solverslib.command.Command;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Position.PositionPidSubsystem;
 import org.firstinspires.ftc.teamcode.MMRobot;
-
-import java.util.function.DoubleSupplier;
+import org.firstinspires.ftc.teamcode.RobotUtils;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -56,7 +56,9 @@ public class TurretSubsystem extends PositionPidSubsystem {
 
         withPid(KP, KI, KD);
     }
-    public Command AngleAim(DoubleSupplier angle){
-        return getToSetpointCommand( ()-> angle.getAsDouble()+getPose());
+
+    public Command alignToTarget(){
+        return getToAndHoldSetPointCommand(()-> RobotUtils.getAngleToTarget()
+                - MMDrivetrain.getInstance().getFollower().getHeading());
     }
 }
