@@ -7,36 +7,28 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
-
 public class IntakeCommandGroup {
+    static int waitTimeForBall = 300;
+    static int ballDis = 18;
+
     public static Command FeedIntake(){
         return new SequentialCommandGroup(
-                SpindexerSubsystem.reset(),
                 SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS).withTimeout(700),
-                new WaitCommand(500),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                new WaitUntilCommand(()->(20 > SpindexerSubsystem.getInstance().getDistance())),
-                new WaitCommand(500),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(0),
+                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
+                new WaitCommand(waitTimeForBall),
                 SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS).withTimeout(700),
-                new WaitCommand(500),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                new WaitUntilCommand(()->(20 > SpindexerSubsystem.getInstance().getDistance())),
-                new WaitCommand(500),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS).withTimeout(700)
+                new WaitCommand(waitTimeForBall),
+                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
+                new WaitCommand(waitTimeForBall),
+                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS).withTimeout(700),
+                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
+                IntakeSubsystem.getInstance().setPowerInstantCommand(0)
         );
     }
 
-    public static Command FeedOneIntake(){
-        return new SequentialCommandGroup(
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.4),
-                new WaitUntilCommand(()->SpindexerSubsystem.getInstance().getZeroSwitch()),
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-//                new WaitUntilCommand(()->SpindexerSubsystem.getInstance().getDistance()),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(0),
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.8),
-                new WaitCommand(165)
-        );
-    }
+//    public static Command FeedOneIntake(){
+//        return new SequentialCommandGroup(
+//        );
+//    }
 }

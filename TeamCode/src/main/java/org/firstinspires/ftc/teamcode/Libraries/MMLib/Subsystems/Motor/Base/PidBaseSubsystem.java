@@ -107,8 +107,10 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
             return angle;
         }
         return encoder.getPose();
+    }
 
-
+    public double getRawPose() {
+        return encoder.getPose();
     }
 
     @AutoLogOutput
