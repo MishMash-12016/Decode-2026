@@ -16,11 +16,13 @@ public class IntakeCommandGroup {
                 new WaitCommand(500),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                 new WaitUntilCommand(()->(20 > SpindexerSubsystem.getInstance().getDistance())),
+                new WaitCommand(500),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(0),
                 SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS).withTimeout(700),
                 new WaitCommand(500),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                 new WaitUntilCommand(()->(20 > SpindexerSubsystem.getInstance().getDistance())),
+                new WaitCommand(500),
                 SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS).withTimeout(700)
         );
     }

@@ -29,8 +29,8 @@ public class MainOpMode extends MMOpMode {
 
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
-        MMDrivetrain.getInstance().update();
+//        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
+//        MMDrivetrain.getInstance().update();
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(IntakeCommandGroup.FeedIntake());
 //        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
@@ -48,7 +48,7 @@ public class MainOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("spindexer pose:", ((SpindexerSubsystem.getInstance().getPose())*360)%360);
+        telemetry.addData("spindexer pose:", SpindexerSubsystem.getInstance().getPose());
         telemetry.addData("dis",SpindexerSubsystem.getInstance().getDistance());
         telemetry.update();
     }
