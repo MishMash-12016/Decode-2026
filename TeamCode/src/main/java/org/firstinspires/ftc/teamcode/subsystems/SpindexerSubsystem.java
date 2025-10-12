@@ -55,12 +55,13 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withEncoder(mmRobot.controlHub,3,RESOLUTION, Direction.REVERSE);
+        withEncoder(mmRobot.controlHub,3,RESOLUTION/360, Direction.REVERSE);
 
         withCrServo(mmRobot.controlHub, 0,Direction.FORWARD);
         withCrServo(mmRobot.controlHub, 1,Direction.FORWARD);
         withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        withZeroSwitch(zeroSwitch,10);
+        withAngleRange(360);
 
         withPid(KP, KI, KD);
         withDebugPidSuppliers(
@@ -85,12 +86,13 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     public Command setPosition(double position){
         return new InstantCommand(() -> setPose(position));
     }
-    public static Command reset(){
+
+    public Command reset(){
         return new SequentialCommandGroup(
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.2),
-                new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))),
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0),
-                SpindexerSubsystem.getInstance().setPosition(100)
+                setPowerInstantCommand(0.1),
+                new WaitUntilCommand(()->(!(getZeroSwitch()))),
+                setPosition(0),
+                setPowerInstantCommand(0)
         );
 
     }

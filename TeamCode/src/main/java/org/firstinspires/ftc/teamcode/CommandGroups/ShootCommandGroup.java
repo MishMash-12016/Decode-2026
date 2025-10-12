@@ -1,27 +1,27 @@
 package org.firstinspires.ftc.teamcode.CommandGroups;
 
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
 
 public class ShootCommandGroup {
-    public static Command ShootAll(){
-        return new SequentialCommandGroup(
-                ShooterSubsystem.  getInstance().getToAndHoldSetPointCommand(40).withTimeout(700),
-                new WaitCommand(1500),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS),
-                new WaitCommand(800),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS),
-                new WaitCommand(800),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS),
-                new WaitCommand(5000),
-                ShooterSubsystem.getInstance().setPowerInstantCommand(0)
-        );
 
-    }
+  static double SpindexerTempStartPose = 0;
+
+  public static Command ShootAll() {
+    return new ParallelRaceGroup(
+            ShooterSubsystem.getInstance().setPowerRunCommand(1),
+            new SequentialCommandGroup(
+                    new InstantCommand(() -> SpindexerTempStartPose = SpindexerSubsystem.getInstance().getRawPose()),
+                    new WaitCommand(3000),
+                    SpindexerSubsystem.getInstance().setPowerRunCommand(-1)
+            ).interruptOn(() -> SpindexerTempStartPose -
+                    SpindexerSubsystem.getInstance().getRawPose() > 360));
+  }
 }
