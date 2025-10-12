@@ -35,7 +35,7 @@ public abstract class MMOpMode extends LinearOpMode {
 
     public OpModeType opModeType = null;
 
-    public AllianceColor allianceColor;
+    public AllianceColor allianceColor = AllianceColor.BLUE;
     public AllianceSide allianceSide;
 
     private final List<Runnable> runOnInit = new ArrayList<>();
@@ -46,8 +46,9 @@ public abstract class MMOpMode extends LinearOpMode {
      *
      * @param opModeType which opmode to activate
      */
-    public MMOpMode(OpModeType opModeType) {
+    public MMOpMode(OpModeType opModeType, AllianceColor allianceColor) {
         this.opModeType = opModeType;
+        this.allianceColor = allianceColor;
     }
 
     private void robotInit() {
