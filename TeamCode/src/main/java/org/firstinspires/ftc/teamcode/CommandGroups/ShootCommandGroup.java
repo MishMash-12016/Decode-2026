@@ -22,6 +22,10 @@ public class ShootCommandGroup {
                     new WaitCommand(3000),
                     SpindexerSubsystem.getInstance().setPowerRunCommand(-1)
             ).interruptOn(() -> SpindexerTempStartPose -
-                    SpindexerSubsystem.getInstance().getRawPose() > 360));
+                    SpindexerSubsystem.getInstance().getRawPose() > 360))
+            .andThen(
+                    SpindexerSubsystem.getInstance().stopInstantCommand(),
+                    ShooterSubsystem.getInstance().stopInstantCommand()
+            );
   }
 }
