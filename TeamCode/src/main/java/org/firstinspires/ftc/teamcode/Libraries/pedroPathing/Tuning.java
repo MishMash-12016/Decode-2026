@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.Libraries.pedroPathing;
 
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.changes;
-import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.draw;
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.drawOnlyCurrent;
+import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.draw;
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.follower;
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.stopRobot;
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.telemetryM;
