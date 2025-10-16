@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
+import org.firstinspires.ftc.teamcode.RobotConstants;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 @Autonomous
@@ -53,7 +54,7 @@ public class MainBasicAuto extends MMOpMode {
                 new FollowPathCommand(follower, FROM_START_TO_SCORE),
                 ShootCommandGroup.ShootAll(),
                 new FollowPathCommand(follower, FROM_SCORE_TO_PARKING),
-                new RunCommand(()-> WebcamSubsystem.getInstance().getAprilTagID())
+                new RunCommand(()-> RobotConstants.APRIL_TAG_ID = WebcamSubsystem.getInstance().getAprilTagID()).withTimeout(2000)
         );
         autonomousSequence.schedule();
     }
@@ -61,6 +62,8 @@ public class MainBasicAuto extends MMOpMode {
     @Override
     public void onPlayLoop() {
         MMDrivetrain.getInstance().update();
+        telemetry.addData("appriltagID",RobotConstants.APRIL_TAG_ID);
+        telemetry.update();
     }
 
 }
