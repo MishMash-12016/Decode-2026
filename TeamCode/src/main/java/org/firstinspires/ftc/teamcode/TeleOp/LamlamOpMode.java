@@ -7,13 +7,11 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 
-import org.firstinspires.ftc.teamcode.Camera.CameraCommandGroups;
 import org.firstinspires.ftc.teamcode.Camera.CameraCommands;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.subsystems.Camera;
 
 import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
@@ -21,9 +19,9 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 @TeleOp
 @Config
 @AutoLog
-public class Lamlam extends MMOpMode {
+public class LamlamOpMode extends MMOpMode {
 
-    public Lamlam() {
+    public LamlamOpMode() {
         super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
     }
 
@@ -32,24 +30,25 @@ public class Lamlam extends MMOpMode {
 
     @Override
     public void onInit() {
-
-        Camera.getInstance().trackGreen();
         MMDrivetrain.update();
         MMDrivetrain.getInstance().setPose(0, 0, Math.toRadians(0));
         KoalaLog.setup(hardwareMap);
         MMDrivetrain.update();
 
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.05);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> false);
 
         //The camera intake:
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                CameraCommandGroups.StrafeToArtifactCommand()
+                CameraCommands.StrafeToArtifact()
         );
 
         //Other shit:
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 new InstantCommand(() -> MMDrivetrain.getInstance().resetYaw())
         );
+
+        //TODO: Use only track functions from CameraCommands and not from Camera class directly!!! BEWARE or else might not switch correctly
+        CameraCommands.trackPurpleAndGreen().schedule(); //tracks green artifacts
     }
 
     @Override

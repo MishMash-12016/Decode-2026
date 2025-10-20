@@ -4,10 +4,13 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.limelightvision.LLResult;
+import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.MMRobot;
+
+import java.util.List;
 
 import Ori.Coval.Logging.Logger.KoalaLog;
 
@@ -16,30 +19,25 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 
 public class Camera extends MMSubsystem {
     public final Limelight3A camera;
-
-    public LLResult previousResultDetector;
-
     public int currentPipeline = 0;
 
     public int detectorPipeline = 0;
 
-    private boolean initiated = false;
+    private boolean initiated = false; // If there is problems in the start of the teleop / auto make that
+                                        //it switches pipelines 3 times. if only 1 pipeline is used dont use this
 
 
     //detection parameters for distance and strafe:
-    public static double CAMERA_HEIGHT = 445;
-    public static double CAMERA_ANGLE = 90 - 35.0;
-    public static double TARGET_HEIGHT = 39;
+    public static double CAMERA_HEIGHT = 445;  //mm
+    public static double CAMERA_ANGLE = 90 - 35.0; // degrees
+    public static double TARGET_HEIGHT = 39; //mm
 
 
+    public static double distanceX = -1; //in mm. the current result X distance. -1 means not detected anything yet
+    public static double distanceY = -1; //in mm. the current result Y distance. -1 means not detected anything yet
 
-    public static double dx = -1;
-    public static double dy = -1;
+    public static double timesPipelineSwitchFail = 0; // for debugging
 
-    public static double timesAngleFailed = 0;
-    public static double timesPipelineSwitchFail = 0;
-
-    private int sampleColorID; //current color need to be detected
     private static Camera instance;
 
 
@@ -48,7 +46,7 @@ public class Camera extends MMSubsystem {
         MMRobot.getInstance().subsystems.add(this);
 
         camera = MMRobot.getInstance().currentOpMode.hardwareMap.get(Limelight3A.class, "limelight");
-        InitializeCamera();
+        initializeCamera();
         camera.pipelineSwitch(currentPipeline);
     }
 
@@ -59,9 +57,10 @@ public class Camera extends MMSubsystem {
         return instance;
     }
 
-    public void InitializeCamera() {
+    public void initializeCamera() {
         camera.setPollRateHz(100);
         camera.start();
+        switchToDetector();
     }
 
     public void SetInitiated(){
@@ -84,8 +83,8 @@ public class Camera extends MMSubsystem {
         return cameraResult.getTy();
     }
 
-    //Get distance in Y axis with given cameraResult
-    public Double getDistance(LLResult lastResult) {
+    //Get distance in Y axis with given cameraResult, returns in mm
+    public Double getDistanceY(LLResult lastResult) {
         double ty = getTy(lastResult);
         if (ty == 0) {
             return 0.0;
@@ -96,43 +95,35 @@ public class Camera extends MMSubsystem {
         return Math.abs(distanceMM);
     }
 
-    //Get distance in Y axis with given cameraResult
-    public Double getDistance() {
-        if (dy == 0) {
-            return 0.0;
-        }
-        double angleToGoalDegrees = CAMERA_ANGLE - dy;
-        double angleToGoalRadians = Math.toRadians(angleToGoalDegrees);
-        double distanceMM = (TARGET_HEIGHT - CAMERA_HEIGHT) / Math.tan(angleToGoalRadians);
-        return Math.abs(distanceMM);
-    }
 
+//     TODO: if strafe offset does problems use this function, it is old but i think it is incorrect..
+//    public double getStrafeOffset(LLResult lastResult) {
+//        if (lastResult != null) {
+//            double tx = getTx(lastResult);
+//            if (tx != 0) {
+//                double tanTX = Math.tan(Math.toRadians(tx));
+//                double height = CAMERA_HEIGHT - TARGET_HEIGHT;
+//                double distanceY = getDistanceY(lastResult);
+//                double diagonalLength = Math.sqrt(height * height + distanceY * distanceY);
+//                return tanTX * diagonalLength / 2.54 / 10;
+//            }
+//        }
+//        return 0;
+//    }
 
-
+    // supposed to be more correct. returns in mm
     public double getStrafeOffset(LLResult lastResult) {
         if (lastResult != null) {
             double tx = getTx(lastResult);
             if (tx != 0) {
-                double tanTX = Math.tan(Math.toRadians(tx));
-                double height = CAMERA_HEIGHT - TARGET_HEIGHT;
-                double distanceY = getDistance(lastResult);
-                double diagonalLength = Math.sqrt(height * height + distanceY * distanceY);
-                return tanTX * diagonalLength / 2.54 / 10;
+                double distanceY = getDistanceY(lastResult); // mm, forward on the floor
+                double strafeMM = Math.tan(Math.toRadians(tx)) * distanceY; // mm, lateral on the floor
+                return strafeMM; // mm
             }
         }
         return 0;
     }
 
-    public double getStrafeOffset() {
-        if (dx != 0) {
-            double tanTX = Math.tan(Math.toRadians(dx));
-            double height = CAMERA_HEIGHT - TARGET_HEIGHT;
-            double distanceY = getDistance();
-            double diagonalLength = Math.sqrt(height * height + distanceY * distanceY);
-            return tanTX * diagonalLength / 2.54 / 10;
-        }
-        return 0;
-    }
 
     public double getPipelineIndex() {
         return camera.getStatus().getPipelineIndex();
@@ -145,10 +136,6 @@ public class Camera extends MMSubsystem {
         return camera.getLatestResult().getStaleness() >= 100;
     }
 
-    public void setPreviousResult() {
-        previousResultDetector = camera.getLatestResult();
-    }
-
     public void trackGreen() {
         currentPipeline = 0;
         detectorPipeline = 0;
@@ -159,7 +146,13 @@ public class Camera extends MMSubsystem {
         detectorPipeline = 1;
     }
 
-    //Switch to neural-detector based detection pipepline (AI omg ooga booga big words I love man)
+    public void trackPurpleAndGreen() { //Todo: change in the limelight itself that pipeline 2 is both colors
+        currentPipeline = 2;
+        detectorPipeline = 2;
+    }
+
+    //Switch to neural-detector based detection pipepline (AI omg ooga booga big words Sharabi love's man).
+    //It accounts the current color needed to be detected and switches to the according detector pipeline of that color
     public boolean switchToDetector() {
         currentPipeline = detectorPipeline;
         if (!camera.pipelineSwitch(currentPipeline)) {
@@ -174,12 +167,28 @@ public class Camera extends MMSubsystem {
     public boolean isTargetVisible(){
         return camera.getLatestResult() != null;
     }
-    public LLResult GetResult(){
-        return camera.getLatestResult();
+    public LLResult getLatestResult(){
+        LLResult result = camera.getLatestResult();
+        distanceX = getStrafeOffset(result); //mm
+        distanceY = (getDistanceY(result)); //mm
+        return result;
     }
 
-    public LLResult GetPreviousDetectorResult(){
-        return previousResultDetector;
+
+    // gives the current artifact color
+    public String getArtifactColor(LLResult result){
+        List<LLResultTypes.DetectorResult> allDetectorResults = result.getDetectorResults();
+        if (!allDetectorResults.isEmpty()) {
+            LLResultTypes.DetectorResult detectorResult = allDetectorResults.get(0);
+            int colorID = detectorResult.getClassId();
+            if (colorID == 0){
+                return "green";
+            }
+            else if (colorID == 1){
+                return "purple";
+            }
+        }
+        return "no result";
     }
 
 
@@ -189,13 +198,11 @@ public class Camera extends MMSubsystem {
 //        AutoLogManager.periodic();
         //updating the python endlessly
 //        if (!initiated) return;
+        getLatestResult();
 
-        dx = getStrafeOffset(GetPreviousDetectorResult());
-        dy = (getDistance(GetPreviousDetectorResult())) / 25.4;
-
-        KoalaLog.log("distanceX periodic",dx,true);
-        KoalaLog.log("distanceY periodic",dy,true);
-        FtcDashboard.getInstance().getTelemetry().addData("distanceX periodic dash", dx);
-        FtcDashboard.getInstance().getTelemetry().addData("distanceY periodic dash", dy);
+        KoalaLog.log("distanceX periodic", distanceX,true);
+        KoalaLog.log("distanceY periodic", distanceY,true);
+        FtcDashboard.getInstance().getTelemetry().addData("distanceX periodic dash", distanceX);
+        FtcDashboard.getInstance().getTelemetry().addData("distanceY periodic dash", distanceY);
     }
 }
