@@ -12,6 +12,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 
@@ -27,7 +28,7 @@ public class TestAutoOpMode extends MMOpMode {
     private PathChain path1, path2;
 
     public TestAutoOpMode() {
-        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION);
+        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION, AllianceColor.BLUE);
     }
 
     public void buildPaths() {
@@ -62,6 +63,5 @@ public class TestAutoOpMode extends MMOpMode {
     public void onPlayLoop() {
         MMDrivetrain.update();
     }
-
 
 }

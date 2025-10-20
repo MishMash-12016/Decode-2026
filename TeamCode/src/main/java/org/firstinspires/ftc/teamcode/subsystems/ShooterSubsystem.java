@@ -1,18 +1,30 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.seattlesolvers.solverslib.command.Command;
 
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
+import java.util.function.DoubleSupplier;
+
 import Ori.Coval.Logging.AutoLog;
+import edu.wpi.first.sysid.SysIdRoutine;
 
 @Config
 @AutoLog
 public class ShooterSubsystem extends VelocityPidSubsystem {
+
+    ExterpolationMap exterpolationMap = new ExterpolationMap()
+            .put(1,6);
+
 
     //TODO: tuned not ideal
     public static double KP = 0.6;
@@ -46,7 +58,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         withMotor(mmRobot.expansionHub,1, Direction.REVERSE).minPower = 0;
         withMotor(mmRobot.expansionHub,0, Direction.FORWARD).minPower = 0;
 
-        withEncoder(mmRobot.controlHub,0,RESOLUTION,Direction.REVERSE);
+        withEncoder(mmRobot.expansionHub,0,RESOLUTION,Direction.REVERSE);
 
         withPid(KP,KI,KD);
 
@@ -71,5 +83,30 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         );
 
     }
+    SysIdRoutine sysIdRoutine = new SysIdRoutine(
+            new SysIdRoutine.Config(
+                    Volts.of(0.01).per(Second),
+                    Volts.of(0.6),
+                    Seconds.of(10)),
+            new SysIdRoutine.Mechanism(
+                    this::setPower,
+                    null,
+                    this,
+                    "shooter"
+            )
+    );
 
+    public Command sysidQuasistatic(SysIdRoutine.Direction direction){
+        return sysIdRoutine.quasistatic(direction);
+    }
+
+    public Command sysidDynamic(SysIdRoutine.Direction direction){
+        return sysIdRoutine.dynamic(direction);
+    }
+
+    public Command aimSpeedToShut(DoubleSupplier distance) {
+        return getToSetpointCommand(
+                ()-> exterpolationMap.exterpolate(distance.getAsDouble()));
+    }
 }
+

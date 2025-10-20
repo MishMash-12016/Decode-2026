@@ -1,10 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.seattlesolvers.solverslib.command.Command;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Servo.ServoSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
+
+import java.util.function.DoubleSupplier;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -15,6 +19,12 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
     public static double hoodMax = 0.65;
     public static double hoodMin = 0.0;
+    ExterpolationMap exterpolationMap = new ExterpolationMap()
+            .put(5,5);
+
+    //TODO: generic values
+    public static double hoodUp = 0.09;
+    public static double hoodDown = 0.001;
 
 
     public static double POSITION_TOLERANCE = 0.1;
@@ -33,5 +43,10 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
         MMRobot mmRobot = MMRobot.getInstance();
 
         withServo("shooterHoodServo",Direction.FORWARD,0);
+    }
+
+    public Command aimHoodToShut(DoubleSupplier distance) {
+        return setPositionCommand(
+                ()-> exterpolationMap.exterpolate(distance.getAsDouble()));
     }
 }

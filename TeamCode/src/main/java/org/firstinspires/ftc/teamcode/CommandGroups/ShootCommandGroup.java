@@ -1,23 +1,31 @@
 package org.firstinspires.ftc.teamcode.CommandGroups;
 
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.ParallelRaceGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 
-import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
 
 public class ShootCommandGroup {
-    public static Command ShootAll(){
-        return new SequentialCommandGroup(
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS),
-                ShooterSubsystem.getInstance().setPowerInstantCommand(1),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS),
-                ShooterSubsystem.getInstance().setPowerInstantCommand(0)
-        );
 
-    }
+  static double SpindexerTempStartPose = 0;
+
+  public static Command ShootAll() {
+    return new ParallelRaceGroup(
+            ShooterSubsystem.getInstance().setPowerRunCommand(1),
+            new SequentialCommandGroup(
+                    new InstantCommand(() -> SpindexerTempStartPose = SpindexerSubsystem.getInstance().getRawPose()),
+                    new WaitCommand(7000),
+                    SpindexerSubsystem.getInstance().setPowerRunCommand(-1)
+            ).interruptOn(() -> SpindexerTempStartPose -
+                    SpindexerSubsystem.getInstance().getRawPose() > 360))
+            .andThen(
+                    SpindexerSubsystem.getInstance().stopInstantCommand(),
+                    ShooterSubsystem.getInstance().stopInstantCommand()
+            );
+  }
 }

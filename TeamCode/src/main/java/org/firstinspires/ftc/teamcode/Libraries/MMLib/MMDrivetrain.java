@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Drawing;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.HoldPointCommand;
+import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.PinpointVisionLocalizer;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 import java.util.function.BooleanSupplier;
@@ -38,15 +39,19 @@ public class MMDrivetrain extends MMSubsystem {
         if (follower == null){
             follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
         }
+
+        if (follower == null){
+            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
+        }
         return instance;
     }
 
-//    public Follower getFollower() {
-//        if (instance != null) {
-//            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
-//        }
-//        return follower;
-//    }
+    public Follower getFollower() {
+        if (instance != null) {
+            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
+        }
+        return follower;
+    }
 
     public static void update() {
         if (instance != null) {
@@ -167,5 +172,10 @@ public class MMDrivetrain extends MMSubsystem {
 
     public void setSlowModeRatioRotation(double slowModeRatioRotation) {
         this.slowModeRatioRotation = slowModeRatioRotation;
+    }
+
+    public void addVisionMeasurement(Pose pose, double timestampSeconds){
+        ((PinpointVisionLocalizer)follower.getPoseTracker().getLocalizer())
+                .addVisionMeasurement(pose, timestampSeconds);
     }
 }
