@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -25,14 +26,15 @@ import Ori.Coval.Logging.AutoLog;
 public class MainOpMode extends MMOpMode {
 
     public MainOpMode() {
-        super(OpModeType.NonCompetition.DEBUG);
+        super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
     }
 
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
-        MMDrivetrain.getInstance().update();
+//        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
+//        MMDrivetrain.getInstance().update();
 
+        /*
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(IntakeCommandGroup.FeedIntake());
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(ShootCommandGroup.ShootAll());
 
@@ -46,7 +48,7 @@ public class MainOpMode extends MMOpMode {
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(80))
                 .whenInactive(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
-
+         */
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
                 ShooterSubsystem.getInstance().setPowerRunCommand(1))
                 .whenInactive(ShooterSubsystem.getInstance().setPowerInstantCommand(0));;
@@ -60,8 +62,7 @@ public class MainOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("spindexer pose:", SpindexerSubsystem.getInstance().getPose());
-        telemetry.addData("dis",SpindexerSubsystem.getInstance().getDistance());
+        telemetry.addData("Shooter Velocity: ",ShooterSubsystem.getInstance().getVelocity());
         telemetry.update();
     }
 }
