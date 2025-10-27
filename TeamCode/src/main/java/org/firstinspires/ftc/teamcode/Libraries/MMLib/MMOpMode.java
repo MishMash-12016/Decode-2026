@@ -315,6 +315,7 @@ public abstract class MMOpMode extends LinearOpMode {
         if (motorsVar == null) return;
 
         for (DcMotorSimple motor : hardwareMap.getAll(DcMotorSimple.class)) {
+            if(motor instanceof CRServo) continue;
             DcMotorEx motorEx = (DcMotorEx) motor;
             String motorName = getDeviceName(motorEx);
             if (motorName == null) continue;
@@ -360,6 +361,7 @@ public abstract class MMOpMode extends LinearOpMode {
         if (motorsVar == null) return;
 
         for (DcMotorSimple motor : hardwareMap.getAll(DcMotorSimple.class)) {
+            if(motor instanceof CRServo) continue;
             DcMotorEx motorEx = (DcMotorEx) motor;
             String deviceName = getDeviceName(motorEx);
             if (deviceName == null) continue;
