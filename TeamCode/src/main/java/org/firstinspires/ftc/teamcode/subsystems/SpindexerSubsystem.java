@@ -25,7 +25,7 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
 
     CuttleDigital zeroSwitch =  new CuttleDigital(MMRobot.getInstance().expansionHub, 0);
 //    ColorSensor colorSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(ColorSensor.class,"spinColor");
-    DistanceSensor distanceSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(DistanceSensor.class,"spinColor");
+    DistanceSensor distanceSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(DistanceSensor.class,"spinDis");
     // the lowest value of light without a ball in
     public static final double ALPHA_TOLERANCE = 4;
 
@@ -35,7 +35,6 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
 
     public static double POSITION_TOLERANCE = 3.5;
 
-    //ToDo: adjust ratio
     public static double RESOLUTION = 8192;
 
     public static final double FIRSTPOS = 0;
@@ -64,6 +63,7 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
         withAngleRange(360);
 
         withPid(KP, KI, KD);
+
         withDebugPidSuppliers(
                 ()-> KP,
                 ()->KI,
@@ -73,23 +73,27 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
                 null,
                 null,
                 null
-        );    }
+        );
+    }
+
 //    public float getAlphaColor(){
 //        return colorSensor.alpha();
 //    }
     public double getDistance() {
         return distanceSensor.getDistance(DistanceUnit.CM);
     }
+
     public boolean getZeroSwitch(){
         return zeroSwitch.getState();
     }
+
     public Command setPosition(double position){
         return new InstantCommand(() -> setPose(position));
     }
 
     public Command reset(){
         return new SequentialCommandGroup(
-                setPowerInstantCommand(0.1),
+                setPowerInstantCommand(0.2),
                 new WaitUntilCommand(()->(!(getZeroSwitch()))),
                 setPosition(0),
                 setPowerInstantCommand(0)

@@ -3,16 +3,19 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import java.util.function.BooleanSupplier;
 
@@ -27,22 +30,14 @@ public class TestOpMode extends MMOpMode {
         super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
     }
 
-    CRServo left;
-    CRServo right;
-
     @Override
     public void onInit() {
 //        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
-//        MMDrivetrain.getInstance().update();
+        MMDrivetrain.getInstance().update();
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
+                new WaitCommand(1)
+        );
 
-        left = hardwareMap.get(CRServo.class,"left");
-        right = hardwareMap.get(CRServo.class,"right");
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(IntakeSubsystem.getInstance().setPowerInstantCommand(1));
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(IntakeSubsystem.getInstance().setPowerInstantCommand(0));
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(1));
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
     }
 
     @Override
@@ -58,11 +53,7 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-//        MMDrivetrain.getInstance().update();
-
-        left.setPower(gamepad1.left_trigger-gamepad1.right_trigger);
-        right.setPower(gamepad1.left_trigger-gamepad1.right_trigger);
-
+        MMDrivetrain.getInstance().update();
     }
 
     @Override

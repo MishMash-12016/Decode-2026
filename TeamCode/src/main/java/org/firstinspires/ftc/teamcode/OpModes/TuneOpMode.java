@@ -26,34 +26,21 @@ public class TuneOpMode extends MMOpMode {
     public TuneOpMode() {
         super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION, AllianceColor.BLUE);
     }
+    CRServo left;
+    CRServo right;
 
-    //    CRServo left;
-//    CRServo right;
     @Override
     public void onInit() {
-//        left = hardwareMap.get(CRServo.class,"left");
-//        right = hardwareMap.get(CRServo.class,"right");
+        left = hardwareMap.get(CRServo.class,"left");
+        right = hardwareMap.get(CRServo.class,"right");
     }
 
     @Override
     public void onPlayLoop() {
-//        left.setPower(gamepad1.left_stick_x/2);
-//        right.setPower(gamepad1.left_stick_x/2);
-//        telemetry.addData("left",gamepad1.left_stick_x);
-//        telemetry.addData("right",gamepad1.right_stick_x);
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
-                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50)
-        ).whenInactive(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                new InstantCommand(
-                        () -> ShooterSubsystem.instance = null
-                )
-        );
+        left.setPower(gamepad1.left_stick_x);
+        right.setPower(gamepad1.left_stick_x);
 
-        ShooterHoodSubsystem.getInstance().setPosition(
-                MMRobot.getInstance().gamepadEx1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER)
-        );
         telemetry.addData("hood:", ShooterHoodSubsystem.getInstance().getPosition());
         telemetry.update();
     }

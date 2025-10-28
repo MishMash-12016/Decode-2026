@@ -34,35 +34,36 @@ public class MainOpMode extends MMOpMode {
 //        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
 //        MMDrivetrain.getInstance().update();
 
-        /*
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(IntakeCommandGroup.FeedIntake());
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(ShootCommandGroup.ShootAll());
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(IntakeCommandGroup.FeedIntake());
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(ShootCommandGroup.ShootAll());
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS));
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS));
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS));
 
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                SpindexerSubsystem.getInstance().reset());
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(80))
-                .whenInactive(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
-         */
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
-                ShooterSubsystem.getInstance().setPowerRunCommand(1))
-                .whenInactive(ShooterSubsystem.getInstance().setPowerInstantCommand(0));;
+
+
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(80))
+//                .whenInactive(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
+
     }
 
     @Override
     public void onPlay() {
         super.onPlay();
-        SpindexerSubsystem.getInstance().reset().schedule();
+//        SpindexerSubsystem.getInstance().reset().schedule();
     }
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("Shooter Velocity: ",ShooterSubsystem.getInstance().getVelocity());
+        telemetry.addData("Spindexer pos: ",SpindexerSubsystem.getInstance().getPose());
         telemetry.update();
     }
 }
