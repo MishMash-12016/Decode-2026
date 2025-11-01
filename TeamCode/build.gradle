@@ -58,16 +58,16 @@ dependencies {
     //Logging
     implementation 'com.github.ori-coval.Koala-Log:KoalaLogger:1.4.0'
     annotationProcessor 'com.github.ori-coval.Koala-Log:KoalaLoggingProcessor:1.4.0'
-    implementation "com.acmerobotics.dashboard:dashboard:0.5.0" // FTC Dashboard
+    implementation "com.acmerobotics.dashboard:dashboard:0.5.1" // FTC Dashboard
 
     // SolversLib
-    implementation "org.solverslib:core:SNAPSHOT-7cdcc66" // core
-    implementation "org.solverslib:pedroPathing:SNAPSHOT-7cdcc66" // pedroPathing
+    implementation "org.solverslib:core:0.3.3" // core
+    implementation "org.solverslib:pedroPathing:0.3.3" // pedroPathing
 
     //pedro
-    implementation 'com.pedropathing:ftc:2.0.2'
+    implementation 'com.pedropathing:ftc:2.0.3'
     implementation 'com.pedropathing:telemetry:1.0.0'
-    implementation 'com.bylazar:fullpanels:1.0.7'
+    implementation 'com.bylazar:fullpanels:1.0.9'
 
     //noinspection GradleDependency
     implementation "org.ejml:ejml-simple:0.44.0"
