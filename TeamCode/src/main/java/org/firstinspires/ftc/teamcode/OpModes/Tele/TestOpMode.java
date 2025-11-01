@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Tele;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
@@ -33,9 +34,10 @@ public class TestOpMode extends MMOpMode {
 //        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
         MMDrivetrain.getInstance().update();
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(TurretSubsystem.getInstance().alignToTarget()).whenInactive(
-                TurretSubsystem.instance.setPowerInstantCommand(0)
-        );
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce().whenInactive(
+//                );
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenActive(
+                new InstantCommand(()-> MMDrivetrain.getInstance().resetYaw()));
     }
 
     @Override
@@ -53,6 +55,11 @@ public class TestOpMode extends MMOpMode {
     public void onPlayLoop() {
         MMDrivetrain.getInstance().update();
         telemetry.update();
+
+        TurretSubsystem.getInstance().alignToTarget();
+
+        telemetry.addData("Turret pose:", TurretSubsystem.getInstance().getPose());
+        telemetry.addData("DriveTrain pose:", MMDrivetrain.getInstance().getPose());
 
 
 

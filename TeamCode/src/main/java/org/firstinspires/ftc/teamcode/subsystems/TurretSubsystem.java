@@ -57,10 +57,10 @@ public class TurretSubsystem extends PositionPidSubsystem {
         MMRobot mmRobot = MMRobot.getInstance();
         //TODO: Ports Not Correct
 
-        withEncoder(mmRobot.controlHub,3,(RESOLUTION*RATIO) /360, Direction.REVERSE);
+        withEncoder(mmRobot.expansionHub,3,(RESOLUTION*RATIO) /360, Direction.REVERSE);
 
-        withCrServo(mmRobot.controlHub, 0,Direction.FORWARD);
-        withCrServo(mmRobot.controlHub, 1,Direction.FORWARD);
+        withCrServo(mmRobot.expansionHub, 0,Direction.FORWARD);
+        withCrServo(mmRobot.expansionHub, 1,Direction.FORWARD);
 
         withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
