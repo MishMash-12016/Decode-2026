@@ -159,7 +159,6 @@ public class PedroAutoSample extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.getInstance().update();
-    }
 
+    }
 }
