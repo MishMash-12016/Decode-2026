@@ -64,7 +64,7 @@ public class UtilityCameraFrameCapture extends LinearOpMode
     /*
      * EDIT THESE PARAMETERS AS NEEDED
      */
-    final boolean USING_WEBCAM = false;
+    final boolean USING_WEBCAM = true;
     final BuiltinCameraDirection INTERNAL_CAM_DIR = BuiltinCameraDirection.BACK;
     final int RESOLUTION_WIDTH = 640;
     final int RESOLUTION_HEIGHT = 480;
@@ -84,6 +84,7 @@ public class UtilityCameraFrameCapture extends LinearOpMode
             portal = new VisionPortal.Builder()
                     .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
                     .setCameraResolution(new Size(RESOLUTION_WIDTH, RESOLUTION_HEIGHT))
+                    .setStreamFormat(VisionPortal.StreamFormat.MJPEG)
                     .build();
         }
         else

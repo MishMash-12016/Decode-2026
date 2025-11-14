@@ -20,6 +20,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceSide;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
@@ -114,6 +115,7 @@ public abstract class MMOpMode extends LinearOpMode {
         AutoLogManager.periodic();
 
         MMDrivetrain.update();
+        WebcamSubsystem.update();
 
         // FTCDash hardware thing
         FtcDashboard.getInstance().withHardwareRoot(hardwareRoot -> {
