@@ -4,6 +4,8 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
@@ -26,20 +28,55 @@ import Ori.Coval.Logging.AutoLog;
 public class TestOpMode extends MMOpMode {
 
     public TestOpMode() {
-        super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
+        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION, AllianceColor.BLUE);
     }
-
     @Override
     public void onInit() {
-//        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
+
         MMDrivetrain.getInstance().update();
 
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce().whenInactive(
-//                );
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenActive(
-                new InstantCommand(()-> MMDrivetrain.getInstance().resetYaw()));
-    }
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileActiveOnce(
+//                SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.FIRSTPOS)
+//        );
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileActiveOnce(
+//                SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.SCNDPOS)
+//        );
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileActiveOnce(
+//                SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.THIRDPOS)
+//        );
 
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
+                new SequentialCommandGroup(
+                        SpindexerSubsystem.getInstance().setPowerInstantCommand(0.15),
+                        new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))),
+                        SpindexerSubsystem.getInstance().setPosition(0),
+                        SpindexerSubsystem.getInstance().setPowerInstantCommand(0))
+        );
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileActiveOnce(
+                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.15)
+        );
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileActiveOnce(
+                new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))).andThen(
+                SpindexerSubsystem.getInstance().setPosition(0))
+        );
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileActiveOnce(
+                SpindexerSubsystem.getInstance().setPowerInstantCommand(0)
+        );
+
+
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+//                ()->SpindexerSubsystem.getInstance().setPose(0));
+
+
+
+
+
+    }
+    int counter = 0;
+    boolean tempswitch;
     @Override
     public void onInitLoop() {
 
@@ -56,10 +93,20 @@ public class TestOpMode extends MMOpMode {
         MMDrivetrain.getInstance().update();
         telemetry.update();
 
-        TurretSubsystem.getInstance().alignToTarget();
+        new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))).andThen(
+                SpindexerSubsystem.getInstance().setPosition(0)).schedule();
 
-        telemetry.addData("Turret pose:", TurretSubsystem.getInstance().getPose());
-        telemetry.addData("DriveTrain pose:", MMDrivetrain.getInstance().getPose());
+//        if (!SpindexerSubsystem.getInstance().getZeroSwitch()&&tempswitch){counter++;}
+//        tempswitch = SpindexerSubsystem.getInstance().getZeroSwitch();
+//        telemetry.addData("counter",counter);
+
+
+        telemetry.addData("Spin pose:", SpindexerSubsystem.getInstance().getPose());
+        telemetry.addData("Spin switch:", SpindexerSubsystem.getInstance().getZeroSwitch());
+        telemetry.addData("Spin power:", SpindexerSubsystem.getInstance().getPower());
+
+//        telemetry.addData("DriveTrain pose:", MMDrivetrain.getInstance().getPose());
+//        telemetry.addData("DriveTrain pose:", MMDrivetrain.getInstance().getFollower().getHeading());
 
 
 

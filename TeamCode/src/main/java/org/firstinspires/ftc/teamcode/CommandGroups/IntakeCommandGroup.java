@@ -13,17 +13,17 @@ public class IntakeCommandGroup {
 
     public static Command FeedIntake(){
         return new SequentialCommandGroup(
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS).withTimeout(700),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
-                new WaitCommand(waitTimeForBall),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS).withTimeout(700),
-                new WaitCommand(waitTimeForBall),
-                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
-                new WaitCommand(waitTimeForBall),
-                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS).withTimeout(700),
-                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(0)
+//                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS).withTimeout(700),
+//                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+//                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
+//                new WaitCommand(waitTimeForBall),
+//                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS).withTimeout(700),
+//                new WaitCommand(waitTimeForBall),
+//                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
+//                new WaitCommand(waitTimeForBall),
+//                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS).withTimeout(700),
+//                new WaitUntilCommand(()->(ballDis > SpindexerSubsystem.getInstance().getDistance())),
+//                IntakeSubsystem.getInstance().setPowerInstantCommand(0)
         );
     }
 

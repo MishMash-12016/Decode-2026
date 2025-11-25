@@ -23,9 +23,11 @@ import Ori.Coval.Logging.AutoLog;
 @AutoLog
 public class SpindexerSubsystem extends PositionPidSubsystem {
 
-    CuttleDigital zeroSwitch =  new CuttleDigital(MMRobot.getInstance().expansionHub, 0);
+    CuttleDigital zeroSwitch =  new CuttleDigital(MMRobot.getInstance().controlHub, 0);
+
 //    ColorSensor colorSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(ColorSensor.class,"spinColor");
-    DistanceSensor distanceSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(DistanceSensor.class,"spinColor");
+
+//    DistanceSensor distanceSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(DistanceSensor.class,"SpinDis");
     // the lowest value of light without a ball in
     public static final double ALPHA_TOLERANCE = 4;
 
@@ -82,9 +84,9 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
 //    public float getAlphaColor(){
 //        return colorSensor.alpha();
 //    }
-    public double getDistance() {
-        return distanceSensor.getDistance(DistanceUnit.CM);
-    }
+//    public double getDistance() {
+//        return distanceSensor.getDistance(DistanceUnit.CM);
+//    }
     public boolean getZeroSwitch(){
         return zeroSwitch.getState();
     }
@@ -94,7 +96,7 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
 
     public Command reset(){
         return new SequentialCommandGroup(
-                setPowerInstantCommand(0.1),
+                setPowerInstantCommand(0.2),
                 new WaitUntilCommand(()->(!(getZeroSwitch()))),
                 setPosition(0),
                 setPowerInstantCommand(0)

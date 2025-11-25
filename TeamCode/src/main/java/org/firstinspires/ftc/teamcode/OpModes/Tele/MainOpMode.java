@@ -59,7 +59,6 @@ public class MainOpMode extends MMOpMode {
     @Override
     public void onPlayLoop() {
         telemetry.addData("spindexer pose:", SpindexerSubsystem.getInstance().getPose());
-        telemetry.addData("dis",SpindexerSubsystem.getInstance().getDistance());
         telemetry.update();
     }
 }
