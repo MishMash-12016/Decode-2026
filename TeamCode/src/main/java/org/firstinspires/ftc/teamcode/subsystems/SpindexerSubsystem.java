@@ -101,15 +101,15 @@ SpindexerSubsystem extends PositionPidSubsystem {
         return new InstantCommand(() -> setPose(position));
     }
 
-    public Command reset(){
+    public static Command reset(){
         return new SequentialCommandGroup(
-                setPowerInstantCommand(0.2),
+                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.2),
                 new InstantCommand(()-> testReset1 = true),
-                new WaitUntilCommand(()->(!(getZeroSwitch()))),
+                new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))),
                 new InstantCommand(()-> testReset2 = true),
-                setPosition(0),
+                SpindexerSubsystem.getInstance().setPosition(0),
                 new InstantCommand(()-> testReset3 = true),
-                setPowerInstantCommand(0)
+                SpindexerSubsystem.getInstance().setPowerInstantCommand(0)
         );
     }
 }

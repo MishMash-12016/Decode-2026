@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -37,24 +38,18 @@ public class TestOpMode extends MMOpMode {
 
         MMDrivetrain.getInstance().update();
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.FIRSTPOS)
         );
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.SCNDPOS)
         );
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.THIRDPOS)
         );
 
 
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
-//                new SequentialCommandGroup(
-//                        SpindexerSubsystem.getInstance().setPowerInstantCommand(0.15),
-//                        new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))),
-//                        SpindexerSubsystem.getInstance().setPosition(0),
-//                        SpindexerSubsystem.getInstance().setPowerInstantCommand(0))
-//        );
+
 //
 //        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileActiveOnce(
 //                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.15)
@@ -64,9 +59,9 @@ public class TestOpMode extends MMOpMode {
 //                SpindexerSubsystem.getInstance().setPosition(0))
 //        );
 //
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileActiveOnce(
-//                SpindexerSubsystem.getInstance().setPowerInstantCommand(0)
-//        );
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileActiveOnce(
+                SpindexerSubsystem.reset()
+        );
 
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
@@ -89,7 +84,7 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.getInstance().update();
+        MMDrivetrain.update();
         telemetry.update();
 
 //        new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))).andThen(
