@@ -21,7 +21,8 @@ import Ori.Coval.Logging.AutoLog;
 
 @Config
 @AutoLog
-public class SpindexerSubsystem extends PositionPidSubsystem {
+public class
+SpindexerSubsystem extends PositionPidSubsystem {
 
     CuttleDigital zeroSwitch =  new CuttleDigital(MMRobot.getInstance().controlHub, 0);
 
@@ -34,7 +35,6 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     public static double KP = 0.0032;
     public static double KI = 0.0000001;
     public static double KD = 0.0001;
-
     public static double IZONE = 20;
 
     public static double POSITION_TOLERANCE = 3.5;
@@ -47,6 +47,13 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     public static final double THIRDPOS = SCNDPOS+120;
 
     public static SpindexerSubsystem instance;
+
+    /**Testing:**/
+    public static boolean testReset1 = false;
+    public static boolean testReset2 = false;
+    public static boolean testReset3 = false;
+
+
 
     public static synchronized SpindexerSubsystem getInstance() {
         if (instance == null) {
@@ -61,8 +68,8 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
 
         withEncoder(mmRobot.controlHub,3,RESOLUTION/360, Direction.REVERSE);
 
-        withCrServo(mmRobot.controlHub, 0,Direction.FORWARD);
-        withCrServo(mmRobot.controlHub, 1,Direction.FORWARD);
+        withCrServo(mmRobot.controlHub, 0,Direction.REVERSE);
+        withCrServo(mmRobot.controlHub, 1,Direction.REVERSE);
         withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //        withZeroSwitch(zeroSwitch,10);
         withAngleRange(360);
@@ -97,8 +104,11 @@ public class SpindexerSubsystem extends PositionPidSubsystem {
     public Command reset(){
         return new SequentialCommandGroup(
                 setPowerInstantCommand(0.2),
+                new InstantCommand(()-> testReset1 = true),
                 new WaitUntilCommand(()->(!(getZeroSwitch()))),
+                new InstantCommand(()-> testReset2 = true),
                 setPosition(0),
+                new InstantCommand(()-> testReset3 = true),
                 setPowerInstantCommand(0)
         );
     }
