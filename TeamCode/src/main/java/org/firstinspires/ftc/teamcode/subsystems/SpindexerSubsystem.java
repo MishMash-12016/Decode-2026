@@ -46,13 +46,7 @@ SpindexerSubsystem extends PositionPidSubsystem {
     public static final double SCNDPOS = FIRSTPOS+120;
     public static final double THIRDPOS = SCNDPOS+120;
 
-    public static SpindexerSubsystem instance;
-
-    /**Testing:**/
-    public static boolean testReset1 = false;
-    public static boolean testReset2 = false;
-    public static boolean testReset3 = false;
-
+    public static SpindexerSubsystemAutoLogged instance;
 
 
     public static synchronized SpindexerSubsystem getInstance() {
@@ -66,7 +60,7 @@ SpindexerSubsystem extends PositionPidSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withEncoder(mmRobot.controlHub,3,RESOLUTION/360, Direction.REVERSE);
+        withEncoder(mmRobot.controlHub,3,RESOLUTION/360, Direction.FORWARD);
 
         withCrServo(mmRobot.controlHub, 0,Direction.REVERSE);
         withCrServo(mmRobot.controlHub, 1,Direction.REVERSE);
@@ -103,12 +97,9 @@ SpindexerSubsystem extends PositionPidSubsystem {
 
     public static Command reset(){
         return new SequentialCommandGroup(
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.2),
-                new InstantCommand(()-> testReset1 = true),
+                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.17),
                 new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))),
-                new InstantCommand(()-> testReset2 = true),
                 SpindexerSubsystem.getInstance().setPosition(0),
-                new InstantCommand(()-> testReset3 = true),
                 SpindexerSubsystem.getInstance().setPowerInstantCommand(0)
         );
     }

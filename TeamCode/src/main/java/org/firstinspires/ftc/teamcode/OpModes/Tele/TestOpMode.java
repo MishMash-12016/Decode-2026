@@ -34,9 +34,8 @@ public class TestOpMode extends MMOpMode {
     }
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
-
-        MMDrivetrain.getInstance().update();
+//        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
+//        MMDrivetrain.update();
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.FIRSTPOS)
@@ -48,8 +47,6 @@ public class TestOpMode extends MMOpMode {
                 SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.THIRDPOS)
         );
 
-
-
 //
 //        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileActiveOnce(
 //                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.15)
@@ -59,18 +56,15 @@ public class TestOpMode extends MMOpMode {
 //                SpindexerSubsystem.getInstance().setPosition(0))
 //        );
 //
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileActiveOnce(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileActiveOnce(
                 SpindexerSubsystem.reset()
         );
 
-
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                ()->SpindexerSubsystem.getInstance().setPose(0));
+                SpindexerSubsystem.getInstance().setPowerInstantCommand(0));
 
 
     }
-    int counter = 0;
-    boolean tempswitch;
     @Override
     public void onInitLoop() {
 

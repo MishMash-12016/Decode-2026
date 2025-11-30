@@ -129,9 +129,8 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
 
     @Override
     public void periodic() {
-        if (MMRobot.getInstance().currentOpMode != null &&
-                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG) {
-
+        if (MMRobot.getInstance().currentOpMode != null) {
+            try {
             MMUtils.updateIfChanged(
                     debugKpSupplier,
                     pidController::getP,
@@ -174,6 +173,9 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
                     pidController::getMaximumIntegral,
                     this::withMaxIntegralRange
             );
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
 }
