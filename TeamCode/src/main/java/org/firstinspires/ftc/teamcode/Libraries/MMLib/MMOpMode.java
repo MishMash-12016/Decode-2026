@@ -124,8 +124,19 @@ public abstract class MMOpMode extends LinearOpMode {
                 updateHardware(hardwareRoot);
             }
         });
+        
+        logCommandScheduler();
     }
 
+    public void logCommandScheduler(){
+        List<Command> scheduledCommands = CommandScheduler.getInstance().getScheduledCommands();
+        String[] commandsName = new String[scheduledCommands.size()];
+        for (int i = 0; i< commandsName.length; i++){
+            commandsName[i] = scheduledCommands.get(i).getName();
+        }
+
+        KoalaLog.log("running commands name", commandsName, true);
+    }
     public abstract void onPlayLoop();
 
     public void onEnd() {}
