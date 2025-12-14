@@ -28,7 +28,7 @@ SpindexerSubsystem extends PositionPidSubsystem {
 
 //    ColorSensor colorSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(ColorSensor.class,"spinColor");
 
-//    DistanceSensor distanceSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(DistanceSensor.class,"SpinDis");
+    DistanceSensor distanceSensor = MMRobot.getInstance().currentOpMode.hardwareMap.get(DistanceSensor.class,"SpinDis");
     // the lowest value of light without a ball in
     public static final double ALPHA_TOLERANCE = 4;
 
@@ -37,9 +37,15 @@ SpindexerSubsystem extends PositionPidSubsystem {
     public static double KD = 0.0001;
     public static double IZONE = 20;
 
+    /*todo: chack what valus are correct
+    public static double KP = 0.0019;
+    public static double KI = 0.02;
+    public static double KD = 0.00004;
+    public static double IZONE = 15;
+     */
+
     public static double POSITION_TOLERANCE = 3.5;
 
-    //ToDo: adjust ratio
     public static double RESOLUTION = 8192;
 
     public static final double FIRSTPOS = 0;
@@ -81,13 +87,18 @@ SpindexerSubsystem extends PositionPidSubsystem {
                 null,
                 null,
                 null
-        );    }
-//    public float getAlphaColor(){
-//        return colorSensor.alpha();
-//    }
-//    public double getDistance() {
-//        return distanceSensor.getDistance(DistanceUnit.CM);
-//    }
+        );
+    }
+
+    /*
+    public float getAlphaColor(){
+        return colorSensor.alpha();
+    }
+    */
+
+    public double getDistance() {
+        return distanceSensor.getDistance(DistanceUnit.CM);
+    }
     public boolean getZeroSwitch(){
         return zeroSwitch.getState();
     }
@@ -95,9 +106,10 @@ SpindexerSubsystem extends PositionPidSubsystem {
         return new InstantCommand(() -> setPose(position));
     }
 
+
     public static Command reset(){
         return new SequentialCommandGroup(
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.17),
+                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.12),
                 new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))),
                 SpindexerSubsystem.getInstance().setPosition(0),
                 SpindexerSubsystem.getInstance().setPowerInstantCommand(0)

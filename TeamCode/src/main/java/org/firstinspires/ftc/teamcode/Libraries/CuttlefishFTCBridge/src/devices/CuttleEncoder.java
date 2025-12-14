@@ -58,6 +58,23 @@ public class CuttleEncoder
         offsetTicks -= getCounts() - pose;
     }
 
+     /*
+         //todo here
+    public double getCounts() {
+        return (hub.bulkData.getEncoderPosition(mPort) - offsetTicks) * direction;
+    }
+
+    public double getPose() {
+        return getCounts() / encTicks;
+    }
+
+    public void setPose(double pose) {
+        double targetTicks = pose * encTicks;
+        double rawTicks = hub.bulkData.getEncoderPosition(mPort);
+        offsetTicks = rawTicks - (targetTicks * direction);
+    }
+    //todo here
+      */
     /**
      * Set the direction of the encoder.
      * @param direction

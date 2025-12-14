@@ -47,15 +47,6 @@ public class TestOpMode extends MMOpMode {
                 SpindexerSubsystem.getInstance().getToSetpointCommand(SpindexerSubsystem.THIRDPOS)
         );
 
-//
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileActiveOnce(
-//                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.15)
-//        );
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileActiveOnce(
-//                new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))).andThen(
-//                SpindexerSubsystem.getInstance().setPosition(0))
-//        );
-//
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whileActiveOnce(
                 SpindexerSubsystem.reset()
         );
@@ -81,32 +72,12 @@ public class TestOpMode extends MMOpMode {
         MMDrivetrain.update();
         telemetry.update();
 
-//        new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))).andThen(
-//                SpindexerSubsystem.getInstance().setPosition(0)).schedule();
-
-//        if (!SpindexerSubsystem.getInstance().getZeroSwitch()&&tempswitch){counter++;}
-//        tempswitch = SpindexerSubsystem.getInstance().getZeroSwitch();
-//        telemetry.addData("counter",counter);
-
-
         telemetry.addData("Spin pose:", SpindexerSubsystem.getInstance().getPose());
         telemetry.addData("Spin switch:", SpindexerSubsystem.getInstance().getZeroSwitch());
         telemetry.addData("Spin power:", SpindexerSubsystem.getInstance().getPower());
-
-//        telemetry.addData("testReset1:", SpindexerSubsystem.testReset1);
-//        telemetry.addData("testReset2:", SpindexerSubsystem.testReset2);
-//        telemetry.addData("testReset3:", SpindexerSubsystem.testReset3);
-
-
-//        telemetry.addData("DriveTrain pose:", MMDrivetrain.getInstance().getPose());
-//        telemetry.addData("DriveTrain pose:", MMDrivetrain.getInstance().getFollower().getHeading());
-
-
-
     }
 
     @Override
     public void onEnd() {
-
     }
 }
