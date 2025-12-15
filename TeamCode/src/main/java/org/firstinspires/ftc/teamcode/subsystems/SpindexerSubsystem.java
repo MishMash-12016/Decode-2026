@@ -109,7 +109,7 @@ SpindexerSubsystem extends PositionPidSubsystem {
 
     public static Command reset(){
         return new SequentialCommandGroup(
-                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.12),
+                SpindexerSubsystem.getInstance().setPowerInstantCommand(0.1),
                 new WaitUntilCommand(()->(!(SpindexerSubsystem.getInstance().getZeroSwitch()))),
                 SpindexerSubsystem.getInstance().setPosition(0),
                 SpindexerSubsystem.getInstance().setPowerInstantCommand(0)

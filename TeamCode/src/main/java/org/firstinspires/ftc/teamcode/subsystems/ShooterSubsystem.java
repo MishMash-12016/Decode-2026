@@ -55,8 +55,8 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
 
         //TODO: temp controlhub (needs to be ex)
 
-        withMotor(mmRobot.expansionHub,1, Direction.REVERSE).minPower = 0;
-        withMotor(mmRobot.expansionHub,0, Direction.FORWARD).minPower = 0;
+        withMotor(mmRobot.expansionHub,1, Direction.FORWARD).minPower = 0;
+        withMotor(mmRobot.expansionHub,0, Direction.REVERSE).minPower = 0;
 
         withEncoder(mmRobot.expansionHub,0,RESOLUTION,Direction.REVERSE);
 

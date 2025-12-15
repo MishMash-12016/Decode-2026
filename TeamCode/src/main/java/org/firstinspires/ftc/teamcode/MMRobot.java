@@ -20,7 +20,7 @@ public class MMRobot extends MMRobotInner {
 
     public MMRobot(){
         setControlHubName("Control Hub");
-        setExpansionHubName("Expansion Hub 2");
+        setExpansionHubName("Expansion Hub 1");
     }
 
     @Override
