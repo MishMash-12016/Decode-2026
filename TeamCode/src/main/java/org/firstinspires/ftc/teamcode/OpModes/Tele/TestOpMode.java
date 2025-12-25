@@ -11,8 +11,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-
-import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.FunnelSubsystem;
 
 
 import Ori.Coval.Logging.AutoLog;
@@ -29,9 +28,6 @@ public class TestOpMode extends MMOpMode {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
         MMDrivetrain.update();
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
-                SpindexerSubsystem.reset());
-
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 IntakeCommandGroup.FeedIntake());
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
@@ -41,7 +37,6 @@ public class TestOpMode extends MMOpMode {
     }
     @Override
     public void onInitLoop() {
-
     }
 
     @Override
@@ -55,10 +50,6 @@ public class TestOpMode extends MMOpMode {
         MMDrivetrain.update();
         telemetry.update();
 
-        telemetry.addData("Spin pose:", SpindexerSubsystem.getInstance().getPose());
-        telemetry.addData("Spin switch:", SpindexerSubsystem.getInstance().getZeroSwitch());
-        telemetry.addData("Spin power:", SpindexerSubsystem.getInstance().getPower());
-        telemetry.addData("ts:", null);
     }
 
     @Override

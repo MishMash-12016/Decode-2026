@@ -12,8 +12,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
-
 import Ori.Coval.Logging.AutoLog;
 
 @TeleOp
@@ -28,37 +26,23 @@ public class MainOpMode extends MMOpMode {
     @Override
     public void onInit() {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
-        MMDrivetrain.getInstance().update();
+        MMDrivetrain.update();
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(IntakeCommandGroup.FeedIntake());
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(ShootCommandGroup.ShootAll());
 
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
-//                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.FIRSTPOS));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
-//                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.SCNDPOS));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
-//                SpindexerSubsystem.getInstance().getToAndHoldSetPointCommand(SpindexerSubsystem.THIRDPOS));
-
-
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
                 ShooterSubsystem.getInstance().setPowerRunCommand(1))
                 .whenInactive(ShooterSubsystem.getInstance().setPowerInstantCommand(0));
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
-                SpindexerSubsystem.getInstance().setPowerRunCommand(-1))
-                .whenInactive(SpindexerSubsystem.getInstance().setPowerInstantCommand(0));
     }
 
     @Override
     public void onPlay() {
         super.onPlay();
-        SpindexerSubsystem.getInstance().reset().schedule();
     }
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("spindexer pose:", SpindexerSubsystem.getInstance().getPose());
         telemetry.update();
     }
 }

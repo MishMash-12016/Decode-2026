@@ -26,8 +26,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.SpindexerSubsystem;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -146,7 +144,6 @@ public abstract class MMOpMode extends LinearOpMode {
      */
     public void reset() {
         CommandScheduler.getInstance().cancelAll();
-        SpindexerSubsystem.instance = null; //todo remove
         ShooterSubsystem.instance = null;
     }
 
