@@ -15,6 +15,8 @@ public class FunnelStoperSubsystem extends ServoSubsystem {
 
     //TODO: generic values
     public static double stoperOpen = 1.0;
+    
+
     public static double stoperClose = 0.0;
 
     public static double POSITION_TOLERANCE = 0.1;
