@@ -5,7 +5,6 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
@@ -17,7 +16,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.RobotConstants;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 @Autonomous
 public class MainBasicAuto extends MMOpMode {
@@ -52,7 +50,7 @@ public class MainBasicAuto extends MMOpMode {
 
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 new FollowPathCommand(follower, FROM_START_TO_SCORE),
-                ShootCommandGroup.ShootAll(),
+                ShootCommandGroup.ShootAllClose(),
                 new FollowPathCommand(follower, FROM_SCORE_TO_PARKING),
                 new RunCommand(()-> RobotConstants.APRIL_TAG_ID = WebcamSubsystem.getInstance().getAprilTagID()).withTimeout(2000)
         );
