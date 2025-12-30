@@ -6,6 +6,7 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
+import org.firstinspires.ftc.teamcode.TimedConditionCommand;
 import org.firstinspires.ftc.teamcode.subsystems.FunnelStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.FunnelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
@@ -21,7 +22,7 @@ public class ShootCommandGroup {
               FunnelSubsystem.getInstance().setPowerInstantCommand(1),
               FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperOpen),
               //todo ideal: until beamsensor->true for 3 sec
-              new WaitCommand(2000),
+              new TimedConditionCommand(()-> FunnelSubsystem.getInstance().getBeamSensor(),3),
               FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperClose),
               FunnelSubsystem.getInstance().stopCommand(),
               ShooterSubsystem.getInstance().stopCommand()
