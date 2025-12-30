@@ -94,6 +94,10 @@ public class MotorOrCrServoSubsystem extends MMSubsystem {
         setPower(0);
     }
 
+    public Command stopCommand(){
+        return setPowerInstantCommand(0);
+    }
+
     /**
      * adds a motor to this subsystem
      * @param revHub

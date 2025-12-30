@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
 @TeleOp
@@ -23,6 +24,8 @@ public class TestOpMode extends MMOpMode {
     public void onInit() {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
         MMDrivetrain.update();
+
+
     }
     @Override
     public void onInitLoop() {
