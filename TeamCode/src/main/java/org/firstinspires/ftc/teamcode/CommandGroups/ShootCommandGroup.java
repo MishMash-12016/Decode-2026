@@ -19,9 +19,10 @@ public class ShootCommandGroup {
 //              MMDrivetrain.getInstance().getFollower().holdPoint(MMDrivetrain.getInstance().getPose()),
               //todo ideal: shooter target -> by pose
               ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50),
+              new WaitUntilCommand(()-> ShooterSubsystem.getInstance().getPose() > 45),
               FunnelSubsystem.getInstance().setPowerInstantCommand(1),
               FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperOpen),
-              new TimedConditionCommand(()-> FunnelSubsystem.getInstance().getBeamSensor(),3),
+              new TimedConditionCommand(()-> FunnelSubsystem.getInstance().getBeamSensor(),2),
               FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperClose),
               FunnelSubsystem.getInstance().stopCommand(),
               ShooterSubsystem.getInstance().stopCommand()
@@ -34,25 +35,22 @@ public class ShootCommandGroup {
             ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(60),
             //first ball
             //todo ideal: shooter target -> by pose
-            new WaitUntilCommand(()-> ShooterSubsystem.getInstance().getPose() > 60),
+            new WaitUntilCommand(()-> ShooterSubsystem.getInstance().getPose() > 55),
             FunnelSubsystem.getInstance().setPowerInstantCommand(1),
             FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperOpen),
-            new WaitUntilCommand(()-> FunnelSubsystem.getInstance().getBeamSensor()),
-            new TimedConditionCommand(()-> !FunnelSubsystem.getInstance().getBeamSensor(),0.5),
+            new TimedConditionCommand(()-> !FunnelSubsystem.getInstance().getBeamSensor(),0.2),
             new WaitUntilCommand(()-> FunnelSubsystem.getInstance().getBeamSensor()),
             FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperClose),
             //second ball
-            new WaitUntilCommand(()-> ShooterSubsystem.getInstance().getPose() > 60),
+            new WaitUntilCommand(()-> ShooterSubsystem.getInstance().getPose() > 55),
             FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperOpen),
-            new WaitUntilCommand(()-> FunnelSubsystem.getInstance().getBeamSensor()),
-            new TimedConditionCommand(()-> !FunnelSubsystem.getInstance().getBeamSensor(),0.5),
+            new TimedConditionCommand(()-> !FunnelSubsystem.getInstance().getBeamSensor(),0.2),
             new WaitUntilCommand(()-> FunnelSubsystem.getInstance().getBeamSensor()),
             FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperClose),
             //third ball
-            new WaitUntilCommand(()-> ShooterSubsystem.getInstance().getPose() > 60),
+            new WaitUntilCommand(()-> ShooterSubsystem.getInstance().getPose() > 55),
             FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperOpen),
-            new WaitUntilCommand(()-> FunnelSubsystem.getInstance().getBeamSensor()),
-            new TimedConditionCommand(()-> !FunnelSubsystem.getInstance().getBeamSensor(),0.5),
+            new TimedConditionCommand(()-> !FunnelSubsystem.getInstance().getBeamSensor(),0.2),
             new WaitUntilCommand(()-> FunnelSubsystem.getInstance().getBeamSensor()),
             FunnelStopperSubsystem.getInstance().setPositionCommand(FunnelStopperSubsystem.stopperClose),
             FunnelSubsystem.getInstance().stopCommand(),

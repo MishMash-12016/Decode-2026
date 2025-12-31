@@ -33,6 +33,6 @@ public class TimedConditionCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return timer.seconds()>=3;
+        return timer.seconds()>=time;
     }
 }
