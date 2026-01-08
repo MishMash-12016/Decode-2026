@@ -10,24 +10,27 @@ import Ori.Coval.Logging.AutoLog;
 
 @Config
 @AutoLog
-public class IntakeSubsystem extends MotorOrCrServoSubsystem {
 
-    public static IntakeSubsystemAutoLogged instance;
+public class IndexerSubsystem extends MotorOrCrServoSubsystem {
 
-    public static synchronized IntakeSubsystemAutoLogged getInstance() {
+    //TODO: generic values
+
+    public static IndexerSubsystemAutoLogged instance;
+
+    public static synchronized IndexerSubsystemAutoLogged getInstance() {
         if (instance == null) {
-            instance = new IntakeSubsystemAutoLogged("IntakeSubsystem");
+            instance = new IndexerSubsystemAutoLogged("IndexerSubsystem");
         }
         return instance;
     }
 
-    public IntakeSubsystem(String subsystemName) {
+    public IndexerSubsystem(String subsystemName) {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
         //todo: change to right hub&port
-        withMotor(mmRobot.expansionHub,2, Direction.FORWARD);
-
-//        withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        withCrServo(mmRobot.controlHub,0,Direction.REVERSE);
     }
+
+
 }
