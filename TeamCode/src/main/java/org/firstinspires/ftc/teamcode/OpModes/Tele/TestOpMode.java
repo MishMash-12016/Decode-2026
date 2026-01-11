@@ -9,7 +9,10 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
 @TeleOp
@@ -24,6 +27,26 @@ public class TestOpMode extends MMOpMode {
     public void onInit() {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
         MMDrivetrain.update();
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
+                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                IntakeSubsystem.getInstance().stopCommand());
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).toggleWhenActive(
+                TransferSubsystem.getInstance().setPowerInstantCommand(1),
+                TransferSubsystem.getInstance().stopCommand());
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenActive(
+                TransferSubsystem.getInstance().setPowerInstantCommand(0.2),
+                TransferSubsystem.getInstance().stopCommand());
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
+                IndexerSubsystem.getInstance().setPowerInstantCommand(1),
+                IndexerSubsystem.getInstance().stopCommand());
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
+                ShooterSubsystem.getInstance().getToSetpointCommand(50),
+                ShooterSubsystem.getInstance().stopCommand());
 
 
     }

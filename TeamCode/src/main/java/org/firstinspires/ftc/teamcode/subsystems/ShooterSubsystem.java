@@ -53,8 +53,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        //TODO: temp controlhub (needs to be ex)
-
+        //todo: change to right hub&port
         withMotor(mmRobot.expansionHub,1, Direction.FORWARD).minPower = 0;
         withMotor(mmRobot.expansionHub,0, Direction.REVERSE).minPower = 0;
 
