@@ -44,6 +44,10 @@ public class TestOpMode extends MMOpMode {
                 IndexerSubsystem.getInstance().setPowerInstantCommand(1),
                 IndexerSubsystem.getInstance().stopCommand());
 
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenActive(
+                IndexerSubsystem.getInstance().setPowerInstantCommand(-0.8),
+                IndexerSubsystem.getInstance().stopCommand());
+
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
                 ShooterSubsystem.getInstance().getToSetpointCommand(50),
                 ShooterSubsystem.getInstance().stopCommand());
