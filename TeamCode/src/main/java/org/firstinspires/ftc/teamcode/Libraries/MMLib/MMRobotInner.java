@@ -29,6 +29,7 @@ public class MMRobotInner extends Robot {
     public String controlHubName = "Control Hub";
     public String expansionHubName = "Expansion Hub";
 
+
     private static MMRobot instance;
 
     public static synchronized MMRobot getInstance() {

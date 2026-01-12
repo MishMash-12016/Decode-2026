@@ -29,7 +29,7 @@ public class IndexerSubsystem extends MotorOrCrServoSubsystem {
         MMRobot mmRobot = MMRobot.getInstance();
 
         //todo: change to right hub&port
-        withCrServo(mmRobot.controlHub,0,Direction.REVERSE);
+        withCrServo(mmRobot.expansionHub,5,Direction.REVERSE);
     }
 
 

@@ -54,6 +54,6 @@ public class TuneOpMode extends MMOpMode {
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
                 new InstantCommand(()->p3.setPower(1)));
 
-        telemetry.addData("xxx:", null);
+        telemetry.addData("run1:", null);
     }
 }

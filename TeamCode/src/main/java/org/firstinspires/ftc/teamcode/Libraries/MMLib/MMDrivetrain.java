@@ -71,7 +71,7 @@ public class MMDrivetrain extends MMSubsystem {
     }
 
     public CommandBase driveCommand(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, DoubleSupplier heading, BooleanSupplier slowMode) {
-        return this.driveCommand(forwardDrive, lateralDrive, heading, false, slowMode);
+        return this.driveCommand(forwardDrive, lateralDrive, heading, true, slowMode);
     }
 
     public CommandBase driveCommand(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, DoubleSupplier heading, boolean robotCentric, BooleanSupplier slowMode) {

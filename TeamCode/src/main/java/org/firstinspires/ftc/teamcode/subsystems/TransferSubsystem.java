@@ -30,7 +30,7 @@ public class TransferSubsystem extends MotorOrCrServoSubsystem {
         MMRobot mmRobot = MMRobot.getInstance();
 
         //todo: change to right hub&port
-        withMotor(mmRobot.expansionHub,0, Direction.FORWARD);
+        withMotor(mmRobot.expansionHub,3, Direction.FORWARD);
 
         withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }

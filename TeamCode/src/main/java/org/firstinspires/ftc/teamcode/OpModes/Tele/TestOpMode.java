@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
@@ -29,28 +30,29 @@ public class TestOpMode extends MMOpMode {
         MMDrivetrain.update();
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
-                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                IntakeSubsystem.getInstance().stopCommand());
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).toggleWhenActive(
-                TransferSubsystem.getInstance().setPowerInstantCommand(1),
-                TransferSubsystem.getInstance().stopCommand());
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenActive(
-                TransferSubsystem.getInstance().setPowerInstantCommand(0.2),
-                TransferSubsystem.getInstance().stopCommand());
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
-                IndexerSubsystem.getInstance().setPowerInstantCommand(1),
-                IndexerSubsystem.getInstance().stopCommand());
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenActive(
-                IndexerSubsystem.getInstance().setPowerInstantCommand(-0.8),
-                IndexerSubsystem.getInstance().stopCommand());
+                new ParallelCommandGroup(
+                    IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                    TransferSubsystem.getInstance().setPowerInstantCommand(0.3),
+                    IndexerSubsystem.getInstance().setPowerInstantCommand(-1)),
+                new ParallelCommandGroup(
+                    IntakeSubsystem.getInstance().stopCommand(),
+                    TransferSubsystem.getInstance().stopCommand(),
+                    IndexerSubsystem.getInstance().stopCommand()));
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
-                ShooterSubsystem.getInstance().getToSetpointCommand(50),
+                new ParallelCommandGroup(
+                    IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                    TransferSubsystem.getInstance().setPowerInstantCommand(1),
+                    IndexerSubsystem.getInstance().setPowerInstantCommand(1)),
+                new ParallelCommandGroup(
+                    IntakeSubsystem.getInstance().stopCommand(),
+                    TransferSubsystem.getInstance().stopCommand(),
+                    IndexerSubsystem.getInstance().stopCommand()));
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
+                ShooterSubsystem.getInstance().setPowerInstantCommand(1),
                 ShooterSubsystem.getInstance().stopCommand());
+
 
 
     }
