@@ -219,6 +219,10 @@ public class ServoSubsystem extends MMSubsystem {
                 tempList.add(new CuttleServo(MMRobot.getInstance().controlHub, servo.port)
                     .setDirection(servo.getDirection())
                     .setOffset(servo.getOffset()));
+            } else if(servo.hub.getHubName().equals(MMRobot.getInstance().servoHub.getHubName())){
+                tempList.add(new CuttleServo(MMRobot.getInstance().servoHub, servo.port)
+                    .setDirection(servo.getDirection())
+                    .setOffset(servo.getOffset()));
             }
             else {
                 tempList.add(new CuttleServo(MMRobot.getInstance().expansionHub, servo.port)

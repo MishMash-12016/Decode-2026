@@ -29,6 +29,7 @@ public class MMRobotInner extends Robot {
 
     public String controlHubName = "Control Hub";
     public String expansionHubName = "Expansion Hub";
+    public String servoHubName = "Servo Hub";
 
     private static MMRobot instance;
 
@@ -85,6 +86,9 @@ public class MMRobotInner extends Robot {
     public void setExpansionHubName(String expansionHubName) {
         this.expansionHubName = expansionHubName;
     }
+    public void setServoHubName(String servoHubName) {
+        this.servoHubName = servoHubName;
+    }
 
     private void initBasics() {
         HardwareMap hardwareMap = MMRobot.getInstance().currentOpMode.hardwareMap;
@@ -92,6 +96,10 @@ public class MMRobotInner extends Robot {
         gamepadEx2 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad2);
 
         controlHub = new CuttleRevHub(hardwareMap, controlHubName);
+        if (MMRobot.getInstance().currentOpMode.opModeType != OpModeType.NonCompetition.DEBUG_SERVOHUB) {
+            expansionHub = new CuttleRevHub(hardwareMap, expansionHubName);
+            servoHub = new CuttleRevHub(hardwareMap, servoHubName);
+        }
         if (MMRobot.getInstance().currentOpMode.opModeType != OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
             expansionHub = new CuttleRevHub(hardwareMap, expansionHubName);
         }
