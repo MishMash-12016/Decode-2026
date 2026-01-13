@@ -3,8 +3,12 @@ package org.firstinspires.ftc.teamcode.OpModes.Tele;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
+import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
+import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
@@ -20,37 +24,26 @@ import Ori.Coval.Logging.AutoLog;
 @Config
 @AutoLog
 public class TestOpMode extends MMOpMode {
-
+    int c = 0;
     public TestOpMode() {
         super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
     }
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()->false);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> gamepad1.left_stick_button);
+        MMDrivetrain.getInstance().resetYaw();
         MMDrivetrain.update();
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
-                new ParallelCommandGroup(
-                    IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                    TransferSubsystem.getInstance().setPowerInstantCommand(0.3),
-                    IndexerSubsystem.getInstance().setPowerInstantCommand(-1)),
-                new ParallelCommandGroup(
-                    IntakeSubsystem.getInstance().stopCommand(),
-                    TransferSubsystem.getInstance().stopCommand(),
-                    IndexerSubsystem.getInstance().stopCommand()));
+                IntakeCommandGroup.FeedIntake(),
+                IntakeCommandGroup.StopIntake());
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
-                new ParallelCommandGroup(
-                    IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                    TransferSubsystem.getInstance().setPowerInstantCommand(1),
-                    IndexerSubsystem.getInstance().setPowerInstantCommand(1)),
-                new ParallelCommandGroup(
-                    IntakeSubsystem.getInstance().stopCommand(),
-                    TransferSubsystem.getInstance().stopCommand(),
-                    IndexerSubsystem.getInstance().stopCommand()));
+                ShootCommandGroup.PrepShoot(),
+                ShootCommandGroup.StopShoot());
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
-                ShooterSubsystem.getInstance().setPowerInstantCommand(1),
+                ShootCommandGroup.StartWheel(),
                 ShooterSubsystem.getInstance().stopCommand());
 
 
@@ -70,6 +63,18 @@ public class TestOpMode extends MMOpMode {
     public void onPlayLoop() {
         MMDrivetrain.update();
         telemetry.update();
+
+        telemetry.addData("able Shoot: ",46 < ShooterSubsystem.getInstance().getVelocity());
+        telemetry.addData("ShootSpeed: ",ShooterSubsystem.getInstance().getVelocity());
+
+        if(gamepad1.right_trigger > 0.01){
+            new SequentialCommandGroup(
+                IntakeCommandGroup.OutIntake(),
+                new WaitCommand(2000),
+                IntakeCommandGroup.StopIntake()).schedule();
+        }
+
+
 
     }
 

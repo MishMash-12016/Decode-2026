@@ -29,7 +29,7 @@ public class MainOpMode extends MMOpMode {
         MMDrivetrain.update();
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(IntakeCommandGroup.FeedIntake());
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(ShootCommandGroup.ShootAllClose());
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(ShootCommandGroup.PrepShoot());
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
                 ShooterSubsystem.getInstance().setPowerRunCommand(1))

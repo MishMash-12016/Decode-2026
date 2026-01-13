@@ -1,38 +1,43 @@
 package org.firstinspires.ftc.teamcode.CommandGroups;
 
 import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitCommand;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 
-import org.firstinspires.ftc.teamcode.TimedConditionCommand;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Commands.WithFinally;
 import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 
 public class ShootCommandGroup {
   public int timesBallDetected = 0;
 
-  public static Command ShootAllClose() {
-            return new SequentialCommandGroup(
-//              MMDrivetrain.getInstance().getFollower().holdPoint(MMDrivetrain.getInstance().getPose()),
-              //todo ideal: shooter target -> by pose
-              ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50),
-              new WaitUntilCommand(()-> ShooterSubsystem.getInstance().getPose() > 45),
-              TransferSubsystem.getInstance().setPowerInstantCommand(1),
-              IndexerSubsystem.getInstance().setPowerInstantCommand(1),
-              IntakeSubsystem.getInstance().setPowerInstantCommand(1)
-            );
+  public static Command PrepShoot() {
+      return new WithFinally(
+              new ParallelCommandGroup(
+                      //MMDrivetrain.getInstance().getFollower().holdPoint(MMDrivetrain.getInstance().getPose()),
+                      //todo ideal: shooter target -> by pose
+                      IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                      TransferSubsystem.getInstance().setPowerInstantCommand(1),
+                      IndexerSubsystem.getInstance().setPowerInstantCommand(1)),
+              ()-> new ParallelCommandGroup(
+                      IntakeSubsystem.getInstance().stopCommand(),
+                      TransferSubsystem.getInstance().stopCommand(),
+                      IndexerSubsystem.getInstance().stopCommand())
+      );
   }
-
     public static Command StopShoot() {
-        return new SequentialCommandGroup(
-                TransferSubsystem.getInstance().setPowerInstantCommand(0),
-                IndexerSubsystem.getInstance().setPowerInstantCommand(0),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(0)
+        return new ParallelCommandGroup(
+                TransferSubsystem.getInstance().stopCommand(),
+                IndexerSubsystem.getInstance().stopCommand(),
+                IntakeSubsystem.getInstance().stopCommand()
         );
     }
+
+    public static Command StartWheel() {
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50);
+    }
+
 
 //    public static Command ShootAllFar() {
 //    return new SequentialCommandGroup(

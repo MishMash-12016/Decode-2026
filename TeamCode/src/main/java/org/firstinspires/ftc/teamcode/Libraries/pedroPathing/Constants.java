@@ -34,7 +34,6 @@ public class Constants {
             .rightFrontMotorName("fr")
             .rightRearMotorName("br")
             .leftFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
-            //lb is reverse, its incorrect (the power 1 is forward)
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)

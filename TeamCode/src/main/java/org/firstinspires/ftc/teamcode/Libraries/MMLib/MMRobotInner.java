@@ -20,6 +20,7 @@ public class MMRobotInner extends Robot {
     //basic robot things(control hub, expansion hub...)
     public CuttleRevHub controlHub;
     public CuttleRevHub expansionHub;
+    public CuttleRevHub servoHub;
     public MMBattery battery;
     public GamepadEx gamepadEx1;
     public GamepadEx gamepadEx2;
@@ -28,7 +29,6 @@ public class MMRobotInner extends Robot {
 
     public String controlHubName = "Control Hub";
     public String expansionHubName = "Expansion Hub";
-
 
     private static MMRobot instance;
 

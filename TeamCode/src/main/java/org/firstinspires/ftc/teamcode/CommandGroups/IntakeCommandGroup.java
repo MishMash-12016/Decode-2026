@@ -9,21 +9,25 @@ import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 public class IntakeCommandGroup {
-    static int waitTimeForBall = 300;
 
-    public static Command FeedIntake(){
-        return new WithFinally(
-             new SequentialCommandGroup(
-                IndexerSubsystem.getInstance().setPowerInstantCommand(-1),
-                new ParallelCommandGroup(
-                        IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                        TransferSubsystem.getInstance().setPowerInstantCommand(0.2)
-                )
-            ),
-            ()->{   IntakeSubsystem.getInstance().stop();
-                    TransferSubsystem.getInstance().stop();
-                    IndexerSubsystem.getInstance().stop();}
-        );
+    public static Command FeedIntake() {
+        return new ParallelCommandGroup(
+                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                TransferSubsystem.getInstance().setPowerInstantCommand(0.3),
+                IndexerSubsystem.getInstance().setPowerInstantCommand(-1));
+    }
+    public static Command StopIntake() {
+        return new ParallelCommandGroup(
+                IntakeSubsystem.getInstance().stopCommand(),
+                TransferSubsystem.getInstance().stopCommand(),
+                IndexerSubsystem.getInstance().stopCommand());
     }
 
+    public static Command OutIntake() {
+        return new ParallelCommandGroup(
+                IntakeSubsystem.getInstance().setPowerInstantCommand(-1),
+                TransferSubsystem.getInstance().setPowerInstantCommand(-1),
+                IndexerSubsystem.getInstance().setPowerInstantCommand(-1));
+    }
 }
+
