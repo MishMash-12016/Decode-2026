@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
+import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
@@ -26,7 +27,7 @@ import Ori.Coval.Logging.AutoLog;
 public class TestOpMode extends MMOpMode {
     int c = 0;
     public TestOpMode() {
-        super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
+        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
     }
     @Override
     public void onInit() {
@@ -47,6 +48,11 @@ public class TestOpMode extends MMOpMode {
                 ShooterSubsystem.getInstance().stopCommand());
 
 
+        new Trigger(()-> gamepad1.right_trigger > 0.01).whenActive(
+                new SequentialCommandGroup(
+                        IntakeCommandGroup.OutIntake(),
+                        new WaitCommand(2000),
+                        IntakeCommandGroup.StopIntake()));
 
     }
     @Override
@@ -61,20 +67,8 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.update();
-        telemetry.update();
-
         telemetry.addData("able Shoot: ",46 < ShooterSubsystem.getInstance().getVelocity());
         telemetry.addData("ShootSpeed: ",ShooterSubsystem.getInstance().getVelocity());
-
-        if(gamepad1.right_trigger > 0.01){
-            new SequentialCommandGroup(
-                IntakeCommandGroup.OutIntake(),
-                new WaitCommand(2000),
-                IntakeCommandGroup.StopIntake()).schedule();
-        }
-
-
 
     }
 

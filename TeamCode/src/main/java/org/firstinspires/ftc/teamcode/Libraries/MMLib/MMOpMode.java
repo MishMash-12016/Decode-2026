@@ -105,6 +105,9 @@ public abstract class MMOpMode extends LinearOpMode {
         if (MMRobot.getInstance().expansionHub != null) {
             MMRobot.getInstance().expansionHub.pullBulkData();  //updates the expansionHub sensors
         }
+        if (MMRobot.getInstance().servoHub != null) {
+            MMRobot.getInstance().servoHub.pullBulkData();  //updates the servo hub sensors
+        }
 
         telemetry.update();                                       //updates the telemetry
 

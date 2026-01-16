@@ -87,6 +87,9 @@ public class MMMotorOrCrServo {
             else if(crServo.hub.getHubName().equals(MMRobot.getInstance().controlHub.getHubName())){
                 crServo = new CuttleCrServo(MMRobot.getInstance().controlHub, crServo.port, crServo.direction);
             }
+            else if(crServo.hub.getHubName().equals(MMRobot.getInstance().servoHubName)){
+                crServo = new CuttleCrServo(MMRobot.getInstance().servoHub, crServo.port, crServo.direction);
+            }
             else {
                 crServo = new CuttleCrServo(MMRobot.getInstance().expansionHub, crServo.port, crServo.direction);
             }
