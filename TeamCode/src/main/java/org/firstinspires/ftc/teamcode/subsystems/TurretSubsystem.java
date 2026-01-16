@@ -25,15 +25,15 @@ public class TurretSubsystem extends PositionPidSubsystem {
 
     //TODO: wrong ports & values
     CuttleDigital zeroSwitch =  new CuttleDigital(MMRobot.getInstance().expansionHub, 1);
-    public static double KP = 1;
-    public static double KI = 0.0;
-    public static double KD = 0.0;
+    public static double KP = 0.0043;
+    public static double KI = 0.0001;
+    public static double KD = 0.006;
 
     public static double POSITION_TOLERANCE = 0.05;
     public static double VELOCITY_TOLERANCE = 0.0;
-    public static double IZONE = 20;
+    public static double IZONE = 10;
 
-    public static double RATIO = 3.30 / 1;
+    public static double RATIO = 132.0 / 40.0;
     public static double RESOLUTION = 8192;
 
 
@@ -57,14 +57,11 @@ public class TurretSubsystem extends PositionPidSubsystem {
         MMRobot mmRobot = MMRobot.getInstance();
 
         //todo: change to right hub&port
-        withEncoder(mmRobot.expansionHub,3,(RESOLUTION*RATIO) /360, Direction.REVERSE);
+        withEncoder(mmRobot.expansionHub,1,(RESOLUTION*RATIO) /360, Direction.REVERSE);
 
-        withCrServo(mmRobot.expansionHub, 0,Direction.FORWARD);
-        withCrServo(mmRobot.expansionHub, 1,Direction.FORWARD);
+        withCrServo(mmRobot.servoHub, 4,Direction.REVERSE);
+        withCrServo(mmRobot.servoHub, 5,Direction.REVERSE);
 
-        withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        withAngleRange(360);
 
         withPid(KP, KI, KD);
         withIZone(IZONE);
@@ -98,7 +95,7 @@ public class TurretSubsystem extends PositionPidSubsystem {
     }
     public Command alignToTarget(){
         return getToAndHoldSetPointCommand(()-> RobotUtils.getAngleToTarget()
-                - MMDrivetrain.getInstance().getFollower().getHeading());
+                - MMDrivetrain.getInstance().getPose().getHeading());
     }
 
 

@@ -4,6 +4,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Commands.WithFinally;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
@@ -15,9 +16,9 @@ public class ShootCommandGroup {
   public static Command PrepShoot() {
       return new WithFinally(
               new ParallelCommandGroup(
-                      //MMDrivetrain.getInstance().getFollower().holdPoint(MMDrivetrain.getInstance().getPose()),
+//                      MMDrivetrain.getInstance().HoldPointCommand(),
                       //todo ideal: shooter target -> by pose
-                      IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                      IntakeSubsystem.getInstance().setPowerInstantCommand(-1),
                       TransferSubsystem.getInstance().setPowerInstantCommand(1),
                       IndexerSubsystem.getInstance().setPowerInstantCommand(1)),
               ()-> new ParallelCommandGroup(

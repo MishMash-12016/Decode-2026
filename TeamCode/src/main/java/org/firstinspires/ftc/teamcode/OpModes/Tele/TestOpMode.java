@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
 @TeleOp
@@ -33,7 +34,10 @@ public class TestOpMode extends MMOpMode {
     public void onInit() {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> gamepad1.left_stick_button);
         MMDrivetrain.getInstance().resetYaw();
-        MMDrivetrain.update();
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                TurretSubsystem.getInstance().alignToTarget()
+        );
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.FeedIntake(),

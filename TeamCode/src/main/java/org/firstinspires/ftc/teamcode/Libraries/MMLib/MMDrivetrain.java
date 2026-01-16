@@ -47,7 +47,7 @@ public class MMDrivetrain extends MMSubsystem {
     }
 
     public Follower getFollower() {
-        if (instance != null) {
+        if (follower == null) {
             follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
         }
         return follower;
@@ -81,7 +81,7 @@ public class MMDrivetrain extends MMSubsystem {
                 follower.setTeleOpDrive(//TODO: add variables for the math.pow
                         Math.pow(forwardDrive.getAsDouble(), 5) * slowModeRatioForward,
                         Math.pow(lateralDrive.getAsDouble(), 5) * slowModeRatioLateral,
-                        Math.pow(heading.getAsDouble(), 1) * slowModeRatioRotation,
+                        Math.pow(heading.getAsDouble(), 3) * slowModeRatioRotation,
                         robotCentric);
             } else {
                 //TODO: add math.pow with variables
@@ -104,6 +104,14 @@ public class MMDrivetrain extends MMSubsystem {
 
     public CommandBase turnToCommand(double radians) {
         return new HoldPointCommand(follower, new Pose(follower.getPose().getX(), follower.getPose().getY(), Math.toRadians(radians)), true);
+    }
+
+    public CommandBase HoldPointCommand(){
+        return new HoldPointCommand(follower, getPose(), true);
+    }
+
+    public CommandBase HoldPointCommand(Pose pose){
+        return new HoldPointCommand(follower, pose, true);
     }
 
     public CommandBase turnToDegreesCommand(double degrees) {

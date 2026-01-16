@@ -12,7 +12,7 @@ public class IntakeCommandGroup {
 
     public static Command FeedIntake() {
         return new ParallelCommandGroup(
-                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                IntakeSubsystem.getInstance().setPowerInstantCommand(-1),
                 TransferSubsystem.getInstance().setPowerInstantCommand(0.3),
                 IndexerSubsystem.getInstance().setPowerInstantCommand(-1));
     }
@@ -25,7 +25,7 @@ public class IntakeCommandGroup {
 
     public static Command OutIntake() {
         return new ParallelCommandGroup(
-                IntakeSubsystem.getInstance().setPowerInstantCommand(-1),
+                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                 TransferSubsystem.getInstance().setPowerInstantCommand(-1),
                 IndexerSubsystem.getInstance().setPowerInstantCommand(-1));
     }

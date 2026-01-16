@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Libraries.MMLib;
 
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
@@ -51,6 +52,7 @@ public class MMRobotInner extends Robot {
      * @param type the {@link OpModeType} chosen
      */
     public void initializeSystems(OpModeType type) {
+        CommandScheduler.getInstance().cancelAll();
         initBasics();
 //        MMDrivetrain.getInstance().getFollower();
         initSubsystems();

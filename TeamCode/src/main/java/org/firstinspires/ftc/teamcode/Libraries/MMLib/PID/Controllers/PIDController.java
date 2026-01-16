@@ -393,6 +393,10 @@ public class PIDController implements AutoCloseable {
 
         m_errorRate = (m_currentError - m_prevError) / m_period;
 
+        if(atSetpoint()){
+            return 0;
+        }
+
         // If the absolute value of the error is greater than IZone, reset the total error
         if (Math.abs(m_currentError) > m_iZone) {
             m_totalError = 0;
