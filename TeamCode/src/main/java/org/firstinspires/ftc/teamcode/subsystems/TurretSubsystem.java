@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
 
 @Config
 @AutoLog
@@ -94,8 +95,9 @@ public class TurretSubsystem extends PositionPidSubsystem {
         );
     }
     public Command alignToTarget(){
-        return getToAndHoldSetPointCommand(()-> RobotUtils.getAngleToTarget()
-                - MMDrivetrain.getInstance().getPose().getHeading());
+        return getToAndHoldSetPointCommand(()->
+                KoalaLog.log("align_to_target/angle_to_target", RobotUtils.getAngleToTarget(), true)
+                - KoalaLog.log("align_to_target/robot_heading", MMDrivetrain.getInstance().getPose().getHeading(), true));
     }
 
 
