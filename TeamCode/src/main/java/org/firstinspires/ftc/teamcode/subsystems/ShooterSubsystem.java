@@ -84,7 +84,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     }
     SysIdRoutine sysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
-                    Volts.of(0.01).per(Second),
+                    Volts.of(0.1).per(Second),
                     Volts.of(0.6),
                     Seconds.of(10)),
             new SysIdRoutine.Mechanism(

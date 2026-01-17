@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 import edu.wpi.first.sysid.SysIdRoutine;
 
+@TeleOp
 public class SysidShooterOpMode extends MMOpMode {
 
   public SysidShooterOpMode() {
