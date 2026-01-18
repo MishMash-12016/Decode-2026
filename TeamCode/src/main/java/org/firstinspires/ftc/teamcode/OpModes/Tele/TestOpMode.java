@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
@@ -15,18 +14,15 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
+
 @TeleOp
 @Config
 @AutoLog
 public class TestOpMode extends MMOpMode {
-    int c = 0;
     public TestOpMode() {
         super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
     }
@@ -35,9 +31,9 @@ public class TestOpMode extends MMOpMode {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> gamepad1.left_stick_button);
         MMDrivetrain.getInstance().resetYaw();
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                TurretSubsystem.getInstance().alignToTarget()
-        );
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+//                TurretSubsystem.getInstance().alignToTarget()
+//        );
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.FeedIntake(),
@@ -48,7 +44,7 @@ public class TestOpMode extends MMOpMode {
                 ShootCommandGroup.StopShoot());
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
-                ShootCommandGroup.StartWheel(),
+                ShootCommandGroup.StartWheelClose(),
                 ShooterSubsystem.getInstance().stopCommand());
 
 
@@ -71,9 +67,8 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("able Shoot: ",46 < ShooterSubsystem.getInstance().getVelocity());
         telemetry.addData("ShootSpeed: ",ShooterSubsystem.getInstance().getVelocity());
-
+        KoalaLog.log("DriveTrainHeading:", MMDrivetrain.getInstance().getPose().getHeading(),true);
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Commands.WithFinally;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
@@ -35,7 +34,10 @@ public class ShootCommandGroup {
         );
     }
 
-    public static Command StartWheel() {
+    public static Command StartWheelFar() {
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(70);
+    }
+    public static Command StartWheelClose() {
         return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50);
     }
 

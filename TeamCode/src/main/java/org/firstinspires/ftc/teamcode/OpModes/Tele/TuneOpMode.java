@@ -25,16 +25,24 @@ public class TuneOpMode extends MMOpMode {
     }
 
 //        CRServo left;
-//    CuttleMotor p0,p1,p2,p3;
+    CuttleMotor p0,p1,p2,p3;
 
     @Override
     public void onInit() {
 //        right = hardwareMap.get(CRServo.class,"right");
-//        p0 = new CuttleMotor(MMRobot.getInstance().controlHub, 0);
-//        p1 = new CuttleMotor(MMRobot.getInstance().controlHub, 1);
-//        p2 = new CuttleMotor(MMRobot.getInstance().controlHub, 2);
-//        p3 = new CuttleMotor(MMRobot.getInstance().controlHub, 3);
+        p0 = new CuttleMotor(MMRobot.getInstance().controlHub, 0);
+        p1 = new CuttleMotor(MMRobot.getInstance().controlHub, 1);
+        p2 = new CuttleMotor(MMRobot.getInstance().controlHub, 2);
+        p3 = new CuttleMotor(MMRobot.getInstance().controlHub, 3);
 
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
+                new InstantCommand(()->p0.setPower(1)));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
+                new InstantCommand(()->p1.setPower(1)));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whileActiveOnce(
+                new InstantCommand(()->p2.setPower(1)));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
+                new InstantCommand(()->p3.setPower(1)));
 //        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
 //                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(30)
 //        );
@@ -49,14 +57,7 @@ public class TuneOpMode extends MMOpMode {
     @Override
     public void onPlayLoop() {
         telemetry.update();
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
-//                new InstantCommand(()->p0.setPower(1)));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
-//                new InstantCommand(()->p1.setPower(1)));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whileActiveOnce(
-//                new InstantCommand(()->p2.setPower(1)));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
-//                new InstantCommand(()->p3.setPower(1)));
+
 
         telemetry.addData("run1", null);
     }

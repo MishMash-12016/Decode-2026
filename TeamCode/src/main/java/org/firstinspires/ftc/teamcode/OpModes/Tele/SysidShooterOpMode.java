@@ -10,13 +10,15 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
+import Ori.Coval.Logging.Logger.KoalaLog;
 import edu.wpi.first.sysid.SysIdRoutine;
+import edu.wpi.first.units.measure.Voltage;
 
 @TeleOp
 public class SysidShooterOpMode extends MMOpMode {
 
   public SysidShooterOpMode() {
-    super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
+    super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
   }
 
   @Override
@@ -42,6 +44,5 @@ public class SysidShooterOpMode extends MMOpMode {
 
   @Override
   public void onPlayLoop() {
-
   }
 }

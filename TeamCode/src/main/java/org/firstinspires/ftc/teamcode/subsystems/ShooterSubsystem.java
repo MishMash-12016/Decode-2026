@@ -27,13 +27,13 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
 
 
     //TODO: tuned not ideal
-    public static double KP = 0.6;
-    public static double KI = 0.028;
-    public static double KD = 0.01;
+    public static double KP = 0.0;
+    public static double KI = 0.0;
+    public static double KD = 0.0;
 
-    public static double KS = 0.0;
-    public static double KV = 0.0;
-    public static double KA = 0.0;
+    public static double KS = 0.063994;
+    public static double KV = 0.0099461;
+    public static double KA = 0.0084413;
 
     public static double VelTol = 5;
     public static double RESOLUTION = 28;
@@ -54,8 +54,8 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         MMRobot mmRobot = MMRobot.getInstance();
 
         //todo: change to right hub&port
-        withMotor(mmRobot.expansionHub,1, Direction.REVERSE).minPower = 0;
-        withMotor(mmRobot.expansionHub,0, Direction.FORWARD).minPower = 0;
+        withMotor(mmRobot.expansionHub,1, Direction.REVERSE);
+        withMotor(mmRobot.expansionHub,0, Direction.FORWARD);
 
         withEncoder(mmRobot.expansionHub,0,RESOLUTION,Direction.FORWARD);
 

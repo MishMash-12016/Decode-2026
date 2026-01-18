@@ -46,7 +46,7 @@ public class TurretSubsystem extends PositionPidSubsystem {
      */
     public static synchronized TurretSubsystemAutoLogged getInstance() {
         if (instance == null) {
-            instance = new TurretSubsystemAutoLogged("SpindexerSubsystem");
+            instance = new TurretSubsystemAutoLogged("TurretSubsystem");
         }
         return instance;
     }
@@ -97,7 +97,8 @@ public class TurretSubsystem extends PositionPidSubsystem {
     public Command alignToTarget(){
         return getToAndHoldSetPointCommand(()->
                 KoalaLog.log("align_to_target/angle_to_target", RobotUtils.getAngleToTarget(), true)
-                - KoalaLog.log("align_to_target/robot_heading", MMDrivetrain.getInstance().getPose().getHeading(), true));
+                - KoalaLog.log("align_to_target/robot_heading", Math.toDegrees(MMDrivetrain.getInstance().getPose().getHeading()), true));
+
     }
 
 
