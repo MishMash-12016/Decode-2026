@@ -31,7 +31,10 @@ public class TestOpMode extends MMOpMode {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> gamepad1.left_stick_button);
         MMDrivetrain.getInstance().resetYaw();
 
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
+                ()->MMDrivetrain.getInstance().resetYaw()
+        );
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
 //                TurretSubsystem.getInstance().alignToTarget()
 //        );
 
@@ -47,8 +50,7 @@ public class TestOpMode extends MMOpMode {
                 ShootCommandGroup.StartWheelClose(),
                 ShooterSubsystem.getInstance().stopCommand());
 
-
-        new Trigger(()-> gamepad1.right_trigger > 0.01).whenActive(
+        new Trigger(()-> gamepad1.right_trigger > 0.1).toggleWhenActive(
                 new SequentialCommandGroup(
                         IntakeCommandGroup.OutIntake(),
                         new WaitCommand(2000),
