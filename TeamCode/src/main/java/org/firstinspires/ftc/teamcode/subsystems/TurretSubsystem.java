@@ -90,7 +90,7 @@ public class TurretSubsystem extends PositionPidSubsystem {
         return new SequentialCommandGroup(
                 setPowerInstantCommand(0.1),
                 new WaitUntilCommand(()->(!(getZeroSwitch()))),
-                setPosition(0),ז
+                setPosition(0),
                 setPowerInstantCommand(0)
         );
     }
