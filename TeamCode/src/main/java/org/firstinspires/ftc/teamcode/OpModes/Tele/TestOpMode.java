@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
@@ -28,15 +29,16 @@ public class TestOpMode extends MMOpMode {
     }
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> gamepad1.left_stick_button);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> gamepad1.left_stick_button||gamepad1.right_stick_button);
         MMDrivetrain.getInstance().resetYaw();
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 ()->MMDrivetrain.getInstance().resetYaw()
         );
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-//                TurretSubsystem.getInstance().alignToTarget()
-//        );
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenActive(
+                TurretSubsystem.getInstance().alignToTarget()
+        );
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.FeedIntake(),
@@ -56,6 +58,12 @@ public class TestOpMode extends MMOpMode {
                         new WaitCommand(2000),
                         IntakeCommandGroup.StopIntake()));
 
+
+ /**
+  * temp stuff:
+  */
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+                ShooterSubsystem.getInstance().stopCommand());
     }
     @Override
     public void onInitLoop() {
@@ -70,7 +78,15 @@ public class TestOpMode extends MMOpMode {
     @Override
     public void onPlayLoop() {
         telemetry.addData("ShootSpeed: ",ShooterSubsystem.getInstance().getVelocity());
-        KoalaLog.log("DriveTrainHeading:", MMDrivetrain.getInstance().getPose().getHeading(),true);
+
+        telemetry.addData("X: ",MMDrivetrain.getInstance().getPose().getX());
+        telemetry.addData("Y: ",MMDrivetrain.getInstance().getPose().getY());
+        KoalaLog.log("ShootSpeed: ", ShooterSubsystem.getInstance().getVelocity(),true);
+
+//        KoalaLog.log("DriveTrainX:", MMDrivetrain.getInstance().getPose().getX(),true);
+//        KoalaLog.log("DriveTrainY:", MMDrivetrain.getInstance().getPose().getY(),true);
+//        KoalaLog.log("DriveTrainHeading:", MMDrivetrain.getInstance().getPose().getHeading(),true);
+
     }
 
     @Override

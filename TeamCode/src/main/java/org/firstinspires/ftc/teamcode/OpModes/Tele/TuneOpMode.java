@@ -24,12 +24,15 @@ public class TuneOpMode extends MMOpMode {
         super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
     }
 
-//        CRServo left;
+/*
+//       CRServo left;
     CuttleMotor p0,p1,p2,p3;
+    */
 
     @Override
     public void onInit() {
 //        right = hardwareMap.get(CRServo.class,"right");
+/*
         p0 = new CuttleMotor(MMRobot.getInstance().controlHub, 0);
         p1 = new CuttleMotor(MMRobot.getInstance().controlHub, 1);
         p2 = new CuttleMotor(MMRobot.getInstance().controlHub, 2);
@@ -43,15 +46,16 @@ public class TuneOpMode extends MMOpMode {
                 new InstantCommand(()->p2.setPower(1)));
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
                 new InstantCommand(()->p3.setPower(1)));
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-//                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(30)
-//        );
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-//                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(40)
-//        );
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-//                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(200)
-//        );
+                */
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(30)
+        );
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(40)
+        );
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(200)
+        );
     }
 
     @Override

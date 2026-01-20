@@ -90,14 +90,14 @@ public class TurretSubsystem extends PositionPidSubsystem {
         return new SequentialCommandGroup(
                 setPowerInstantCommand(0.1),
                 new WaitUntilCommand(()->(!(getZeroSwitch()))),
-                setPosition(0),
+                setPosition(0),ז
                 setPowerInstantCommand(0)
         );
     }
     public Command alignToTarget(){
         return getToAndHoldSetPointCommand(()->
-                KoalaLog.log("align_to_target/angle_to_target", RobotUtils.getAngleToTarget(), true)
-                - KoalaLog.log("align_to_target/robot_heading", Math.toDegrees(MMDrivetrain.getInstance().getPose().getHeading()), true));
+                KoalaLog.log("angle_to_target", RobotUtils.getAngleToTarget(), true)
+                - KoalaLog.log("robot_heading", Math.toDegrees(MMDrivetrain.getInstance().getPose().getHeading()), true));
 
     }
 

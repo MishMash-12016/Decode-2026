@@ -85,7 +85,7 @@ public class MMDrivetrain extends MMSubsystem {
                         robotCentric);
             } else {
                 //TODO: add math.pow with variables
-                follower.setTeleOpDrive(-forwardDrive.getAsDouble(), -lateralDrive.getAsDouble(), Math.pow(-heading.getAsDouble(), 3), robotCentric);
+                follower.setTeleOpDrive(-forwardDrive.getAsDouble(), -lateralDrive.getAsDouble(), Math.pow(-heading.getAsDouble(), 4), robotCentric);
             }
 
             follower.update();

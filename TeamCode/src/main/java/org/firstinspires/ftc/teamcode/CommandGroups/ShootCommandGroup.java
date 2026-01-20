@@ -38,7 +38,7 @@ public class ShootCommandGroup {
         return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(70);
     }
     public static Command StartWheelClose() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50);
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(65);
     }
 
 
