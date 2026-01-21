@@ -81,11 +81,12 @@ public class MMDrivetrain extends MMSubsystem {
                 follower.setTeleOpDrive(//TODO: add variables for the math.pow
                         -Math.pow(forwardDrive.getAsDouble(), 5) * slowModeRatioForward,
                         -Math.pow(lateralDrive.getAsDouble(), 5) * slowModeRatioLateral,
-                        -Math.pow(heading.getAsDouble(), 5) * slowModeRatioRotation,
+                        -Math.pow(heading.getAsDouble(), 7
+                        ) * slowModeRatioRotation,
                         robotCentric);
             } else {
                 //TODO: add math.pow with variables
-                follower.setTeleOpDrive(-forwardDrive.getAsDouble(), -lateralDrive.getAsDouble(), Math.pow(-heading.getAsDouble(), 4), robotCentric);
+                follower.setTeleOpDrive(-forwardDrive.getAsDouble(), -lateralDrive.getAsDouble(), Math.pow(-heading.getAsDouble(), 5), robotCentric);
             }
 
             follower.update();

@@ -26,13 +26,13 @@ public class TurretSubsystem extends PositionPidSubsystem {
 
     //TODO: wrong ports & values
     CuttleDigital zeroSwitch =  new CuttleDigital(MMRobot.getInstance().expansionHub, 1);
-    public static double KP = 0.0043;
-    public static double KI = 0.0001;
-    public static double KD = 0.006;
+    public static double KP = 0.002;
+    public static double KI = 0.02;
+    public static double KD = 0.000005;
 
     public static double POSITION_TOLERANCE = 0.05;
     public static double VELOCITY_TOLERANCE = 0.0;
-    public static double IZONE = 10;
+    public static double IZONE = 15;
 
     public static double RATIO = 132.0 / 40.0;
     public static double RESOLUTION = 8192;
