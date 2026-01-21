@@ -6,6 +6,7 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Commands.WithFinally;
 import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 public class IntakeCommandGroup {
@@ -13,7 +14,7 @@ public class IntakeCommandGroup {
     public static Command FeedIntake() {
         return new ParallelCommandGroup(
                 IntakeSubsystem.getInstance().setPowerInstantCommand(-1),
-                TransferSubsystem.getInstance().setPowerInstantCommand(0.3),
+                TransferSubsystem.getInstance().setPowerInstantCommand(0.45),
                 IndexerSubsystem.getInstance().setPowerInstantCommand(-1));
     }
     public static Command StopIntake() {
@@ -28,6 +29,13 @@ public class IntakeCommandGroup {
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                 TransferSubsystem.getInstance().setPowerInstantCommand(-1),
                 IndexerSubsystem.getInstance().setPowerInstantCommand(-1));
+    }
+    public static Command StopAll() {
+        return new ParallelCommandGroup(
+                TransferSubsystem.getInstance().stopCommand(),
+                IndexerSubsystem.getInstance().stopCommand(),
+                IntakeSubsystem.getInstance().stopCommand(),
+                ShooterSubsystem.getInstance().stopCommand());
     }
 }
 

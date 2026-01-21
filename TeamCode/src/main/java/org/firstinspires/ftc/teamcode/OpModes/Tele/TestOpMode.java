@@ -31,10 +31,8 @@ public class TestOpMode extends MMOpMode {
     public void onInit() {
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> gamepad1.left_stick_button||gamepad1.right_stick_button);
         MMDrivetrain.getInstance().resetYaw();
-
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
-                ()->MMDrivetrain.getInstance().resetYaw()
-        );
+                ()->MMDrivetrain.getInstance().resetYaw());
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenActive(
                 TurretSubsystem.getInstance().alignToTarget()
@@ -62,8 +60,27 @@ public class TestOpMode extends MMOpMode {
  /**
   * temp stuff:
   */
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 ShooterSubsystem.getInstance().stopCommand());
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(55));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(60));
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(65));
+
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(45));
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(47));
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(42));
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                IntakeCommandGroup.StopAll());
     }
     @Override
     public void onInitLoop() {
@@ -82,6 +99,7 @@ public class TestOpMode extends MMOpMode {
         telemetry.addData("X: ",MMDrivetrain.getInstance().getPose().getX());
         telemetry.addData("Y: ",MMDrivetrain.getInstance().getPose().getY());
         KoalaLog.log("ShootSpeed: ", ShooterSubsystem.getInstance().getVelocity(),true);
+
 
 //        KoalaLog.log("DriveTrainX:", MMDrivetrain.getInstance().getPose().getX(),true);
 //        KoalaLog.log("DriveTrainY:", MMDrivetrain.getInstance().getPose().getY(),true);
