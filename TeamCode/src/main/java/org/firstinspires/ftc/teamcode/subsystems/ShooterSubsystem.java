@@ -31,13 +31,10 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     public static double KI = 0.0;
     public static double KD = 0.0;
 
-    public static double KS = 0.10128;
-    public static double KV = 0.01149;
-    public static double KA = 0.01545;
+    public static double KS = 0.085176;
+    public static double KV = 0.010802;
+    public static double KA = 0.012526;
 
-//    public static double KS = 0.063994;
-//    public static double KV = 0.0099461;
-//    public static double KA = 0.0084413;
 
     public static double VelTol = 5;
     public static double RESOLUTION = 28;

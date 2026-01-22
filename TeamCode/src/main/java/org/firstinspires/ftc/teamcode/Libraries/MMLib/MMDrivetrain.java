@@ -23,9 +23,9 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 @AutoLog
 public class MMDrivetrain extends MMSubsystem {
 
-    public double slowModeRatioForward = 0.3;
-    public double slowModeRatioLateral = 0.3;
-    public double slowModeRatioRotation = 0.25;
+    public double slowModeRatioForward = 0.2;
+    public double slowModeRatioLateral = 0.2;
+    public double slowModeRatioRotation = 0.08;
 
     @IgnoreConfigurable
     private static MMDrivetrain instance;
@@ -77,15 +77,24 @@ public class MMDrivetrain extends MMSubsystem {
     public CommandBase driveCommand(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, DoubleSupplier heading, boolean robotCentric, BooleanSupplier slowMode) {
         return (CommandBase) new RunCommand(() -> {
             //todo Shouldn't be minuses on the values
-            if (slowMode.getAsBoolean()) {
+/*            if (slowMode.getAsBoolean()) {
                 follower.setTeleOpDrive(//TODO: add variables for the math.pow
                         -Math.pow(forwardDrive.getAsDouble(), 5) * slowModeRatioForward,
                         -Math.pow(lateralDrive.getAsDouble(), 5) * slowModeRatioLateral,
-                        -Math.pow(heading.getAsDouble(), 111) * slowModeRatioRotation,
+                        -Math.pow(heading.getAsDouble(), 1) * slowModeRatioRotation,
                         robotCentric);
             } else {
                 //TODO: add math.pow with variables
-                follower.setTeleOpDrive(-forwardDrive.getAsDouble(), -lateralDrive.getAsDouble(), Math.pow(-heading.getAsDouble(), 5), robotCentric);
+                follower.setTeleOpDrive(-forwardDrive.getAsDouble(), -lateralDrive.getAsDouble(), -heading.getAsDouble() * 0.4, robotCentric);
+            }*/
+            if (slowMode.getAsBoolean()) {
+                follower.setTeleOpDrive(//TODO: add variables for the math.pow
+                        Math.pow(forwardDrive.getAsDouble(), 5) * slowModeRatioForward,
+                        Math.pow(lateralDrive.getAsDouble(), 5) * slowModeRatioLateral,
+                        Math.pow(heading.getAsDouble(), 1) * slowModeRatioRotation,
+                        robotCentric);
+            } else {
+                follower.setTeleOpDrive(forwardDrive.getAsDouble(), lateralDrive.getAsDouble(), heading.getAsDouble() * 0.4, robotCentric);
             }
 
             follower.update();
