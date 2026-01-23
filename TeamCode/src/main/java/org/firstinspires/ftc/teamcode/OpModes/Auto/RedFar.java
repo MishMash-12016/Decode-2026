@@ -4,6 +4,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
@@ -16,6 +17,10 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 
+import Ori.Coval.Logging.AutoLog;
+
+@AutoLog
+@Autonomous
 public class RedFar extends MMOpMode {
 
     private PathChain
@@ -46,13 +51,12 @@ public class RedFar extends MMOpMode {
     }
 
     public RedFar() {
-        super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
+        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
     }
 
     @Override
     public void onInit() {
-        MMDrivetrain.update();
-        MMDrivetrain.follower.setPose(startPose);
+        MMDrivetrain.getInstance().setPose(startPose);
         buildPaths();
         Follower follower = MMDrivetrain.follower;
 
@@ -74,7 +78,7 @@ public class RedFar extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.getInstance().update();
+        MMDrivetrain.update();
         telemetry.update();
     }
 }

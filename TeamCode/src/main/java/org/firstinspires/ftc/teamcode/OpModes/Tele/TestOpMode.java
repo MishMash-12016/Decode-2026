@@ -27,13 +27,17 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 @Config
 @AutoLog
 public class TestOpMode extends MMOpMode {
-
+    boolean slow = false;
     public TestOpMode() {
         super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
     }
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> gamepad1.left_stick_button||gamepad1.right_stick_button);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> slow);
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
+                ()-> slow = !slow
+        );
+
         MMDrivetrain.getInstance().resetYaw();
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 ()->MMDrivetrain.getInstance().resetYaw());
@@ -55,6 +59,7 @@ public class TestOpMode extends MMOpMode {
                         IntakeCommandGroup.OutIntake(),
                         new WaitCommand(1000),
                         IntakeCommandGroup.StopIntake()));
+
  /**
   * temp stuff:
   */
