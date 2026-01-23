@@ -51,7 +51,7 @@ public class RedFar extends MMOpMode {
 
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().update();
+        MMDrivetrain.update();
         MMDrivetrain.follower.setPose(startPose);
         buildPaths();
         Follower follower = MMDrivetrain.follower;
@@ -66,7 +66,7 @@ public class RedFar extends MMOpMode {
                 //intake on
                 new FollowPathCommand(follower, FROM_SCORE_TO_SECOND_INTAKE),
                 // intake off
-                new FollowPathCommand(follower, FROM_SECOND_INTAKE_TO_SCORE),
+                new FollowPathCommand(follower, FROM_SECOND_INTAKE_TO_SCORE)
                 //shoot
         );
         autonomousSequence.schedule();
