@@ -76,22 +76,54 @@ public class MMDrivetrain extends MMSubsystem {
 
     public CommandBase driveCommand(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, DoubleSupplier heading, boolean robotCentric, BooleanSupplier slowMode) {
         return (CommandBase) new RunCommand(() -> {
+
+
             if (slowMode.getAsBoolean()) {
-                follower.setTeleOpDrive(//TODO: add variables for the math.pow
-                        Math.pow(forwardDrive.getAsDouble(), 5) * slowModeRatioForward,
-                        Math.pow(lateralDrive.getAsDouble(), 5) * slowModeRatioLateral,
-                        Math.pow(heading.getAsDouble(), 5) * slowModeRatioRotation,
+                double forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 5);
+                double lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 5);
+                double headingPower = Math.pow(heading.getAsDouble(), 3);
+                double powerSum = Math.max(
+                        Math.abs(forwardDrivePower) +
+                                Math.abs(lateralDrivePower) +
+                                Math.abs(headingPower),
+                        1);
+                double normalizeTo1 = 1 / powerSum;
+
+                forwardDrivePower *= normalizeTo1;
+                lateralDrivePower *= normalizeTo1;
+                headingPower *= normalizeTo1;
+
+                follower.setTeleOpDrive(
+                        forwardDrivePower * slowModeRatioForward,
+                        lateralDrivePower * slowModeRatioLateral,
+                        headingPower * slowModeRatioRotation,
                         robotCentric);
             } else {
-                follower.setTeleOpDrive(forwardDrive.getAsDouble(), lateralDrive.getAsDouble(), Math.pow(heading.getAsDouble(), 3) * 0.4, robotCentric);
+                double forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
+                double lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
+                double headingPower = Math.pow(heading.getAsDouble(), 1);
+                double powerSum = Math.max(
+                        Math.abs(forwardDrivePower) +
+                                Math.abs(lateralDrivePower) +
+                                Math.abs(headingPower),
+                        1);
+                double normalizeTo1 = 1 / powerSum;
+
+                forwardDrivePower *= normalizeTo1;
+                lateralDrivePower *= normalizeTo1;
+                headingPower *= normalizeTo1;
+                follower.setTeleOpDrive(
+                        forwardDrivePower,
+                        lateralDrivePower,
+                        Math.pow(headingPower, 1),
+                        robotCentric);
             }
 
             follower.update();
         }, this)
                 .beforeStarting(() -> {
                     follower.startTeleopDrive();
-                    follower.setMaxPower(2);//TODO:testing to see if this works and if it is the right way to do this
-                }).whenFinished(() -> follower.setMaxPower(1));
+                });
     }
 
     public CommandBase turnCommand(double radians, boolean isLeft) {
