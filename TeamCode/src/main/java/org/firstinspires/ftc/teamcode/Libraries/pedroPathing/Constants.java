@@ -7,6 +7,7 @@ import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.pedropathing.ftc.drivetrains.MecanumConstants;
 import com.pedropathing.ftc.localization.constants.PinpointConstants;
+import com.pedropathing.ftc.localization.localizers.PinpointLocalizer;
 import com.pedropathing.paths.PathConstraints;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -46,16 +47,15 @@ public class Constants {
             .yVelocity(54.08)
             ;
 
-    public static PinpointVisionConstants localizerConstants = new PinpointVisionConstants()
+    public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(0 / 2.54)
             .strafePodX(0 / 2.54)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-            .odometryStdDevs(0.0, 0.0, 0.0)
-            .visionMeasurementStdDevs(0.5, 0.5, 0.2);
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
+
 
 
     public static PathConstraints pathConstraints = new PathConstraints(
@@ -66,9 +66,20 @@ public class Constants {
     );
 
     public static Follower createFollower(HardwareMap hardwareMap) {
+        double[] P = {0.155, 0.155, 0.0003}; // how much we trust the start pose(lower mean trust start pose more)
+        double[] processVariance = {0.31, 0.31, 0.0006}; // how much we trust the odometry(lower mean trust odo more)
+        double[] measurementVariance = {1.395, 1.395, 0.0025}; // how much we trust the vision(lower mean trust vision more)
+        int bufferSize = 200;
+
+        FusionLocalizer fusionLocalizer = new FusionLocalizer(
+            new PinpointLocalizer(hardwareMap, localizerConstants),
+            P,
+            processVariance,
+            measurementVariance,
+            bufferSize);
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
-                .setLocalizer(new PinpointVisionLocalizer(hardwareMap, localizerConstants))
+                .setLocalizer(fusionLocalizer)
                 .pathConstraints(pathConstraints)
                 .build();
     }
