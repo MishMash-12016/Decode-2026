@@ -145,7 +145,7 @@ public class PinpointVisionConstants {
         customEncoderResolution = OptionalDouble.empty();
         forwardEncoderDirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
         strafeEncoderDirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
-        odometryStdDevs = new double[] {0.05, 0.05, 0.02};
-        visionMeasurementStdDevs = new double[] {0.5, 0.5, 0.2};
+        odometryStdDevs = new double[] {0.0, 0.0, 0.0};
+        visionMeasurementStdDevs = new double[] {0.0, 0.0, 0.0};
     }
 }

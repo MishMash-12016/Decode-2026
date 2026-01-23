@@ -76,25 +76,14 @@ public class MMDrivetrain extends MMSubsystem {
 
     public CommandBase driveCommand(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, DoubleSupplier heading, boolean robotCentric, BooleanSupplier slowMode) {
         return (CommandBase) new RunCommand(() -> {
-            //todo Shouldn't be minuses on the values
-/*            if (slowMode.getAsBoolean()) {
-                follower.setTeleOpDrive(//TODO: add variables for the math.pow
-                        -Math.pow(forwardDrive.getAsDouble(), 5) * slowModeRatioForward,
-                        -Math.pow(lateralDrive.getAsDouble(), 5) * slowModeRatioLateral,
-                        -Math.pow(heading.getAsDouble(), 1) * slowModeRatioRotation,
-                        robotCentric);
-            } else {
-                //TODO: add math.pow with variables
-                follower.setTeleOpDrive(-forwardDrive.getAsDouble(), -lateralDrive.getAsDouble(), -heading.getAsDouble() * 0.4, robotCentric);
-            }*/
             if (slowMode.getAsBoolean()) {
                 follower.setTeleOpDrive(//TODO: add variables for the math.pow
                         Math.pow(forwardDrive.getAsDouble(), 5) * slowModeRatioForward,
                         Math.pow(lateralDrive.getAsDouble(), 5) * slowModeRatioLateral,
-                        Math.pow(heading.getAsDouble(), 1) * slowModeRatioRotation,
+                        Math.pow(heading.getAsDouble(), 5) * slowModeRatioRotation,
                         robotCentric);
             } else {
-                follower.setTeleOpDrive(forwardDrive.getAsDouble(), lateralDrive.getAsDouble(), heading.getAsDouble() * 0.4, robotCentric);
+                follower.setTeleOpDrive(forwardDrive.getAsDouble(), lateralDrive.getAsDouble(), Math.pow(heading.getAsDouble(), 3) * 0.4, robotCentric);
             }
 
             follower.update();
