@@ -234,7 +234,13 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
         return withIntegralRange(pidController.getMinimumIntegral(), maxIntegralRange);
     }
 
-    public PidBaseSubsystem withAngleRange(double angleRange){
+    public PidBaseSubsystem withSetpointLimit(double minSetpoint, double maxSetpoint){
+        pidController.setMinSetpoint(minSetpoint);
+        pidController.setMaxSetpoint(maxSetpoint);
+        return this;
+    }
+
+    public PidBaseSubsystem withWrappedAngleRange(double angleRange){
          this.angleRange = angleRange;
          shouldWrapAngle = true;
          pidController.enableContinuousInput(0, angleRange);

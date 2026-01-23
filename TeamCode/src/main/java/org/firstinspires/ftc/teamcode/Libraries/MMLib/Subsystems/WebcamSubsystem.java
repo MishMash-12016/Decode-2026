@@ -39,9 +39,9 @@ public class WebcamSubsystem extends MMSubsystem {
     }
 
     private final Position cameraPosition = new Position(DistanceUnit.INCH,
-            0, 0, 0, 0);
+            3.5, 5, 0, 0);
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
-            0, -90, 0, 0);
+            0, -65, 180, 0);
 
     private AprilTagProcessor aprilTag;
     public VisionPortal visionPortal;

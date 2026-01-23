@@ -54,6 +54,8 @@ public class PIDController implements AutoCloseable {
 
     private boolean m_haveMeasurement;
     private boolean m_haveSetpoint;
+    private double minSetpoint = Double.NEGATIVE_INFINITY;
+    private double maxSetpoint = Double.POSITIVE_INFINITY;
 
     /**
      * Allocates a PIDController with the given constants for kp, ki, and kd and a default period of
@@ -166,6 +168,13 @@ public class PIDController implements AutoCloseable {
         m_iZone = iZone;
     }
 
+    public void setMaxSetpoint(double maxSetpoint){
+        this.maxSetpoint = maxSetpoint;
+    }
+    public void setMinSetpoint(double minSetpoint){
+        this.minSetpoint = minSetpoint;
+    }
+
     /**
      * Get the Proportional coefficient.
      *
@@ -235,7 +244,7 @@ public class PIDController implements AutoCloseable {
      * @param setpoint The desired setpoint.
      */
     public void setSetpoint(double setpoint) {
-        m_setpoint = setpoint;
+        m_setpoint = Math.max(Math.min(this.maxSetpoint, setpoint), this.minSetpoint);
         m_haveSetpoint = true;
 
         if (m_continuous) {
@@ -368,7 +377,7 @@ public class PIDController implements AutoCloseable {
      * @return The next controller output.
      */
     public double calculate(double measurement, double setpoint) {
-        m_setpoint = setpoint;
+        m_setpoint = Math.max(Math.min(this.maxSetpoint, setpoint), this.minSetpoint);
         m_haveSetpoint = true;
         return calculate(measurement);
     }

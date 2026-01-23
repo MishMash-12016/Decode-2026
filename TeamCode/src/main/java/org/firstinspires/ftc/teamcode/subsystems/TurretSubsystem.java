@@ -1,18 +1,13 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-import com.seattlesolvers.solverslib.command.RamseteCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Position.PositionPidSubsystem;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
@@ -63,10 +58,11 @@ public class TurretSubsystem extends PositionPidSubsystem {
         withCrServo(mmRobot.servoHub, 4,Direction.REVERSE);
         withCrServo(mmRobot.servoHub, 5,Direction.REVERSE);
 
-
         withPid(KP, KI, KD);
         withIZone(IZONE);
         withPositionTolerance(POSITION_TOLERANCE);
+
+        withSetpointLimit(0, 170);
         withDebugPidSuppliers(
                 ()-> KP,
                 ()->KI,
@@ -77,12 +73,15 @@ public class TurretSubsystem extends PositionPidSubsystem {
                 null,
                 null
         );
+
+        setPose(180);
+        setSetpoint(180);
     }
 
     public boolean getZeroSwitch(){
         return zeroSwitch.getState();
     }
-    public Command setPosition(double position){
+    public Command setPositionCommand(double position){
         return new InstantCommand(() -> setPose(position));
     }
 
@@ -90,13 +89,13 @@ public class TurretSubsystem extends PositionPidSubsystem {
         return new SequentialCommandGroup(
                 setPowerInstantCommand(0.1),
                 new WaitUntilCommand(()->(!(getZeroSwitch()))),
-                setPosition(0),
+                setPositionCommand(0),
                 setPowerInstantCommand(0)
         );
     }
     public Command alignToTarget(){
         return getToAndHoldSetPointCommand(()->
-                KoalaLog.log("angle_to_target", RobotUtils.getAngleToTarget(), true));
+                KoalaLog.log("angle_to_target", RobotUtils.getAngleToTarget() + 90, true));
     }
 
 

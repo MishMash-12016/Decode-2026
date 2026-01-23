@@ -41,6 +41,7 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
             @Override
             public void execute() {
                 pidController.setSetpoint(setPoint.getAsDouble());
+                KoalaLog.log(subsystemName + "/double supplier setpoint", setPoint.getAsDouble(), true);
                 KoalaLog.log(subsystemName + "/pid setpoint", pidController.getSetpoint(), true);
 
                 double pidOutput = KoalaLog.log(subsystemName + "/pid output", pidController.calculate(getPose()), true);
