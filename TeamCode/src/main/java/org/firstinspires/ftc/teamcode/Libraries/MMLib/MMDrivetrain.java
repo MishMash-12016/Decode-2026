@@ -9,7 +9,6 @@ import com.seattlesolvers.solverslib.command.RunCommand;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Drawing;
-import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FusionLocalizer;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.HoldPointCommand;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
@@ -212,4 +211,9 @@ public class MMDrivetrain extends MMSubsystem {
     public void setSlowModeRatioRotation(double slowModeRatioRotation) {
         this.slowModeRatioRotation = slowModeRatioRotation;
     }
+
+//    public void addVisionMeasurement(Pose pose, double timestampSeconds){
+//        ((PinpointVisionLocalizer)follower.getPoseTracker().getLocalizer())
+//                .addVisionMeasurement(pose, timestampSeconds);
+//    }
 }
