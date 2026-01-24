@@ -15,6 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
+import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FusionLocalizer;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -70,6 +72,8 @@ public class WebcamSubsystem extends MMSubsystem {
                     instance.distance = detection.ftcPose.range;
                     instance.angle = detection.ftcPose.bearing;
                     instance.robotPose = detection.robotPose;
+
+                    ((FusionLocalizer)MMDrivetrain.getInstance().getFollower().getPoseTracker().getLocalizer()).addMeasurement(getInstance().getRobotPosePedro(), detection.frameAcquisitionNanoTime);
                 }
             }
         }
