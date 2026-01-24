@@ -118,7 +118,7 @@ public class PedroAutoSample extends MMOpMode {
         super.reset();
 
         // Initialize follower
-        follower = MMDrivetrain.follower;
+        follower = MMDrivetrain.getInstance().getFollower();
         follower.setStartingPose(startPose);
         buildPaths();
 

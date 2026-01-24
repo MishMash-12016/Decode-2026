@@ -27,14 +27,15 @@ public class MainBasicAuto extends MMOpMode {
     private final Pose parkingPose = new Pose(90.000, 55.000,Math.toRadians(90));
 
     public void buildPaths() {
-        FROM_START_TO_SCORE = MMDrivetrain.follower.pathBuilder()
+        FROM_START_TO_SCORE = follower.pathBuilder()
                 .addPath(new BezierLine(startPose,scorePose))
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
                 .build();
-        FROM_SCORE_TO_PARKING = MMDrivetrain.follower.pathBuilder()
+        FROM_SCORE_TO_PARKING = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose,parkingPose))
                 .setTangentHeadingInterpolation().build();
     }
+    Follower follower;
 
 
     public MainBasicAuto() {
@@ -43,10 +44,9 @@ public class MainBasicAuto extends MMOpMode {
 
     @Override
     public void onInit() {
-        MMDrivetrain.getInstance().update();
-        MMDrivetrain.follower.setPose(startPose);
+        MMDrivetrain.update();
+        follower.setStartingPose(startPose);
         buildPaths();
-        Follower follower = MMDrivetrain.follower;
 
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 new FollowPathCommand(follower, FROM_START_TO_SCORE),
@@ -59,7 +59,7 @@ public class MainBasicAuto extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.getInstance().update();
+        MMDrivetrain.update();
         telemetry.addData("appriltagID",RobotConstants.APRIL_TAG_ID);
         telemetry.update();
     }

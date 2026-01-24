@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Position.
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 
+import java.util.function.DoubleSupplier;
+
 import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
 
@@ -21,9 +23,9 @@ public class TurretSubsystem extends PositionPidSubsystem {
 
     //TODO: wrong ports & values
     CuttleDigital zeroSwitch =  new CuttleDigital(MMRobot.getInstance().expansionHub, 1);
-    public static double KP = 0.002;
-    public static double KI = 0.02;
-    public static double KD = 0.000005;
+    public static double KP = 0.0038;
+    public static double KI = 0.01;
+    public static double KD = 0.00007;
 
     public static double POSITION_TOLERANCE = 0.05;
     public static double VELOCITY_TOLERANCE = 0.0;
@@ -62,7 +64,7 @@ public class TurretSubsystem extends PositionPidSubsystem {
         withIZone(IZONE);
         withPositionTolerance(POSITION_TOLERANCE);
 
-        withSetpointLimit(0, 170);
+        withSetpointLimit(5, 175);
         withDebugPidSuppliers(
                 ()-> KP,
                 ()->KI,
@@ -84,6 +86,7 @@ public class TurretSubsystem extends PositionPidSubsystem {
     public Command setPositionCommand(double position){
         return new InstantCommand(() -> setPose(position));
     }
+
 
     public Command reset(){
         return new SequentialCommandGroup(

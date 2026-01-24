@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -34,16 +36,16 @@ public class TestOpMode extends MMOpMode {
     }
     @Override
     public void onInit() {
-        WebcamSubsystem.getInstance();
-        MMDrivetrain.getInstance().setPose(8,8,0);
+//        WebcamSubsystem.getInstance();
+        MMDrivetrain.getInstance().getFollower().setStartingPose(new Pose(8,8,0));
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> slow);
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(()-> slow = !slow);
-        MMDrivetrain.getInstance().resetYaw();
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 ()->MMDrivetrain.getInstance().resetYaw());
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 TurretSubsystem.getInstance().alignToTarget());
+
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.FeedIntake(), IntakeCommandGroup.StopIntake());

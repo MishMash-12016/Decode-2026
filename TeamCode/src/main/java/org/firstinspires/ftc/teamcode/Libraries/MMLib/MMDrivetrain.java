@@ -28,7 +28,7 @@ public class MMDrivetrain extends MMSubsystem {
 
     @IgnoreConfigurable
     private static MMDrivetrain instance;
-    public static Follower follower;
+    private static Follower follower;
 
     public static synchronized MMDrivetrain getInstance() {
         if (instance == null) {

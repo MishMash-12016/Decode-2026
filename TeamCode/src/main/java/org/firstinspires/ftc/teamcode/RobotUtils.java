@@ -18,8 +18,7 @@ public class RobotUtils {
 
     public static Pose2d getTargetPose(){
         AllianceColor allianceColor = MMRobot.getInstance().currentOpMode.allianceColor;
-        if(allianceColor == null
-                || allianceColor == AllianceColor.BLUE){
+        if(allianceColor == null || allianceColor == AllianceColor.BLUE){
             return targetPoseBlue;
         }
 

@@ -34,18 +34,19 @@ public class RedFar extends MMOpMode {
     private final Pose scorePose = new Pose(85, 12,Math.toRadians(50));
     private final Pose secondIntake = new Pose(132, 35,Math.toRadians(-90));
 
+    Follower follower;
     public void buildPaths() {
-        FROM_START_TO_FIRST_INTAKE = MMDrivetrain.follower.pathBuilder()
+        FROM_START_TO_FIRST_INTAKE = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, firstIntake))
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(135))
                 .build();
-        FROM_FIRST_INTAKE_TO_SCORE = MMDrivetrain.follower.pathBuilder()
+        FROM_FIRST_INTAKE_TO_SCORE = follower.pathBuilder()
                 .addPath(new BezierLine(firstIntake, scorePose))
                 .setTangentHeadingInterpolation().build();
-        FROM_SCORE_TO_SECOND_INTAKE = MMDrivetrain.follower.pathBuilder()
+        FROM_SCORE_TO_SECOND_INTAKE = follower.pathBuilder()
                 .addPath(new BezierLine(scorePose, secondIntake))
                 .setTangentHeadingInterpolation().build();
-        FROM_SECOND_INTAKE_TO_SCORE = MMDrivetrain.follower.pathBuilder()
+        FROM_SECOND_INTAKE_TO_SCORE = follower.pathBuilder()
                 .addPath(new BezierLine(secondIntake, scorePose))
                 .setTangentHeadingInterpolation().build();
     }
@@ -57,8 +58,8 @@ public class RedFar extends MMOpMode {
     @Override
     public void onInit() {
         MMDrivetrain.getInstance().setPose(startPose);
+        follower = MMDrivetrain.getInstance().getFollower();
         buildPaths();
-        Follower follower = MMDrivetrain.follower;
 
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 // shoot
