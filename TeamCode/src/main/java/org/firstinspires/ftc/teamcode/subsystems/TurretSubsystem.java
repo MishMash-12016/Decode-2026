@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
@@ -64,9 +65,9 @@ public class TurretSubsystem extends PositionPidSubsystem {
         withIZone(IZONE);
         withPositionTolerance(POSITION_TOLERANCE);
 
-        withSetpointLimit(5, 175);
-
-        withKf(-0, 0);
+        withSetpointLimit(0, 180);
+        
+//        withKf(0, -0);
         withDebugPidSuppliers(
                 ()-> KP,
                 ()->KI,
@@ -77,9 +78,6 @@ public class TurretSubsystem extends PositionPidSubsystem {
                 null,
                 null
         );
-
-        setPose(180);
-        setSetpoint(180);
     }
 
     public boolean getZeroSwitch(){
@@ -92,15 +90,16 @@ public class TurretSubsystem extends PositionPidSubsystem {
 
     public Command reset(){
         return new SequentialCommandGroup(
+                getToSetpointCommand(0),
                 setPowerInstantCommand(0.1),
-                new WaitUntilCommand(()->(!(getZeroSwitch()))),
+                new WaitCommand(2000),
                 setPositionCommand(0),
                 setPowerInstantCommand(0)
         );
     }
     public Command alignToTarget(){
         return getToAndHoldSetPointCommand(()->
-                KoalaLog.log("angle_to_target", RobotUtils.getAngleToTarget() + 90, true));
+                KoalaLog.log("angle_to_target", (RobotUtils.getAngleToTarget() + 90), true));
     }
 
 

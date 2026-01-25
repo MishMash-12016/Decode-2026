@@ -14,37 +14,31 @@ import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 import java.util.function.BooleanSupplier;
 
 public class ShootCommandGroup {
-
-  public static Command upShoot() {
-      return new WithFinally(
-              new ParallelCommandGroup(
-//                      MMDrivetrain.getInstance().HoldPointCommand(),
-                      //todo ideal: shooter target -> by pose
-                      IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                      TransferSubsystem.getInstance().setPowerInstantCommand(1),
-                      IndexerSubsystem.getInstance().setPowerInstantCommand(1)),
-              ()-> new ParallelCommandGroup(
-                      IntakeSubsystem.getInstance().stopCommand(),
-                      TransferSubsystem.getInstance().stopCommand(),
-                      IndexerSubsystem.getInstance().stopCommand())
-      );
-  }
-    public static Command upShootThird(BooleanSupplier third) {
+    public static Command UpShoot() {
         return new WithFinally(
-                new SequentialCommandGroup(
-                        new ParallelCommandGroup(
+                new ParallelCommandGroup(
 //                      MMDrivetrain.getInstance().HoldPointCommand(),
-                        IntakeSubsystem.getInstance().setPowerInstantCommand(0.4),
+                        //todo ideal: shooter target -> by pose
+                        IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                         TransferSubsystem.getInstance().setPowerInstantCommand(1),
                         IndexerSubsystem.getInstance().setPowerInstantCommand(1)),
-                        new WaitUntilCommand(third),
-                        IntakeSubsystem.getInstance().setPowerInstantCommand(1)),
-                ()-> new ParallelCommandGroup(
+                () -> new ParallelCommandGroup(
                         IntakeSubsystem.getInstance().stopCommand(),
                         TransferSubsystem.getInstance().stopCommand(),
                         IndexerSubsystem.getInstance().stopCommand())
         );
     }
+
+//    public static Command UpShootWithWait() {
+//                new SequentialCommandGroup(
+//                        new WaitUntilCommand(
+//                                ()-> ShooterSubsystem.getInstance().getSetPoint()+10 < ShooterSubsystem.getInstance().getVelocity())
+//                        UpShoot(),
+//                        new WaitUntilCommand(
+//                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity())
+//                        )
+//                );
+//    }
 
 
     public static Command StopShoot() {
@@ -53,10 +47,14 @@ public class ShootCommandGroup {
                 IndexerSubsystem.getInstance().stopCommand(),
                 IntakeSubsystem.getInstance().stopCommand());
     }
+
     public static Command StartWheelClose() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50);}
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50);
+    }
+
     public static Command StartWheelFar() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(85);}
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(85);
+    }
 
 
 }

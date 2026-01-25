@@ -25,7 +25,7 @@ import Ori.Coval.Logging.AutoLog;
 
 @AutoLog
 @Autonomous
-public class CloseBlue extends MMOpMode {
+public class CloseRed extends MMOpMode {
 
     private PathChain
             START_TO_PRE_SHOOT,
@@ -36,13 +36,12 @@ public class CloseBlue extends MMOpMode {
             SCND_TURN_TO_SCND_INTAKE,
             SCND_INTAKE_TO_THRD_SHOOT;
 
-    private final Pose startPose = new Pose(21, 122, Math.toRadians(144));
-    private final Pose shoot = new Pose(59.5, 84);
-    private final Pose toFrstIntake = new Pose(59.5, 84);
-    //    private final Pose toFrstIntake = new Pose(40, 84);
-    private final Pose frstIntake = new Pose(14, 84);
-    private final Pose toScndIntake = new Pose(43, 60);
-    private final Pose scndintake = new Pose(18, 60);
+    private final Pose startPose = new Pose(123, 122, Math.toRadians(36));
+    private final Pose shoot = new Pose(84.5, 84);
+    private final Pose toFrstIntake = new Pose(100, 84);
+    private final Pose frstIntake = new Pose(125, 84);
+    private final Pose toScndIntake = new Pose(0, 0);
+    private final Pose scndintake = new Pose(0, 0);
 
 
     Follower follower;
@@ -50,35 +49,35 @@ public class CloseBlue extends MMOpMode {
     public void buildPaths() {
         START_TO_PRE_SHOOT = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shoot))
-                .setLinearHeadingInterpolation(Math.toRadians(143), Math.toRadians(136)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(43)).build();
 
         PRE_SHOOT_TO_FRST_TURN = follower.pathBuilder()
                 .addPath(new BezierLine(shoot, toFrstIntake))
-                .setLinearHeadingInterpolation(Math.toRadians(136), Math.toRadians(180)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0)).build();
 
         FRST_TURN_TO_FRST_INTAKE = follower.pathBuilder()
                 .addPath(new BezierLine(toFrstIntake, frstIntake))
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0)).build();
 
         FRST_INTAKE_TO_SCND_SHOOT = follower.pathBuilder()
                 .addPath(new BezierLine(frstIntake, shoot))
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(136)).build();
-        //from here
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43)).build();
+        //scnd from here
         SCND_SHOOT_TO_SCND_TURN = follower.pathBuilder()
                 .addPath(new BezierLine(shoot, toScndIntake))
-                .setLinearHeadingInterpolation(Math.toRadians(136), Math.toRadians(180)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0)).build();
 
         SCND_TURN_TO_SCND_INTAKE = follower.pathBuilder()
                 .addPath(new BezierLine(toScndIntake, scndintake))
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0)).build();
 
         SCND_INTAKE_TO_THRD_SHOOT = follower.pathBuilder()
                 .addPath(new BezierLine(scndintake, shoot))
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(136)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0)).build();
     }
 
-    public CloseBlue() {
-        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
+    public CloseRed() {
+        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
     }
 
     @Override
@@ -104,19 +103,19 @@ public class CloseBlue extends MMOpMode {
                                 new ParallelDeadlineGroup(
                                         new FollowPathCommand(follower, PRE_SHOOT_TO_FRST_TURN),
                                         IntakeCommandGroup.FeedIntake()
-                                ).withTimeout(3000),
+                                ).withTimeout(2000),
 //                                new WaitCommand(2000),
                                 new SequentialCommandGroup(
                                         new FollowPathCommand(follower, FRST_TURN_TO_FRST_INTAKE),
-                                        new WaitCommand(1000)
-                                ).withTimeout(3000),
+                                        new WaitCommand(100)
+                                ).withTimeout(2000),
                                 IntakeCommandGroup.StopIntake(),
                                 new ParallelDeadlineGroup(
                                         new SequentialCommandGroup(
                                                 new FollowPathCommand(follower, FRST_INTAKE_TO_SCND_SHOOT),
                                                 new WaitCommand(1000),
                                                 ShootCommandGroup.UpShoot(),
-                                                new WaitCommand(1000)
+                                                new WaitCommand(3000)
                                         ).withTimeout(6000),
                                         ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50)
                                 ),

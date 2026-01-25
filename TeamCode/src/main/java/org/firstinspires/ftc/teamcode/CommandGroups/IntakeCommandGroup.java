@@ -14,7 +14,7 @@ public class IntakeCommandGroup {
     public static Command FeedIntake() {
         return new ParallelCommandGroup(
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                TransferSubsystem.getInstance().setPowerInstantCommand(0.6),
+                TransferSubsystem.getInstance().setPowerInstantCommand(0.7),
                 IndexerSubsystem.getInstance().setPowerInstantCommand(-1));
     }
     public static Command StopIntake() {

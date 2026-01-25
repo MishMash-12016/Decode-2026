@@ -4,7 +4,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
@@ -18,10 +17,9 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
-
-import java.util.function.BooleanSupplier;
 
 import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
@@ -30,65 +28,75 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 @Config
 @AutoLog
 public class TestOpMode extends MMOpMode {
-    boolean slow = false;
+//    boolean slow = false;
+    Follower follower;
+
     public TestOpMode() {
         super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
     }
+
     @Override
     public void onInit() {
-//        WebcamSubsystem.getInstance();
+        /** Auto things */
         MMDrivetrain.getInstance().getFollower().setStartingPose(new Pose(8,8,0));
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(()-> slow);
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(()-> slow = !slow);
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
-                ()->MMDrivetrain.getInstance().resetYaw());
+        follower = MMDrivetrain.getInstance().getFollower();
+        WebcamSubsystem.getInstance();
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> /*slow*/
+        gamepad1.left_stick_button||gamepad1.right_stick_button);
+//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
+//                () -> slow = !slow
+//        );
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                TurretSubsystem.getInstance().alignToTarget());
-
+        MMDrivetrain.getInstance().turnCommand(Math.toRadians(RobotUtils.getAngleToTarget()),true);
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
-                IntakeCommandGroup.FeedIntake(), IntakeCommandGroup.StopIntake());
-        //todo needs to be checked
+                IntakeCommandGroup.FeedIntake(), IntakeCommandGroup.StopIntake()
+        );
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
-                ShootCommandGroup.upShootThird(()->gamepad1.dpad_left), ShootCommandGroup.StopShoot());
+                new SequentialCommandGroup(
+                        IntakeCommandGroup.OutIntake(),
+                        new WaitCommand(800),
+                        IntakeCommandGroup.StopIntake()
+                )
+        );
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
-                ShootCommandGroup.StartWheelClose(), ShooterSubsystem.getInstance().stopCommand());
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).toggleWhenActive(
-                ShootCommandGroup.StartWheelFar(), ShooterSubsystem.getInstance().stopCommand());
+                ShootCommandGroup.StartWheelClose(), ShooterSubsystem.getInstance().stopCommand()
+        );
 
-        new Trigger(()-> gamepad1.right_trigger > 0.1).toggleWhenActive(
-                new SequentialCommandGroup(IntakeCommandGroup.OutIntake(), new WaitCommand(800), IntakeCommandGroup.StopIntake()));
+        new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
+                ShootCommandGroup.UpShoot(), ShootCommandGroup.StopShoot()
+        );
 
- /**
-  * temp stuff:
-  */
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(ShooterSubsystem.getInstance().stopCommand());
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(IntakeCommandGroup.StopAll());
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).toggleWhenActive(
-                ShootCommandGroup.upShoot(), ShootCommandGroup.StopShoot());
-
-
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
-                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(60));
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(48));
+        /**
+         * temp stuff:
+         */
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                ShooterSubsystem.getInstance().stopCommand()
+        );
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                IntakeCommandGroup.StopAll()
+        );
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(100));
+        TurretSubsystem.getInstance().holdCurrentPoseCommand().schedule();
     }
+
     @Override
     public void onInitLoop() {
     }
+
     @Override
     public void onPlay() {
+        TurretSubsystem.getInstance().alignToTarget().schedule();
     }
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("ShootSpeed: ",ShooterSubsystem.getInstance().getVelocity());
+        telemetry.addData("ShootSpeed: ", ShooterSubsystem.getInstance().getVelocity());
 
-        telemetry.addData("X: ",MMDrivetrain.getInstance().getPose().getX());
-        telemetry.addData("Y: ",MMDrivetrain.getInstance().getPose().getY());
-        KoalaLog.log("ShootSpeed: ", ShooterSubsystem.getInstance().getVelocity(),true);
+        telemetry.addData("X: ", MMDrivetrain.getInstance().getPose().getX());
+        telemetry.addData("Y: ", MMDrivetrain.getInstance().getPose().getY());
+        KoalaLog.log("ShootSpeed: ", ShooterSubsystem.getInstance().getVelocity(), true);
 
 //        KoalaLog.log("DriveTrainX:", MMDrivetrain.getInstance().getPose().getX(),true);
 //        KoalaLog.log("DriveTrainY:", MMDrivetrain.getInstance().getPose().getY(),true);

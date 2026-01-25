@@ -22,9 +22,9 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 @AutoLog
 public class MMDrivetrain extends MMSubsystem {
 
-    public double slowModeRatioForward = 0.2;
-    public double slowModeRatioLateral = 0.2;
-    public double slowModeRatioRotation = 0.08;
+    public double slowModeRatioForward = 0.3;
+    public double slowModeRatioLateral = 0.3;
+    public double slowModeRatioRotation = 0.2;
 
     @IgnoreConfigurable
     private static MMDrivetrain instance;
