@@ -11,10 +11,22 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 
-import java.util.function.BooleanSupplier;
-
 public class ShootCommandGroup {
-    public static Command UpShoot() {
+
+    public static Command BallWithControl() {
+        return new SequentialCommandGroup(
+                new WaitUntilCommand(
+                        ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity() + 3
+                ),
+                DumbUpShoot(),
+                new WaitUntilCommand(
+                        ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
+                ),
+                StopShoot()
+        );
+    }
+
+    public static Command DumbUpShoot() {
         return new WithFinally(
                 new ParallelCommandGroup(
 //                      MMDrivetrain.getInstance().HoldPointCommand(),
@@ -29,16 +41,38 @@ public class ShootCommandGroup {
         );
     }
 
-//    public static Command UpShootWithWait() {
-//                new SequentialCommandGroup(
-//                        new WaitUntilCommand(
-//                                ()-> ShooterSubsystem.getInstance().getSetPoint()+10 < ShooterSubsystem.getInstance().getVelocity())
-//                        UpShoot(),
-//                        new WaitUntilCommand(
-//                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity())
-//                        )
-//                );
-//    }
+
+    public static Command SmartUpShoot() {
+                return new SequentialCommandGroup(
+                        /*new WaitUntilCommand(
+                                ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity() + 3
+                        ),
+                        DumbUpShoot(),
+                        new WaitUntilCommand(
+                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
+                        ),
+                        StopShoot(),
+                        new WaitUntilCommand(
+                                ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity() + 3
+                        ),
+                        DumbUpShoot(),
+                        new WaitUntilCommand(
+                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
+                        ),
+                        StopShoot(),
+                        new WaitUntilCommand(
+                                ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity() + 3
+                        ),
+                        DumbUpShoot(),
+                        new WaitUntilCommand(
+                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
+                        ),
+                        StopShoot()*/
+                        BallWithControl(),
+                        BallWithControl(),
+                        BallWithControl()
+                );
+    }
 
 
     public static Command StopShoot() {

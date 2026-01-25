@@ -9,6 +9,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
@@ -17,11 +18,15 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
+import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
+
 @TeleOp
+@AutoLog
 public class TuneOpMode extends MMOpMode {
 
     public TuneOpMode() {
-        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
+        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
     }
 
 /*
@@ -46,6 +51,7 @@ public class TuneOpMode extends MMOpMode {
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
                 new InstantCommand(()->p3.setPower(1)));
         */
+        //TODO turret pid tuner
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 TurretSubsystem.getInstance().reset()
@@ -60,17 +66,35 @@ public class TuneOpMode extends MMOpMode {
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 TurretSubsystem.getInstance().getToAndHoldSetPointCommand(170)
         );
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
-                TurretSubsystem.getInstance().setPowerInstantCommand(0.055)
-        );
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
-                TurretSubsystem.getInstance().setPowerInstantCommand(1)
-        );
 
+
+        //TODO ff turret tuner
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+                TurretSubsystem.getInstance().setPowerInstantCommand(0.053)
+        ).whenInactive(TurretSubsystem.getInstance().stopCommand());
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+                TurretSubsystem.getInstance().setPowerInstantCommand(-0.053)
+        ).whenInactive(TurretSubsystem.getInstance().stopCommand());
+
+
+        //TODO Shooter pid tuner (gamepadEx2)
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(40)
+        );
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(50)
+        );
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                TurretSubsystem.getInstance().getToAndHoldSetPointCommand(60)
+        );
     }
 
     @Override
     public void onPlayLoop() {
+        telemetry.update();
         telemetry.addData("run1", null);
+//        KoalaLog.log("  : ",    , true);
+
     }
 }

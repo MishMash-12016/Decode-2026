@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
@@ -94,7 +93,7 @@ public class CloseRed extends MMOpMode {
                                 new ParallelDeadlineGroup(
                                         new SequentialCommandGroup(
                                                 new FollowPathCommand(follower, START_TO_PRE_SHOOT),
-                                                ShootCommandGroup.UpShoot(),
+                                                ShootCommandGroup.DumbUpShoot(),
                                                 new WaitCommand(4000)
                                         ).withTimeout(7000),
                                         ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50)
@@ -114,7 +113,7 @@ public class CloseRed extends MMOpMode {
                                         new SequentialCommandGroup(
                                                 new FollowPathCommand(follower, FRST_INTAKE_TO_SCND_SHOOT),
                                                 new WaitCommand(1000),
-                                                ShootCommandGroup.UpShoot(),
+                                                ShootCommandGroup.DumbUpShoot(),
                                                 new WaitCommand(3000)
                                         ).withTimeout(6000),
                                         ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50)
@@ -134,7 +133,7 @@ public class CloseRed extends MMOpMode {
                                         new SequentialCommandGroup(
                                                 new FollowPathCommand(follower, SCND_INTAKE_TO_THRD_SHOOT),
                                                 new WaitCommand(1000),
-                                                ShootCommandGroup.UpShoot(),
+                                                ShootCommandGroup.DumbUpShoot(),
                                                 new WaitCommand(3000)
                                         ).withTimeout(6000),
                                         ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50)

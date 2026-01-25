@@ -19,7 +19,6 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
-import Ori.Coval.Logging.Logger.KoalaLog;
 
 @TeleOp
 @Config
@@ -59,7 +58,7 @@ public class MainOpMode extends MMOpMode {
         );
 
         new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
-                ShootCommandGroup.UpShoot(), ShootCommandGroup.StopShoot()
+                ShootCommandGroup.DumbUpShoot(), ShootCommandGroup.StopShoot()
         );
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(

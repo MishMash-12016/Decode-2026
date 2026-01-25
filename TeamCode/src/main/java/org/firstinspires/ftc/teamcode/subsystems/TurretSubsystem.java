@@ -98,9 +98,8 @@ public class TurretSubsystem extends PositionPidSubsystem {
 
     public Command reset(){
         return new SequentialCommandGroup(
-                getToSetpointCommand(0),
-                setPowerInstantCommand(0.1),
-                new WaitCommand(2000),
+                setPowerInstantCommand(0.5),
+                new WaitCommand(1000),
                 setPositionCommand(0),
                 setPowerInstantCommand(0)
         );

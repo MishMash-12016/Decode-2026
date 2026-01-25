@@ -28,7 +28,7 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 @Config
 @AutoLog
 public class TestOpMode extends MMOpMode {
-//    boolean slow = false;
+    boolean slow = false;
     Follower follower;
 
     public TestOpMode() {
@@ -40,22 +40,18 @@ public class TestOpMode extends MMOpMode {
         /** Auto things */
         MMDrivetrain.getInstance().getFollower().setStartingPose(new Pose(8,8,0));
         follower = MMDrivetrain.getInstance().getFollower();
-        WebcamSubsystem.getInstance();
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> /*slow*/
-        gamepad1.left_stick_button||gamepad1.right_stick_button);
-//        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
-//                () -> slow = !slow
-//        );
-
-        MMDrivetrain.getInstance().turnCommand(Math.toRadians(RobotUtils.getAngleToTarget()),true);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
+                () -> slow = !slow
+        );
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.FeedIntake(), IntakeCommandGroup.StopIntake()
         );
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
                         IntakeCommandGroup.OutIntake(),
-                        new WaitCommand(800),
+                        new WaitCommand(700),
                         IntakeCommandGroup.StopIntake()
                 )
         );
@@ -64,21 +60,34 @@ public class TestOpMode extends MMOpMode {
                 ShootCommandGroup.StartWheelClose(), ShooterSubsystem.getInstance().stopCommand()
         );
 
-        new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
-                ShootCommandGroup.UpShoot(), ShootCommandGroup.StopShoot()
-        );
-
         /**
          * temp stuff:
          */
+
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 ShooterSubsystem.getInstance().stopCommand()
         );
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
                 IntakeCommandGroup.StopAll()
         );
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(100));
-        TurretSubsystem.getInstance().holdCurrentPoseCommand().schedule();
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(100)
+        );
+
+        //TODO; needs to be tested
+
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
+                ()->MMDrivetrain.getInstance().resetYaw()
+        );
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
+                MMDrivetrain.getInstance().turnCommand(Math.toRadians(RobotUtils.getAngleToTarget()),true)
+        );
+
+        new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
+                ShootCommandGroup.SmartUpShoot(), ShootCommandGroup.StopShoot()
+        );
+
+
     }
 
     @Override
@@ -92,13 +101,12 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        telemetry.addData("ShootSpeed: ", ShooterSubsystem.getInstance().getVelocity());
+        telemetry.update();
 
-        telemetry.addData("X: ", MMDrivetrain.getInstance().getPose().getX());
-        telemetry.addData("Y: ", MMDrivetrain.getInstance().getPose().getY());
+        telemetry.addData("ShootSpeed: ", ShooterSubsystem.getInstance().getVelocity());
         KoalaLog.log("ShootSpeed: ", ShooterSubsystem.getInstance().getVelocity(), true);
 
-//        KoalaLog.log("DriveTrainX:", MMDrivetrain.getInstance().getPose().getX(),true);
+//        KoalaLog.log("    :",  ,true);
 //        KoalaLog.log("DriveTrainY:", MMDrivetrain.getInstance().getPose().getY(),true);
 //        KoalaLog.log("DriveTrainHeading:", MMDrivetrain.getInstance().getPose().getHeading(),true);
 

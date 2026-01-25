@@ -150,9 +150,14 @@ public class MMDrivetrain extends MMSubsystem {
         return this.turnCommand(Math.toRadians(degrees), isLeft);
     }
 
-    public void resetYaw() {
+/*    public void resetYaw() {
         Pose pose = follower.getPose().setHeading(0);
         follower.setPose(pose);
+    }*/
+    //TODO; needs to be tested
+    public void resetYaw() {
+        Pose pose = follower.getPoseTracker().getLocalizer().getPose().setHeading(0);
+        follower.getPoseTracker().getLocalizer().setPose(pose);
     }
 
     @AutoLogPose2d

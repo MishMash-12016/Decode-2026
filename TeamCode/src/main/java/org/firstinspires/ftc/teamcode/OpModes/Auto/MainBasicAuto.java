@@ -50,7 +50,7 @@ public class MainBasicAuto extends MMOpMode {
 
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 new FollowPathCommand(follower, FROM_START_TO_SCORE),
-                ShootCommandGroup.UpShoot(),
+                ShootCommandGroup.DumbUpShoot(),
                 new FollowPathCommand(follower, FROM_SCORE_TO_PARKING),
                 new RunCommand(()-> RobotConstants.APRIL_TAG_ID = WebcamSubsystem.getInstance().getAprilTagID()).withTimeout(2000)
         );
