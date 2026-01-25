@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 import Ori.Coval.Logging.AutoLog;
@@ -13,13 +14,20 @@ import Ori.Coval.Logging.AutoLog;
 
 public class IndexerSubsystem extends MotorOrCrServoSubsystem {
 
-    //TODO: generic values
+    // TODO: generic values
 
-    public static IndexerSubsystemAutoLogged instance;
+    public static IndexerSubsystem instance;
 
-    public static synchronized IndexerSubsystemAutoLogged getInstance() {
+    public static synchronized IndexerSubsystem getInstance() {
         if (instance == null) {
-            instance = new IndexerSubsystemAutoLogged("IndexerSubsystem");
+            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+                instance = new IndexerSubsystemAutoLogged("IndexerSubsystem");
+
+            } else {
+                instance = new IndexerSubsystem("IndexerSubsystem");
+            }
         }
         return instance;
     }
@@ -28,9 +36,8 @@ public class IndexerSubsystem extends MotorOrCrServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        //todo: change to right hub&port
-        withCrServo(mmRobot.servoHub,2,Direction.REVERSE);
+        // todo: change to right hub&port
+        withCrServo(mmRobot.servoHub, 2, Direction.REVERSE);
     }
-
 
 }

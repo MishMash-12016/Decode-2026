@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 import Ori.Coval.Logging.AutoLog;
@@ -12,11 +13,18 @@ import Ori.Coval.Logging.AutoLog;
 @AutoLog
 public class IntakeSubsystem extends MotorOrCrServoSubsystem {
 
-    public static IntakeSubsystemAutoLogged instance;
+    public static IntakeSubsystem instance;
 
-    public static synchronized IntakeSubsystemAutoLogged getInstance() {
+    public static synchronized IntakeSubsystem getInstance() {
         if (instance == null) {
-            instance = new IntakeSubsystemAutoLogged("IntakeSubsystem");
+            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+                instance = new IntakeSubsystem("IntakeSubsystem");
+
+            } else {
+                instance = new IntakeSubsystem("IntakeSubsystem");
+            }
         }
         return instance;
     }

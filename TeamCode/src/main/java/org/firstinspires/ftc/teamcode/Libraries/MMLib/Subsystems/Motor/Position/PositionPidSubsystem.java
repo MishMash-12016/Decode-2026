@@ -147,7 +147,8 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
 
     @Override
     public void periodic() {
-        if (MMRobot.getInstance().currentOpMode != null) {
+        if (MMRobot.getInstance().currentOpMode != null &&
+                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG) {
             try {
             MMUtils.updateIfChanged(
                     debugKpSupplier,
