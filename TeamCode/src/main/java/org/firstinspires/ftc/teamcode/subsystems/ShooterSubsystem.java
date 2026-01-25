@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.command.Command;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
@@ -40,11 +41,18 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     public static double RESOLUTION = 28;
 
 
-    public static ShooterSubsystemAutoLogged instance;
+    public static ShooterSubsystem instance;
 
-    public static synchronized ShooterSubsystemAutoLogged getInstance() {
+    public static synchronized ShooterSubsystem getInstance() {
         if (instance == null) {
-            instance = new ShooterSubsystemAutoLogged("ShooterSubsystem");
+            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+                instance = new ShooterSubsystem("ShooterSubsystem");
+
+            } else {
+                instance = new ShooterSubsystem("ShooterSubsystem");
+            }
         }
         return instance;
     }

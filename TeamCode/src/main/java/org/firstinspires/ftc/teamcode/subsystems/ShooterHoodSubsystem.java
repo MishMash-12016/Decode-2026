@@ -5,6 +5,7 @@ import com.seattlesolvers.solverslib.command.Command;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Servo.ServoSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
@@ -29,11 +30,18 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
     public static double POSITION_TOLERANCE = 0.1;
 
-    public static ShooterHoodSubsystemAutoLogged instance;
+    public static ShooterHoodSubsystem instance;
 
-    public static synchronized ShooterHoodSubsystemAutoLogged getInstance() {
+    public static synchronized ShooterHoodSubsystem getInstance() {
         if (instance == null) {
-            instance = new ShooterHoodSubsystemAutoLogged("ShooterHoodSubsystem");
+            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+                instance = new ShooterHoodSubsystem("ShooterHoodSubsystem");
+
+            } else {
+                instance = new ShooterHoodSubsystem("ShooterHoodSubsystem");
+            }
         }
         return instance;
     }

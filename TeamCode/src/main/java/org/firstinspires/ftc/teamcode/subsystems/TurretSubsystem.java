@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Position.PositionPidSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 
@@ -37,14 +38,21 @@ public class TurretSubsystem extends PositionPidSubsystem {
 
 
     // Singleton instance
-    public static TurretSubsystemAutoLogged instance;
+    public static TurretSubsystem instance;
 
     /**
      * Get the singleton instance of ElevatorSubsystem.
      */
-    public static synchronized TurretSubsystemAutoLogged getInstance() {
+    public static synchronized TurretSubsystem getInstance() {
         if (instance == null) {
-            instance = new TurretSubsystemAutoLogged("TurretSubsystem");
+            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+                instance = new TurretSubsystem("IntakeSubsystem");
+
+            } else {
+                instance = new TurretSubsystem("IntakeSubsystem");
+            }
         }
         return instance;
     }
