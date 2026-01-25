@@ -65,6 +65,8 @@ public class TurretSubsystem extends PositionPidSubsystem {
         withPositionTolerance(POSITION_TOLERANCE);
 
         withSetpointLimit(5, 175);
+
+        withKf(-0, 0);
         withDebugPidSuppliers(
                 ()-> KP,
                 ()->KI,

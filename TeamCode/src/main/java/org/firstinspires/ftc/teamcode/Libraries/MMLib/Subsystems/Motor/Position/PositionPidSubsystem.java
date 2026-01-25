@@ -16,6 +16,9 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 
 public class PositionPidSubsystem extends PidBaseSubsystem {
 
+    double positiveKf = 0;
+    double negativeKf = 0;
+
     public PositionPidSubsystem(String subsystemName) {
         super(subsystemName);
     }
@@ -45,7 +48,15 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
                 KoalaLog.log(subsystemName + "/pid setpoint", pidController.getSetpoint(), true);
 
                 double pidOutput = KoalaLog.log(subsystemName + "/pid output", pidController.calculate(getPose()), true);
-                setPower(pidOutput);// apply computed power
+                double kf = 0;
+                if(Math.signum(pidController.getError()) == 1){
+                    kf = positiveKf;
+                } else if (Math.signum(pidController.getError()) == -1) {
+                    kf = negativeKf;
+                }
+
+                KoalaLog.log(subsystemName + "/kf", kf, true);
+                setPower(pidOutput + kf);// apply computed power
             }
 
             @Override
@@ -80,6 +91,12 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
      */
     public PositionPidSubsystem withVelocityTolerance(double tolerance) {
         pidController.setTolerance(pidController.getErrorTolerance(), tolerance);
+        return this;
+    }
+
+    public PositionPidSubsystem withKf(double positiveKf, double negativeKf){
+        this.positiveKf = positiveKf;
+        this.negativeKf = negativeKf;
         return this;
     }
 
