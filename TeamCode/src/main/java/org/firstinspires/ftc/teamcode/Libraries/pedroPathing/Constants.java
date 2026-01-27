@@ -66,20 +66,20 @@ public class Constants {
     );
 
     public static Follower createFollower(HardwareMap hardwareMap) {
-        double[] P = {0.155, 0.155, 0.0003}; // how much we trust the start pose(lower mean trust start pose more)
-        double[] processVariance = {0.31, 0.31, 0.0006}; // how much we trust the odometry(lower mean trust odo more)
-        double[] measurementVariance = {1.395, 1.395, 0.0025}; // how much we trust the vision(lower mean trust vision more)
-        int bufferSize = 200;
-
-        FusionLocalizer fusionLocalizer = new FusionLocalizer(
-            new PinpointLocalizer(hardwareMap, localizerConstants),
-            P,
-            processVariance,
-            measurementVariance,
-            bufferSize);
+//        double[] P = {0.155, 0.155, 0.0003}; // how much we trust the start pose(lower mean trust start pose more)
+//        double[] processVariance = {0.31, 0.31, 0.0006}; // how much we trust the odometry(lower mean trust odo more)
+//        double[] measurementVariance = {1.395, 1.395, 0.0025}; // how much we trust the vision(lower mean trust vision more)
+//        int bufferSize = 200;
+//
+//        FusionLocalizer fusionLocalizer = new FusionLocalizer(
+//            new PinpointLocalizer(hardwareMap, localizerConstants),
+//            P,
+//            processVariance,
+//            measurementVariance,
+//            bufferSize);
         return new FollowerBuilder(followerConstants, hardwareMap)
                 .mecanumDrivetrain(driveConstants)
-                .setLocalizer(fusionLocalizer)
+                .setLocalizer(new PinpointLocalizer(hardwareMap,localizerConstants))
                 .pathConstraints(pathConstraints)
                 .build();
     }

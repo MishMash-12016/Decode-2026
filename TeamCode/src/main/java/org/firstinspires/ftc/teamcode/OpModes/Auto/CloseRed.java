@@ -5,8 +5,9 @@ import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.ParallelDeadlineGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 
@@ -33,26 +34,30 @@ public class CloseRed extends MMOpMode {
             FRST_INTAKE_TO_SCND_SHOOT,
             SCND_SHOOT_TO_SCND_TURN,
             SCND_TURN_TO_SCND_INTAKE,
-            SCND_INTAKE_TO_THRD_SHOOT;
+    ///constrction
+            SCND_INTAKE_TO_SCND_TURN,
+            SCND_TURN_TO_THRD_SHOOT,
+    ///constrction
+    THRD_SHOOT_TO_END;
 
-    private final Pose startPose = new Pose(123, 122, Math.toRadians(36));
-    private final Pose shoot = new Pose(84.5, 84);
-    private final Pose toFrstIntake = new Pose(100, 84);
-    private final Pose frstIntake = new Pose(125, 84);
-    private final Pose toScndIntake = new Pose(0, 0);
-    private final Pose scndintake = new Pose(0, 0);
-
+    private final Pose startPose = new Pose(144-21, 122, Math.toRadians(180-144));
+    private final Pose shoot = new Pose(144-59.5, 84, Math.toRadians(180-136));
+    private final Pose toFrstIntake = new Pose(144-59.5, 84);
+    private final Pose frstIntake = new Pose(144-14, 84);
+    private final Pose toScndIntake = new Pose(144-43, 58);
+    private final Pose scndintake = new Pose(144-10, 58);
+    private final Pose endAuto = new Pose(144-30, 72);
 
     Follower follower;
 
     public void buildPaths() {
         START_TO_PRE_SHOOT = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shoot))
-                .setLinearHeadingInterpolation(Math.toRadians(36), Math.toRadians(43)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(180-143), Math.toRadians(180-136)).build();
 
         PRE_SHOOT_TO_FRST_TURN = follower.pathBuilder()
                 .addPath(new BezierLine(shoot, toFrstIntake))
-                .setLinearHeadingInterpolation(Math.toRadians(43), Math.toRadians(0)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(180-136), Math.toRadians(0)).build();
 
         FRST_TURN_TO_FRST_INTAKE = follower.pathBuilder()
                 .addPath(new BezierLine(toFrstIntake, frstIntake))
@@ -60,87 +65,114 @@ public class CloseRed extends MMOpMode {
 
         FRST_INTAKE_TO_SCND_SHOOT = follower.pathBuilder()
                 .addPath(new BezierLine(frstIntake, shoot))
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(43)).build();
-        //scnd from here
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(180-136)).build();
+        //from here 3+6
         SCND_SHOOT_TO_SCND_TURN = follower.pathBuilder()
                 .addPath(new BezierLine(shoot, toScndIntake))
-                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0)).build();
+                .setLinearHeadingInterpolation(Math.toRadians(180-136), Math.toRadians(0)).build();
 
         SCND_TURN_TO_SCND_INTAKE = follower.pathBuilder()
                 .addPath(new BezierLine(toScndIntake, scndintake))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0)).build();
 
-        SCND_INTAKE_TO_THRD_SHOOT = follower.pathBuilder()
-                .addPath(new BezierLine(scndintake, shoot))
+///construction ↓
+        SCND_INTAKE_TO_SCND_TURN = follower.pathBuilder()
+                .addPath(new BezierLine(scndintake, toScndIntake))
                 .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(0)).build();
+
+        SCND_TURN_TO_THRD_SHOOT = follower.pathBuilder()
+                .addPath(new BezierLine(toScndIntake, shoot))
+                .setLinearHeadingInterpolation(Math.toRadians(0), Math.toRadians(180-136)).build();
+///construction ↑
+
+        THRD_SHOOT_TO_END = follower.pathBuilder()
+                .addPath(new BezierLine(shoot, endAuto))
+                .setLinearHeadingInterpolation(Math.toRadians(180-136), Math.toRadians(180-90)).build();
     }
 
+
+
     public CloseRed() {
-        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
+        super(OpModeType.Competition.AUTO, AllianceColor.RED);
     }
 
     @Override
     public void onInit() {
+        MMDrivetrain.getInstance().reset();
         MMDrivetrain.getInstance().getFollower().setStartingPose(startPose);
         follower = MMDrivetrain.getInstance().getFollower();
         buildPaths();
 
-        ParallelCommandGroup autonomousSequence =
-                new ParallelCommandGroup(
-//                        TurretSubsystem.getInstance().alignToTarget(),
-                        TurretSubsystem.getInstance().holdCurrentPoseCommand(),
+        ///PATH
+        Command autonomousSequence =
+                TurretSubsystem.getInstance().holdCurrentPoseCommand().alongWith(
                         new SequentialCommandGroup(
-                                new ParallelDeadlineGroup(
+                                new ParallelCommandGroup(
+                                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(60),
                                         new SequentialCommandGroup(
-                                                new FollowPathCommand(follower, START_TO_PRE_SHOOT),
-                                                ShootCommandGroup.DumbUpShoot(),
-                                                new WaitCommand(4000)
-                                        ).withTimeout(7000),
-                                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50)
+
+                                                //START_TO_PRE_SHOOT:
+                                                new SequentialCommandGroup(
+                                                        new FollowPathCommand(follower, START_TO_PRE_SHOOT),
+                                                        ShootCommandGroup.SmartUpShoot(),
+                                                        new WaitCommand(1000)
+                                                ).withTimeout(5000),
+
+                                                //PRE_SHOOT_TO_FRST_TURN:
+                                                new ParallelCommandGroup(
+                                                        new FollowPathCommand(follower, PRE_SHOOT_TO_FRST_TURN),
+                                                        IntakeCommandGroup.FeedIntake()
+                                                ).withTimeout(1000),
+                                                new WaitCommand(500),
+
+                                                //TURN_TO_FRST_INTAKE:
+                                                new SequentialCommandGroup(
+                                                        new FollowPathCommand(follower, FRST_TURN_TO_FRST_INTAKE),
+                                                        new WaitCommand(500)
+                                                ).withTimeout(1500),
+                                                IntakeCommandGroup.StopIntake(),
+
+                                                //FRST_INTAKE_TO_SHOOT:
+                                                new SequentialCommandGroup(
+                                                        new FollowPathCommand(follower, FRST_INTAKE_TO_SCND_SHOOT),
+                                                        new WaitCommand(1000),
+                                                        ShootCommandGroup.SmartUpShoot(),
+                                                        new WaitCommand(500)
+                                                ),
+                                                IntakeCommandGroup.StopIntake(),
+
+                                                /// 3+6
+
+                                                //SHOOT_TO_TURN:
+                                                new ParallelCommandGroup(
+                                                        new FollowPathCommand(follower, SCND_SHOOT_TO_SCND_TURN),
+                                                        IntakeCommandGroup.FeedIntake()
+                                                ).withTimeout(1600),
+
+                                                //TURN_TO_SCND_INTAKE:
+                                                new SequentialCommandGroup(
+                                                        new FollowPathCommand(follower, SCND_TURN_TO_SCND_INTAKE),
+                                                        new WaitCommand(100)
+                                                ).withTimeout(1600),
+                                                IntakeCommandGroup.StopIntake(),
+
+
+                                                new SequentialCommandGroup(
+                                                        new FollowPathCommand(follower,SCND_INTAKE_TO_SCND_TURN),
+                                                        new WaitCommand(500),
+                                                        new FollowPathCommand(follower,SCND_TURN_TO_THRD_SHOOT)
+                                                ),
+
+                                                new WaitCommand(1000)
+                                        )
                                 ),
-                                ShooterSubsystem.getInstance().stopCommand(),
-                                new ParallelDeadlineGroup(
-                                        new FollowPathCommand(follower, PRE_SHOOT_TO_FRST_TURN),
-                                        IntakeCommandGroup.FeedIntake()
-                                ).withTimeout(2000),
-//                                new WaitCommand(2000),
-                                new SequentialCommandGroup(
-                                        new FollowPathCommand(follower, FRST_TURN_TO_FRST_INTAKE),
-                                        new WaitCommand(100)
-                                ).withTimeout(2000),
-                                IntakeCommandGroup.StopIntake(),
-                                new ParallelDeadlineGroup(
-                                        new SequentialCommandGroup(
-                                                new FollowPathCommand(follower, FRST_INTAKE_TO_SCND_SHOOT),
-                                                new WaitCommand(1000),
-                                                ShootCommandGroup.DumbUpShoot(),
-                                                new WaitCommand(3000)
-                                        ).withTimeout(6000),
-                                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50)
-                                ),
-                                IntakeCommandGroup.StopAll()/*,
-//                                scnd intake:
-                                new ParallelDeadlineGroup(
-                                        new FollowPathCommand(follower, SCND_SHOOT_TO_SCND_TURN),
-                                        IntakeCommandGroup.FeedIntake()
-                                ).withTimeout(2000),
-                                new SequentialCommandGroup(
-                                        new FollowPathCommand(follower, SCND_TURN_TO_SCND_INTAKE),
-                                        new WaitCommand(100)
-                                ).withTimeout(2000),
-                                IntakeCommandGroup.StopIntake(),
-                                new ParallelDeadlineGroup(
-                                        new SequentialCommandGroup(
-                                                new FollowPathCommand(follower, SCND_INTAKE_TO_THRD_SHOOT),
-                                                new WaitCommand(1000),
-                                                ShootCommandGroup.DumbUpShoot(),
-                                                new WaitCommand(3000)
-                                        ).withTimeout(6000),
-                                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50)
-                                ),
-                                IntakeCommandGroup.StopAll()*/
+                                IntakeCommandGroup.StopAll(),
+
+                                //SHOOT_TO_END:
+                                new FollowPathCommand(follower, THRD_SHOOT_TO_END)
                         )
                 );
+
         autonomousSequence.schedule();
     }
 
@@ -148,6 +180,12 @@ public class CloseRed extends MMOpMode {
     public void onPlayLoop() {
         MMDrivetrain.update();
         telemetry.update();
+        telemetry.addData("Shooter: ", ShooterSubsystem.getInstance().getVelocity());
+    }
+
+    @Override
+    public void onEnd() {
+        super.onEnd();
+        CommandScheduler.getInstance().reset();
     }
 }
-

@@ -16,7 +16,7 @@ public class ShootCommandGroup {
     public static Command BallWithControl() {
         return new SequentialCommandGroup(
                 new WaitUntilCommand(
-                        ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity() + 3
+                        ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity()
                 ),
                 DumbUpShoot(),
                 new WaitUntilCommand(
