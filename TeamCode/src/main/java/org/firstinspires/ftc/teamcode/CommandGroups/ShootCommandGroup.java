@@ -27,17 +27,12 @@ public class ShootCommandGroup {
     }
 
     public static Command DumbUpShoot() {
-        return new WithFinally(
-                new ParallelCommandGroup(
+                return new ParallelCommandGroup(
 //                      MMDrivetrain.getInstance().HoldPointCommand(),
                         //todo ideal: shooter target -> by pose
                         IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                         TransferSubsystem.getInstance().setPowerInstantCommand(1),
-                        IndexerSubsystem.getInstance().setPowerInstantCommand(1)),
-                () -> new ParallelCommandGroup(
-                        IntakeSubsystem.getInstance().stopCommand(),
-                        TransferSubsystem.getInstance().stopCommand(),
-                        IndexerSubsystem.getInstance().stopCommand())
+                        IndexerSubsystem.getInstance().setPowerInstantCommand(1)
         );
     }
 
@@ -70,7 +65,10 @@ public class ShootCommandGroup {
                         StopShoot()*/
                         BallWithControl(),
                         BallWithControl(),
-                        BallWithControl()
+                        DumbUpShoot(),
+                        new WaitUntilCommand(
+                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
+                        )
                 );
     }
 
@@ -87,7 +85,7 @@ public class ShootCommandGroup {
     }
 
     public static Command StartWheelFar() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(85);
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(90);
     }
 
 

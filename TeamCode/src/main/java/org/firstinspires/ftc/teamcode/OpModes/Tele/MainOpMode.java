@@ -26,6 +26,7 @@ import Ori.Coval.Logging.AutoLog;
 @AutoLog
 public class MainOpMode extends MMOpMode {
         boolean slow = false;
+        boolean Shoot = false;
     public MainOpMode() {
         super(OpModeType.Competition.TELEOP, AllianceColor.RED);
     }
@@ -39,6 +40,7 @@ public class MainOpMode extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
                 () -> slow = !slow
         );
+        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(35).schedule();
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 ()->MMDrivetrain.getInstance().resetYaw()
@@ -57,10 +59,14 @@ public class MainOpMode extends MMOpMode {
                 )
         );
 
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
+/*        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
                 ShootCommandGroup.StartWheelClose(), ShooterSubsystem.getInstance().stopCommand()
         );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 ShooterSubsystem.getInstance().stopCommand()
+        );*/
+
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                ShootCommandGroup.StartWheelClose()
         );
 
         new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
@@ -87,11 +93,11 @@ public class MainOpMode extends MMOpMode {
         MMDrivetrain.update();
 
         if(ShooterSubsystem.getInstance().getVelocity()>ShooterSubsystem.getInstance().getSetPoint()
-                &&ShooterSubsystem.getInstance().getSetPoint()!=0) {
+                && ShooterSubsystem.getInstance().getSetPoint() != 0  &&  ShooterSubsystem.getInstance().getSetPoint() > 40) {
             gamepad1.rumble(100);
         }
 
-        telemetry.addData("can shoot?: ", ShooterSubsystem.getInstance().getVelocity()>47);
+        telemetry.addData("shooter speed: ", ShooterSubsystem.getInstance().getVelocity());
     }
 
     @Override

@@ -14,22 +14,24 @@ public class IntakeCommandGroup {
     public static Command FeedIntake() {
         return new ParallelCommandGroup(
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                TransferSubsystem.getInstance().setPowerInstantCommand(0.6),
-                IndexerSubsystem.getInstance().setPowerInstantCommand(-1));
+                TransferSubsystem.getInstance().setPowerInstantCommand(0.2),
+                IndexerSubsystem.getInstance().setPowerInstantCommand(-1)
+        );
     }
     public static Command StopIntake() {
         return new ParallelCommandGroup(
                 IntakeSubsystem.getInstance().stopCommand(),
                 TransferSubsystem.getInstance().stopCommand(),
-                IndexerSubsystem.getInstance().stopCommand());
+                IndexerSubsystem.getInstance().stopCommand()
+        );
     }
 
     public static Command OutIntake() {
         return new ParallelCommandGroup(
                 IntakeSubsystem.getInstance().setPowerInstantCommand(-1),
                 TransferSubsystem.getInstance().setPowerInstantCommand(-1),
-                IndexerSubsystem.getInstance().setPowerInstantCommand(-1),
-                ShooterSubsystem.getInstance().setPowerInstantCommand(-1));
+                IndexerSubsystem.getInstance().setPowerInstantCommand(-1)
+        );
     }
 
     public static Command StopAll() {
@@ -37,7 +39,16 @@ public class IntakeCommandGroup {
                 TransferSubsystem.getInstance().stopCommand(),
                 IndexerSubsystem.getInstance().stopCommand(),
                 IntakeSubsystem.getInstance().stopCommand(),
-                ShooterSubsystem.getInstance().stopCommand());
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(35)
+        );
+
+/*        public static Command StopAll() {
+        return new ParallelCommandGroup(
+                TransferSubsystem.getInstance().stopCommand(),
+                IndexerSubsystem.getInstance().stopCommand(),
+                IntakeSubsystem.getInstance().stopCommand(),
+                ShooterSubsystem.getInstance().stopCommand()
+        );*/
     }
 }
 
