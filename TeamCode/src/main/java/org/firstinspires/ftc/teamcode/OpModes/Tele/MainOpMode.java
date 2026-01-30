@@ -40,7 +40,6 @@ public class MainOpMode extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
                 () -> slow = !slow
         );
-        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(35).schedule();
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 ()->MMDrivetrain.getInstance().resetYaw()
@@ -59,15 +58,14 @@ public class MainOpMode extends MMOpMode {
                 )
         );
 
-/*        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
-                ShootCommandGroup.StartWheelClose(), ShooterSubsystem.getInstance().stopCommand()
-        );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                ShooterSubsystem.getInstance().stopCommand()
-        );*/
-
         GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 ShootCommandGroup.StartWheelClose()
+        );GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                ShootCommandGroup.StartWheelFar()
+        );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                ShooterSubsystem.getInstance().stopCommand()
         );
+
 
         new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
                 ShootCommandGroup.SmartUpShoot(), ShootCommandGroup.StopShoot()
@@ -93,7 +91,7 @@ public class MainOpMode extends MMOpMode {
         MMDrivetrain.update();
 
         if(ShooterSubsystem.getInstance().getVelocity()>ShooterSubsystem.getInstance().getSetPoint()
-                && ShooterSubsystem.getInstance().getSetPoint() != 0  &&  ShooterSubsystem.getInstance().getSetPoint() > 40) {
+                && ShooterSubsystem.getInstance().getSetPoint() != 0) {
             gamepad1.rumble(100);
         }
 

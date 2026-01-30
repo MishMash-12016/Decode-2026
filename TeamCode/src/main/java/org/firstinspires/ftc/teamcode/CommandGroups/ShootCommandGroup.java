@@ -81,11 +81,11 @@ public class ShootCommandGroup {
     }
 
     public static Command StartWheelClose() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(50);
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(43);
     }
 
     public static Command StartWheelFar() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(90);
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(48);
     }
 
 

@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import Ori.Coval.Logging.AutoLog;
 
 @AutoLog
-@Autonomous
+//@Autonomous
 @Config
 public class TestAutoOpMode extends MMOpMode {
 

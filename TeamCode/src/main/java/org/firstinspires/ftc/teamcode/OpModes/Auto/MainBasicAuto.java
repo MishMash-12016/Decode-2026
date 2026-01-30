@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.RobotConstants;
 
-@Autonomous
+//@Autonomous
 public class MainBasicAuto extends MMOpMode {
 
     private PathChain FROM_START_TO_SCORE, FROM_SCORE_TO_PARKING;

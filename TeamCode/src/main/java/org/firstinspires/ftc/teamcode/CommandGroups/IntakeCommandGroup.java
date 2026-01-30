@@ -39,7 +39,7 @@ public class IntakeCommandGroup {
                 TransferSubsystem.getInstance().stopCommand(),
                 IndexerSubsystem.getInstance().stopCommand(),
                 IntakeSubsystem.getInstance().stopCommand(),
-                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(35)
+                ShooterSubsystem.getInstance().stopCommand()
         );
 
 /*        public static Command StopAll() {

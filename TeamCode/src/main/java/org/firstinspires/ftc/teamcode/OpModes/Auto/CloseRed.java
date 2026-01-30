@@ -46,7 +46,7 @@ public class CloseRed extends MMOpMode {
     private final Pose toFrstIntake = new Pose(144-48, 84);
     private final Pose frstIntake = new Pose(144-14, 84);
     private final Pose toScndIntake = new Pose(144-43, 60);
-    private final Pose scndintake = new Pose(144-8, 60);
+    private final Pose scndintake = new Pose(144-2, 60);
     private final Pose endAuto = new Pose(144-30, 72);
 
     Follower follower;
@@ -99,6 +99,11 @@ public class CloseRed extends MMOpMode {
 
     @Override
     public void onInit() {
+
+    }
+
+    @Override
+    public void onPlay() {
         CommandScheduler.getInstance().reset();
         MMDrivetrain.getInstance().reset();
         MMDrivetrain.getInstance().getFollower().setStartingPose(startPose);
@@ -111,17 +116,21 @@ public class CloseRed extends MMOpMode {
                 TurretSubsystem.getInstance().holdCurrentPoseCommand().alongWith(
                         new SequentialCommandGroup(
                                 new ParallelCommandGroup(
-                                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(45),
+                                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(42),
                                         new SequentialCommandGroup(
 
                                                 //START_TO_PRE_SHOOT:
                                                 new SequentialCommandGroup(
                                                         new FollowPathCommand(follower, START_TO_PRE_SHOOT),
                                                         ShootCommandGroup.BallWithControl(),
+                                                        ShootCommandGroup.BallWithControl()
+                                                                .withTimeout(1500),
                                                         ShootCommandGroup.DumbUpShoot(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
                                                 IntakeCommandGroup.StopIntake(),
+
+
 
                                                 //PRE_SHOOT_TO_FRST_TURN:
                                                 new ParallelCommandGroup(
@@ -135,12 +144,14 @@ public class CloseRed extends MMOpMode {
                                                         new FollowPathCommand(follower, FRST_TURN_TO_FRST_INTAKE),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(2000),
-                                                IntakeCommandGroup.StopIntake(),
 
                                                 //FRST_INTAKE_TO_SHOOT:
                                                 new SequentialCommandGroup(
                                                         new FollowPathCommand(follower, FRST_INTAKE_TO_SCND_SHOOT),
+                                                        IntakeCommandGroup.StopIntake(),
                                                         ShootCommandGroup.BallWithControl(),
+                                                        ShootCommandGroup.BallWithControl()
+                                                                .withTimeout(1500),
                                                         ShootCommandGroup.DumbUpShoot(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
@@ -169,6 +180,8 @@ public class CloseRed extends MMOpMode {
                                                 ).withTimeout(5000),
                                                 new WaitCommand(500),
                                                 ShootCommandGroup.BallWithControl(),
+                                                ShootCommandGroup.BallWithControl()
+                                                        .withTimeout(1500),
                                                 ShootCommandGroup.DumbUpShoot()
                                                         .withTimeout(2000),
                                                 new WaitCommand(1000),
