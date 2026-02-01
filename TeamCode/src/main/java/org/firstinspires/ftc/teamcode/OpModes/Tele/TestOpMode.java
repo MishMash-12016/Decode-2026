@@ -81,7 +81,7 @@ public class TestOpMode extends MMOpMode {
            ()->MMDrivetrain.getInstance().getFollower().followPath(
                 MMDrivetrain.getInstance().getFollower().pathBuilder()
                         .setLinearHeadingInterpolation(Math.toRadians(MMDrivetrain.getInstance().getFollower().getHeading()),
-                                Math.toRadians(RobotUtils.getAngleToTarget())).build()
+                                RobotUtils.getAngleToTarget().getRadians()).build()
         )
    );
         GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(

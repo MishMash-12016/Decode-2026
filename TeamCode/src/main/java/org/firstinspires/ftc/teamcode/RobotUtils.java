@@ -25,13 +25,13 @@ public class RobotUtils {
         return targetPoseRed;
     }
 
-    public static double getAngleToTarget(){
+    public static Rotation2d getAngleToTarget(){
         Pose2d robotPose = MMUtils.PedroPoseToSolversPose2d(
                 MMDrivetrain.getInstance().getFollower().getPose());
         Pose2d targetPose = getTargetPose();
 
         Translation2d relativeTrl = targetPose.relativeTo(robotPose).getTranslation();
-        return new Rotation2d(relativeTrl.getX(), relativeTrl.getY()).getDegrees();
+        return new Rotation2d(relativeTrl.getX(), relativeTrl.getY());
     }
 
     public static double getDistanceToTarget() {

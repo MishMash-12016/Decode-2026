@@ -106,7 +106,7 @@ public class TurretSubsystem extends PositionPidSubsystem {
     }
     public Command alignToTarget(){
         return getToAndHoldSetPointCommand(()->
-                KoalaLog.log("angle_to_target", (RobotUtils.getAngleToTarget() + 90), true));
+                KoalaLog.log("angle_to_target", (RobotUtils.getAngleToTarget().getDegrees() + 90), true));
     }
 
 
