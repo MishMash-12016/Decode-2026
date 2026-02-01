@@ -20,7 +20,7 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new IntakeSubsystem("IntakeSubsystem");
+                instance = new IntakeSubsystemAutoLogged("IntakeSubsystem");
 
             } else {
                 instance = new IntakeSubsystem("IntakeSubsystem");

@@ -48,10 +48,10 @@ public class TurretSubsystem extends PositionPidSubsystem {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new TurretSubsystem("IntakeSubsystem");
+                instance = new TurretSubsystemAutoLogged("TurretSubsystem");
 
             } else {
-                instance = new TurretSubsystem("IntakeSubsystem");
+                instance = new TurretSubsystem("TurretSubsystem");
             }
         }
         return instance;

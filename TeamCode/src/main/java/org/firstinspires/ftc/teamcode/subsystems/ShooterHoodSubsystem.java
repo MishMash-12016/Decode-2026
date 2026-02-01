@@ -37,7 +37,7 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new ShooterHoodSubsystem("ShooterHoodSubsystem");
+                instance = new ShooterHoodSubsystemAutoLogged("ShooterHoodSubsystem");
 
             } else {
                 instance = new ShooterHoodSubsystem("ShooterHoodSubsystem");

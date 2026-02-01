@@ -24,7 +24,7 @@ public class TransferSubsystem extends MotorOrCrServoSubsystem {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new TransferSubsystem("TransferSubsystem");
+                instance = new TransferSubsystemAutoLogged("TransferSubsystem");
 
             } else {
                 instance = new TransferSubsystem("TransferSubsystem");
