@@ -14,7 +14,6 @@ import Ori.Coval.Logging.AutoLog;
 
 public class IndexerSubsystem extends MotorOrCrServoSubsystem {
 
-    // TODO: generic values
 
     public static IndexerSubsystem instance;
 
@@ -36,7 +35,6 @@ public class IndexerSubsystem extends MotorOrCrServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        // todo: change to right hub&port
         withCrServo(mmRobot.servoHub, 2, Direction.REVERSE);
     }
 
