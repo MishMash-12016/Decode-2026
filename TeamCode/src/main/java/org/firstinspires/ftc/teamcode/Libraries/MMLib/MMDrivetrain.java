@@ -6,11 +6,13 @@ import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.RunCommand;
 
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Drawing;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.HoldPointCommand;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.RobotUtils;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -25,6 +27,10 @@ public class MMDrivetrain extends MMSubsystem {
     public double slowModeRatioForward = 0.3;
     public double slowModeRatioLateral = 0.3;
     public double slowModeRatioRotation = 0.2;
+
+    public double headingKP = 0.9;
+    public double headingKI = 0;
+    public double headingKD = 0;
 
     @IgnoreConfigurable
     private static MMDrivetrain instance;
@@ -73,51 +79,83 @@ public class MMDrivetrain extends MMSubsystem {
         return this.driveCommand(forwardDrive, lateralDrive, heading, true, slowMode);
     }
 
-    public CommandBase driveCommand(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, DoubleSupplier heading, boolean robotCentric, BooleanSupplier slowMode) {
-        return (CommandBase) new RunCommand(() -> {
+    public CommandBase driveAligned(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, boolean robotCentric, BooleanSupplier slowMode) {
+        PIDController headingPid = new PIDController(headingKP, headingKI, headingKD);
 
+        return (CommandBase) new RunCommand(() -> {
+            double headingPower = headingPid.calculate(getPose().getHeading(), RobotUtils.getAngleToTarget().getRadians());
+            if (headingPower > 0.5){
+                headingPower = 0.5;
+            }
+            double maxPower = 1 - headingPower;
+
+            double forwardDrivePower = 0;
+            double lateralDrivePower = 0;
+            double translationPowerSum = 0;
 
             if (slowMode.getAsBoolean()) {
-                double forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 5);
-                double lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 5);
-                double headingPower = Math.pow(heading.getAsDouble(), 3);
-                double powerSum = Math.max(
-                        Math.abs(forwardDrivePower) +
-                                Math.abs(lateralDrivePower) +
-                                Math.abs(headingPower),
-                        1);
-                double normalizeTo1 = 1 / powerSum;
-
-                forwardDrivePower *= normalizeTo1;
-                lateralDrivePower *= normalizeTo1;
-                headingPower *= normalizeTo1;
-
-                follower.setTeleOpDrive(
-                        forwardDrivePower * slowModeRatioForward,
-                        lateralDrivePower * slowModeRatioLateral,
-                        headingPower * slowModeRatioRotation,
-                        robotCentric);
+                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 5);
+                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 5);
             } else {
-                double forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
-                double lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
-                double headingPower = Math.pow(heading.getAsDouble(), 1);
-                double powerSum = Math.max(
-                        Math.abs(forwardDrivePower) +
-                                Math.abs(lateralDrivePower) +
-                                Math.abs(headingPower),
-                        1);
-                double normalizeTo1 = 1 / powerSum;
-
-                forwardDrivePower *= normalizeTo1;
-                lateralDrivePower *= normalizeTo1;
-                headingPower *= normalizeTo1;
-                follower.setTeleOpDrive(
-                        forwardDrivePower,
-                        lateralDrivePower,
-                        Math.pow(headingPower, 1),
-                        robotCentric);
+                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
+                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
             }
 
+            translationPowerSum = Math.abs(forwardDrivePower) + Math.abs(lateralDrivePower);
+            if (translationPowerSum > maxPower){
+                double normalizeTo1 = maxPower / translationPowerSum;
+
+                forwardDrivePower *= normalizeTo1;
+                lateralDrivePower *= normalizeTo1;
+            }
+
+            follower.setTeleOpDrive(
+                    forwardDrivePower * (slowMode.getAsBoolean() ? slowModeRatioForward : 1),
+                    lateralDrivePower * (slowMode.getAsBoolean() ? slowModeRatioLateral : 1),
+                    headingPower,
+                    robotCentric);
+            follower.update();
+        }, this)
+                .beforeStarting(() -> {
+                    follower.startTeleopDrive();
+                });
+    }
+
+    public CommandBase driveCommand(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, DoubleSupplier heading, boolean robotCentric, BooleanSupplier slowMode) {
+        return (CommandBase) new RunCommand(() -> {
+            double forwardDrivePower = 0;
+            double lateralDrivePower = 0;
+            double headingPower = 0;
+
+            if (slowMode.getAsBoolean()) {
+                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 5);
+                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 5);
+                headingPower = Math.pow(heading.getAsDouble(), 3);
+            } else {
+                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
+                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
+                headingPower = Math.pow(heading.getAsDouble(), 1);
+            }
+
+            double powerSum = Math.max(
+                    Math.abs(forwardDrivePower) +
+                            Math.abs(lateralDrivePower) +
+                            Math.abs(headingPower),
+                    1);
+            if (powerSum > 1){
+                double normalizeTo1 = 1 / powerSum;
+
+                forwardDrivePower *= normalizeTo1;
+                lateralDrivePower *= normalizeTo1;
+                headingPower *= normalizeTo1;
+            }
+
+
+            follower.setTeleOpDrive(
+                    forwardDrivePower * (slowMode.getAsBoolean() ? slowModeRatioForward : 1),
+                    lateralDrivePower * (slowMode.getAsBoolean() ? slowModeRatioLateral : 1),
+                    headingPower * (slowMode.getAsBoolean() ? slowModeRatioRotation : 1),
+                    robotCentric);
             follower.update();
         }, this)
                 .beforeStarting(() -> {
