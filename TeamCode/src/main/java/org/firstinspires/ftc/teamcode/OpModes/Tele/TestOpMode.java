@@ -36,56 +36,18 @@ public class TestOpMode extends MMOpMode {
     boolean Shoot = false;
     Pose startPose = new Pose(57,55,0);
     public TestOpMode() {
-        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
+        super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION, AllianceColor.RED);
     }
 
 
     @Override
     public void onInit() {
         MMDrivetrain.getInstance().setPose(startPose);
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> false);
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
 
-/*        GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
-                ()->MMDrivetrain.getInstance().resetYaw()
-        );
-
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
-                IntakeCommandGroup.FeedIntake(), IntakeCommandGroup.StopIntake()
-        );
-
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
-                        IntakeCommandGroup.OutIntake(), IntakeCommandGroup.StopIntake()
-        );
-
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                ShootCommandGroup.StartWheelClose()
-        );GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                ShootCommandGroup.StartWheelFar()
-        );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                ShooterSubsystem.getInstance().stopCommand()
-        );
-
-
-        new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
-                ShootCommandGroup.SmartUpShoot(), ShootCommandGroup.StopShoot()
-        );
-        new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
-                ShootCommandGroup.DumbUpShoot(), ShootCommandGroup.StopShoot()
-        );
-
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
-                IntakeCommandGroup.StopAll()
-        );*/
-
-   GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-           ()->MMDrivetrain.getInstance().getFollower().followPath(
-                MMDrivetrain.getInstance().getFollower().pathBuilder()
-                        .setLinearHeadingInterpolation(Math.toRadians(MMDrivetrain.getInstance().getFollower().getHeading()),
-                                RobotUtils.getAngleToTarget().getRadians()).build()
-        )
-   );
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                ()->CommandScheduler.getInstance().reset()
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
+                MMDrivetrain.getInstance().enableDriveAligned(()->false)
         );
 
 
@@ -102,7 +64,6 @@ public class TestOpMode extends MMOpMode {
         telemetry.update();
         MMDrivetrain.update();
 
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> false);
 
         telemetry.addData("driver pose: ", MMDrivetrain.getInstance().getPose());
         telemetry.addData("driver target: ", MMDrivetrain.getInstance().getAScopeTargetPose());

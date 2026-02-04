@@ -98,7 +98,7 @@ public class MMRobotInner extends Robot {
         gamepadEx2 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad2);
 
         controlHub = new CuttleRevHub(hardwareMap, controlHubName);
-        servoHub = new CuttleRevHub(hardwareMap, servoHubName);
+//        servoHub = new CuttleRevHub(hardwareMap, servoHubName);
         if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB) {
             expansionHub = new CuttleRevHub(hardwareMap, expansionHubName);
             servoHub = new CuttleRevHub(hardwareMap, servoHubName);
