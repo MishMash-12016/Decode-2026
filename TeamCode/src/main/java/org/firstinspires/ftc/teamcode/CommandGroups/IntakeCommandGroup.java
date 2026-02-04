@@ -4,51 +4,44 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Commands.WithFinally;
-import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
+
+import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.FunnelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+
+
 public class IntakeCommandGroup {
 
-    public static Command FeedIntake() {
+    public static Command dumbFeed() {
         return new ParallelCommandGroup(
-                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                TransferSubsystem.getInstance().setPowerInstantCommand(0.2),
-                IndexerSubsystem.getInstance().setPowerInstantCommand(-1)
-        );
-    }
-    public static Command StopIntake() {
-        return new ParallelCommandGroup(
-                IntakeSubsystem.getInstance().stopCommand(),
-                TransferSubsystem.getInstance().stopCommand(),
-                IndexerSubsystem.getInstance().stopCommand()
+                FunnelSubsystem.getInstance().setPowerInstantCommand(1)
         );
     }
 
-    public static Command OutIntake() {
-        return new ParallelCommandGroup(
-                IntakeSubsystem.getInstance().setPowerInstantCommand(-1),
-                TransferSubsystem.getInstance().setPowerInstantCommand(-1),
-                IndexerSubsystem.getInstance().setPowerInstantCommand(-1)
+    public static Command smartFeed() {
+        return new SequentialCommandGroup(
         );
     }
 
-    public static Command StopAll() {
+    public static Command stopIntake() {
         return new ParallelCommandGroup(
-                TransferSubsystem.getInstance().stopCommand(),
-                IndexerSubsystem.getInstance().stopCommand(),
-                IntakeSubsystem.getInstance().stopCommand(),
+                FunnelSubsystem.getInstance().stopCommand(),
+                BallStopperSubsystem.getInstance().close()
+        );
+    }
+
+    public static Command outIntake() {
+        return new ParallelCommandGroup(
+                FunnelSubsystem.getInstance().setPowerInstantCommand(-1)
+        );
+    }
+
+    public static Command stopAll() {
+        return new ParallelCommandGroup(
+                FunnelSubsystem.getInstance().stopCommand(),
                 ShooterSubsystem.getInstance().stopCommand()
         );
 
-/*        public static Command StopAll() {
-        return new ParallelCommandGroup(
-                TransferSubsystem.getInstance().stopCommand(),
-                IndexerSubsystem.getInstance().stopCommand(),
-                IntakeSubsystem.getInstance().stopCommand(),
-                ShooterSubsystem.getInstance().stopCommand()
-        );*/
     }
 }
 

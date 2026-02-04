@@ -10,9 +10,11 @@ import com.seattlesolvers.solverslib.command.Command;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.RobotUtils;
 
 import java.util.function.DoubleSupplier;
 
@@ -111,9 +113,12 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         return sysIdRoutine.dynamic(direction);
     }
 
-    public Command aimSpeedToShut(DoubleSupplier distance) {
-        return getToSetpointCommand(
-                ()-> exterpolationMap.exterpolate(distance.getAsDouble()));
+    public Command speedByDistance(double distance) {
+        return getToAndHoldSetPointCommand(
+                ()-> exterpolationMap.exterpolate(distance));
+    }
+    public Command speedByLocation() {
+        return speedByDistance(RobotUtils.getDistanceToTarget());
     }
 }
 

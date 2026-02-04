@@ -4,7 +4,6 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 
@@ -50,7 +49,7 @@ public class MainBasicAuto extends MMOpMode {
 
         SequentialCommandGroup autonomousSequence = new SequentialCommandGroup(
                 new FollowPathCommand(follower, FROM_START_TO_SCORE),
-                ShootCommandGroup.DumbUpShoot(),
+                ShootCommandGroup.dumbUpShoot(),
                 new FollowPathCommand(follower, FROM_SCORE_TO_PARKING),
                 new RunCommand(()-> RobotConstants.APRIL_TAG_ID = WebcamSubsystem.getInstance().getAprilTagID()).withTimeout(2000)
         );

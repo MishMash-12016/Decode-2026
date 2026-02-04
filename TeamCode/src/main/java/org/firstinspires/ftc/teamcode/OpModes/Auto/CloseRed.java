@@ -122,20 +122,20 @@ public class CloseRed extends MMOpMode {
                                                 //START_TO_PRE_SHOOT:
                                                 new SequentialCommandGroup(
                                                         new FollowPathCommand(follower, START_TO_PRE_SHOOT),
-                                                        ShootCommandGroup.BallWithControl(),
-                                                        ShootCommandGroup.BallWithControl()
+                                                        ShootCommandGroup.ballWithControl(),
+                                                        ShootCommandGroup.ballWithControl()
                                                                 .withTimeout(1500),
-                                                        ShootCommandGroup.DumbUpShoot(),
+                                                        ShootCommandGroup.dumbUpShoot(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
-                                                IntakeCommandGroup.StopIntake(),
+                                                IntakeCommandGroup.stopIntake(),
 
 
 
                                                 //PRE_SHOOT_TO_FRST_TURN:
                                                 new ParallelCommandGroup(
                                                         new FollowPathCommand(follower, PRE_SHOOT_TO_FRST_TURN),
-                                                        IntakeCommandGroup.FeedIntake()
+                                                        IntakeCommandGroup.dumbFeed()
                                                 ).withTimeout(2000),
                                                 new WaitCommand(1000),
 
@@ -148,21 +148,21 @@ public class CloseRed extends MMOpMode {
                                                 //FRST_INTAKE_TO_SHOOT:
                                                 new SequentialCommandGroup(
                                                         new FollowPathCommand(follower, FRST_INTAKE_TO_SCND_SHOOT),
-                                                        IntakeCommandGroup.StopIntake(),
-                                                        ShootCommandGroup.BallWithControl(),
-                                                        ShootCommandGroup.BallWithControl()
+                                                        IntakeCommandGroup.stopIntake(),
+                                                        ShootCommandGroup.ballWithControl(),
+                                                        ShootCommandGroup.ballWithControl()
                                                                 .withTimeout(1500),
-                                                        ShootCommandGroup.DumbUpShoot(),
+                                                        ShootCommandGroup.dumbUpShoot(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
-                                                IntakeCommandGroup.StopIntake(),
+                                                IntakeCommandGroup.stopIntake(),
 
                                                 /// 3+6
 
                                                 //SCND_SHOOT_TO_TURN:
                                                 new ParallelCommandGroup(
                                                         new FollowPathCommand(follower, SCND_SHOOT_TO_SCND_TURN),
-                                                        IntakeCommandGroup.FeedIntake()
+                                                        IntakeCommandGroup.dumbFeed()
                                                 ).withTimeout(1600),
 
                                                 //TURN_TO_SCND_INTAKE:
@@ -173,16 +173,16 @@ public class CloseRed extends MMOpMode {
                                                 //SCND_INTAKE_TO_SHOOT:
                                                 new SequentialCommandGroup(
                                                         new FollowPathCommand(follower, SCND_INTAKE_TO_SCND_TURN),
-                                                        IntakeCommandGroup.StopIntake()
+                                                        IntakeCommandGroup.stopIntake()
                                                                 .withTimeout(2000),
                                                         new WaitCommand(500),
                                                         new FollowPathCommand(follower, SCND_TURN_TO_THRD_SHOOT)
                                                 ).withTimeout(5000),
                                                 new WaitCommand(500),
-                                                ShootCommandGroup.BallWithControl(),
-                                                ShootCommandGroup.BallWithControl()
+                                                ShootCommandGroup.ballWithControl(),
+                                                ShootCommandGroup.ballWithControl()
                                                         .withTimeout(1500),
-                                                ShootCommandGroup.DumbUpShoot()
+                                                ShootCommandGroup.dumbUpShoot()
                                                         .withTimeout(2000),
                                                 new WaitCommand(1000),
                                                 new FollowPathCommand(follower, THRD_SHOOT_TO_END)
@@ -190,7 +190,7 @@ public class CloseRed extends MMOpMode {
 
                                         )
                                 ),
-                                IntakeCommandGroup.StopAll()
+                                IntakeCommandGroup.stopAll()
 
                                 //SHOOT_TO_END:
 //                                new FollowPathCommand(follower, THRD_SHOOT_TO_END)

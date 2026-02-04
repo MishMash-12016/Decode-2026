@@ -5,88 +5,57 @@ import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Commands.WithFinally;
-import org.firstinspires.ftc.teamcode.subsystems.IndexerSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
+import org.firstinspires.ftc.teamcode.RobotUtils;
+import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.FunnelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TransferSubsystem;
 
 public class ShootCommandGroup {
 
-    public static Command BallWithControl() {
+    public static Command ballWithControl() {
         return new SequentialCommandGroup(
                 new WaitUntilCommand(
-                        ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity()
+                        () -> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity()
                 ),
-                DumbUpShoot(),
+                dumbUpShoot(),
                 new WaitUntilCommand(
-                        ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
+                        () -> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
                 ),
-                StopShoot()
+                stopShoot()
         );
     }
 
-    public static Command DumbUpShoot() {
-                return new ParallelCommandGroup(
-//                      MMDrivetrain.getInstance().HoldPointCommand(),
-                        //todo ideal: shooter target -> by pose
-                        IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                        TransferSubsystem.getInstance().setPowerInstantCommand(1),
-                        IndexerSubsystem.getInstance().setPowerInstantCommand(1)
-        );
-    }
-
-
-    public static Command SmartUpShoot() {
-                return new SequentialCommandGroup(
-                        /*new WaitUntilCommand(
-                                ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity() + 3
-                        ),
-                        DumbUpShoot(),
-                        new WaitUntilCommand(
-                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
-                        ),
-                        StopShoot(),
-                        new WaitUntilCommand(
-                                ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity() + 3
-                        ),
-                        DumbUpShoot(),
-                        new WaitUntilCommand(
-                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
-                        ),
-                        StopShoot(),
-                        new WaitUntilCommand(
-                                ()-> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity() + 3
-                        ),
-                        DumbUpShoot(),
-                        new WaitUntilCommand(
-                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
-                        ),
-                        StopShoot()*/
-                        BallWithControl(),
-                        BallWithControl(),
-                        DumbUpShoot(),
-                        new WaitUntilCommand(
-                                ()-> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
-                        )
-                );
-    }
-
-
-    public static Command StopShoot() {
+    public static Command dumbUpShoot() {
         return new ParallelCommandGroup(
-                TransferSubsystem.getInstance().stopCommand(),
-                IndexerSubsystem.getInstance().stopCommand(),
-                IntakeSubsystem.getInstance().stopCommand());
+                BallStopperSubsystem.getInstance().open(),
+                FunnelSubsystem.getInstance().setPowerInstantCommand(1)
+        );
     }
 
-    public static Command StartWheelClose() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(43);
+    public static Command smartUpShoot(boolean slow) {
+        return MMDrivetrain.getInstance().enableDriveAligned(() -> slow).andThen(
+                new ParallelCommandGroup(
+                        MMDrivetrain.getInstance().enableDriveAligned(() -> slow),
+                        BallStopperSubsystem.getInstance().open(),
+                        FunnelSubsystem.getInstance().setPowerInstantCommand(1)
+                )
+        );
     }
 
-    public static Command StartWheelFar() {
+    public static Command stopShoot() {
+        return new ParallelCommandGroup(
+                FunnelSubsystem.getInstance().stopCommand()
+        );
+    }
+
+    public static Command closeDumbSpeed() {
         return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(48);
     }
 
+    //TODO: function by speed and hood angle
+    public static Command speedByLocation() {
+        return ShooterSubsystem.getInstance().speedByDistance(RobotUtils.getDistanceToTarget());
+    }
 
 }

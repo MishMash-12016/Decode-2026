@@ -132,16 +132,16 @@ public class CloseBlueOpenGate extends MMOpMode {
                                                 //START_TO_PRE_SHOOT:
                                                 new SequentialCommandGroup(
                                                         new FollowPathCommand(follower, START_TO_PRE_SHOOT),
-                                                        ShootCommandGroup.BallWithControl(),
-                                                        ShootCommandGroup.DumbUpShoot(),
+                                                        ShootCommandGroup.ballWithControl(),
+                                                        ShootCommandGroup.dumbUpShoot(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
-                                                IntakeCommandGroup.StopIntake(),
+                                                IntakeCommandGroup.stopIntake(),
 
                                                 //PRE_SHOOT_TO_FRST_TURN:
                                                 new ParallelCommandGroup(
                                                         new FollowPathCommand(follower, PRE_SHOOT_TO_FRST_TURN),
-                                                        IntakeCommandGroup.FeedIntake()
+                                                        IntakeCommandGroup.dumbFeed()
                                                 ).withTimeout(2000),
                                                 new WaitCommand(1000),
 
@@ -150,7 +150,7 @@ public class CloseBlueOpenGate extends MMOpMode {
                                                         new FollowPathCommand(follower, FRST_TURN_TO_FRST_INTAKE),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(2000),
-                                                IntakeCommandGroup.StopIntake(),
+                                                IntakeCommandGroup.stopIntake(),
 
 
                                                 //FRST_INTAKE_TO_GATE&SHOOT:
@@ -159,18 +159,18 @@ public class CloseBlueOpenGate extends MMOpMode {
                                                                 .withTimeout(2000),
                                                         new WaitCommand(500),
                                                         new FollowPathCommand(follower, OPEN_GATE_TO_SCND_SHOOT),
-                                                        ShootCommandGroup.BallWithControl(),
-                                                        ShootCommandGroup.DumbUpShoot(),
+                                                        ShootCommandGroup.ballWithControl(),
+                                                        ShootCommandGroup.dumbUpShoot(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
-                                                IntakeCommandGroup.StopIntake(),
+                                                IntakeCommandGroup.stopIntake(),
 
                                                 /// 3+6
 
                                                 //SCND_SHOOT_TO_TURN:
                                                 new ParallelCommandGroup(
                                                         new FollowPathCommand(follower, SCND_SHOOT_TO_SCND_TURN),
-                                                        IntakeCommandGroup.FeedIntake()
+                                                        IntakeCommandGroup.dumbFeed()
                                                 ).withTimeout(1600),
 
                                                 //TURN_TO_SCND_INTAKE:
@@ -181,14 +181,14 @@ public class CloseBlueOpenGate extends MMOpMode {
                                                 //SCND_INTAKE_TO_SHOOT:
                                                 new SequentialCommandGroup(
                                                         new FollowPathCommand(follower, SCND_INTAKE_TO_SCND_TURN),
-                                                        IntakeCommandGroup.StopIntake()
+                                                        IntakeCommandGroup.stopIntake()
                                                                 .withTimeout(2000),
                                                         new WaitCommand(500),
                                                         new FollowPathCommand(follower, SCND_TURN_TO_THRD_SHOOT)
                                                 ).withTimeout(5000),
                                                 new WaitCommand(500),
-                                                ShootCommandGroup.BallWithControl(),
-                                                ShootCommandGroup.DumbUpShoot()
+                                                ShootCommandGroup.ballWithControl(),
+                                                ShootCommandGroup.dumbUpShoot()
                                                         .withTimeout(2000),
                                                 new WaitCommand(1000),
                                                 new FollowPathCommand(follower, THRD_SHOOT_TO_END)
@@ -196,7 +196,7 @@ public class CloseBlueOpenGate extends MMOpMode {
 
                                         )
                                 ),
-                                IntakeCommandGroup.StopAll()
+                                IntakeCommandGroup.stopAll()
 
                                 //SHOOT_TO_END:
 //                                new FollowPathCommand(follower, THRD_SHOOT_TO_END)

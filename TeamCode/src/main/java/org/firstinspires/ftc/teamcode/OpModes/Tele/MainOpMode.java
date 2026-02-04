@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -41,6 +40,7 @@ public class MainOpMode extends MMOpMode {
                 () -> slow = !slow
         );
 
+
         GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 ()->MMDrivetrain.getInstance().resetYaw()
         );
@@ -48,34 +48,35 @@ public class MainOpMode extends MMOpMode {
         TurretSubsystem.getInstance().holdCurrentPoseCommand().schedule();
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
-                IntakeCommandGroup.FeedIntake(), IntakeCommandGroup.StopIntake()
+                IntakeCommandGroup.dumbFeed(), IntakeCommandGroup.stopIntake()
         );
         GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
                 new SequentialCommandGroup(
-                        IntakeCommandGroup.OutIntake(),
+                        IntakeCommandGroup.outIntake(),
                         new WaitCommand(800),
-                        IntakeCommandGroup.StopIntake()
+                        IntakeCommandGroup.stopIntake()
                 )
         );
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                ShootCommandGroup.StartWheelClose()
+                ShootCommandGroup.closeDumbSpeed()
         );GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                ShootCommandGroup.StartWheelFar()
+                ShootCommandGroup.speedByLocation()
         );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 ShooterSubsystem.getInstance().stopCommand()
         );
 
 
         new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
-                ShootCommandGroup.SmartUpShoot(), ShootCommandGroup.StopShoot()
+                ShootCommandGroup.smartUpShoot(slow),
+                ShootCommandGroup.stopShoot()
         );
         new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
-                ShootCommandGroup.DumbUpShoot(), ShootCommandGroup.StopShoot()
+                ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot()
         );
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
-                IntakeCommandGroup.StopAll()
+                IntakeCommandGroup.stopAll()
         );
     }
 
