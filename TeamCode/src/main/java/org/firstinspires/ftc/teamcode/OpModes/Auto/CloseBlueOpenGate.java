@@ -20,7 +20,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -123,7 +122,6 @@ public class CloseBlueOpenGate extends MMOpMode {
 
         ///PATH
         Command autonomousSequence =
-                TurretSubsystem.getInstance().holdCurrentPoseCommand().alongWith(
                         new SequentialCommandGroup(
                                 new ParallelCommandGroup(
                                         ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(45),
@@ -200,8 +198,7 @@ public class CloseBlueOpenGate extends MMOpMode {
 
                                 //SHOOT_TO_END:
 //                                new FollowPathCommand(follower, THRD_SHOOT_TO_END)
-                        )
-                );
+                        );
 
         autonomousSequence.schedule();
     }

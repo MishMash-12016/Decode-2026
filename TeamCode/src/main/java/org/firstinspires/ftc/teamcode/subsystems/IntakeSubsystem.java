@@ -11,30 +11,35 @@ import Ori.Coval.Logging.AutoLog;
 
 @Config
 @AutoLog
-public class FunnelSubsystem extends MotorOrCrServoSubsystem {
+public class IntakeSubsystem extends MotorOrCrServoSubsystem {
 
-    public static FunnelSubsystem instance;
+    // Singleton instance
+    public static IntakeSubsystem instance;
 
-    public static synchronized FunnelSubsystem getInstance() {
+    /**
+     * Get the singleton instance of ElevatorSubsystem.
+     */
+    public static synchronized IntakeSubsystem getInstance() {
         if (instance == null) {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new FunnelSubsystemAutoLogged("FunnelSubsystem");
+                instance = new IntakeSubsystemAutoLogged("IntakeSubsystem");
 
             } else {
-                instance = new FunnelSubsystem("FunnelSubsystem");
+                instance = new IntakeSubsystem("IntakeSubsystem");
             }
         }
         return instance;
     }
 
-    public FunnelSubsystem(String subsystemName) {
+
+    public IntakeSubsystem(String subsystemName) {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.expansionHub,3, Direction.REVERSE);
+        //todo: change to right hub&port
+        withMotor(mmRobot.controlHub, 4,Direction.REVERSE);
 
-//        withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 }

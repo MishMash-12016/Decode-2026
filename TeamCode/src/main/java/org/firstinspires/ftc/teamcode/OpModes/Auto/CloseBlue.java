@@ -19,7 +19,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -113,7 +112,6 @@ public class CloseBlue extends MMOpMode {
 
         ///PATH
         Command autonomousSequence =
-                TurretSubsystem.getInstance().holdCurrentPoseCommand().alongWith(
                         new SequentialCommandGroup(
                                 new ParallelCommandGroup(
                                         ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(40),
@@ -194,8 +192,7 @@ public class CloseBlue extends MMOpMode {
 
                                 //SHOOT_TO_END:
 //                                new FollowPathCommand(follower, THRD_SHOOT_TO_END)
-                        )
-                );
+                        );
 
         autonomousSequence.schedule();
     }
@@ -213,86 +210,3 @@ public class CloseBlue extends MMOpMode {
         CommandScheduler.getInstance().reset();
     }
 }
-/*
-        Command autonomousSequence =
-                TurretSubsystem.getInstance().holdCurrentPoseCommand().alongWith(
-                        new SequentialCommandGroup(
-                                new ParallelCommandGroup(
-                                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(40),
-                                        new SequentialCommandGroup(
-
-                                                //START_TO_PRE_SHOOT:
-                                                new SequentialCommandGroup(
-                                                        new FollowPathCommand(follower, START_TO_PRE_SHOOT),
-                                                        ShootCommandGroup.ballWithControl(),
-                                                        ShootCommandGroup.dumbUpShoot(),
-                                                        new WaitCommand(1000)
-                                                ).withTimeout(6000),
-                                                IntakeCommandGroup.stopIntake(),
-
-
-
-                                                //PRE_SHOOT_TO_FRST_TURN:
-                                                new ParallelCommandGroup(
-                                                        new FollowPathCommand(follower, PRE_SHOOT_TO_FRST_TURN),
-                                                        IntakeCommandGroup.dumbFeed()
-                                                ).withTimeout(2000),
-                                                new WaitCommand(1000),
-
-                                                //TURN_TO_FRST_INTAKE:
-                                                new SequentialCommandGroup(
-                                                        new FollowPathCommand(follower, FRST_TURN_TO_FRST_INTAKE),
-                                                        new WaitCommand(1000)
-                                                ).withTimeout(2000),
-                                                IntakeCommandGroup.stopIntake(),
-
-                                                //FRST_INTAKE_TO_SHOOT:
-                                                new SequentialCommandGroup(
-                                                        new FollowPathCommand(follower, FRST_INTAKE_TO_SCND_SHOOT),
-                                                        ShootCommandGroup.ballWithControl(),
-                                                        ShootCommandGroup.dumbUpShoot(),
-                                                        new WaitCommand(1000)
-                                                ).withTimeout(6000),
-                                                IntakeCommandGroup.stopIntake(),
-
-                                                /// 3+6
-
-                                                //SCND_SHOOT_TO_TURN:
-                                                new ParallelCommandGroup(
-                                                        new FollowPathCommand(follower, SCND_SHOOT_TO_SCND_TURN),
-                                                        IntakeCommandGroup.dumbFeed()
-                                                ).withTimeout(1600),
-
-                                                //TURN_TO_SCND_INTAKE:
-                                                new FollowPathCommand(follower, SCND_TURN_TO_SCND_INTAKE)
-                                                        .andThen(new WaitCommand(500))
-                                                        .withTimeout(2000),
-
-                                                //SCND_INTAKE_TO_SHOOT:
-                                                new SequentialCommandGroup(
-                                                        new FollowPathCommand(follower, SCND_INTAKE_TO_SCND_TURN),
-                                                        IntakeCommandGroup.stopIntake()
-                                                        .withTimeout(2000),
-                                                        new WaitCommand(500),
-                                                        new FollowPathCommand(follower, SCND_TURN_TO_THRD_SHOOT)
-                                                ).withTimeout(5000),
-                                                new WaitCommand(500),
-                                                ShootCommandGroup.ballWithControl(),
-                                                ShootCommandGroup.dumbUpShoot()
-                                                        .withTimeout(2000),
-                                                new WaitCommand(1000),
-                                                new FollowPathCommand(follower, THRD_SHOOT_TO_END)
-                                                        .withTimeout(2000)
-
-                                        )
-                                ),
-                                IntakeCommandGroup.stopAll()
-
-                                //SHOOT_TO_END:
-//                                new FollowPathCommand(follower, THRD_SHOOT_TO_END)
-                        )
-                );
-
-        autonomousSequence.schedule();
-    }
- */

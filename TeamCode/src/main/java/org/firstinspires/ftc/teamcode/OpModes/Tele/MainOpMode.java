@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TurretSubsystem;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -44,8 +43,6 @@ public class MainOpMode extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 ()->MMDrivetrain.getInstance().resetYaw()
         );
-
-        TurretSubsystem.getInstance().holdCurrentPoseCommand().schedule();
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.dumbFeed(), IntakeCommandGroup.stopIntake()

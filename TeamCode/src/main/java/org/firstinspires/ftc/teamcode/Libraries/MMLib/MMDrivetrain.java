@@ -29,9 +29,9 @@ public class MMDrivetrain extends MMSubsystem {
     public double slowModeRatioLateral = 0.3;
     public double slowModeRatioRotation = 0.2;
 
-    public double headingKP = 0.9;
-    public double headingKI = 0;
-    public double headingKD = 0;
+    public double headingKP = 0.3;
+    public double headingKI = 0.0004;
+    public double headingKD = 0.001;
 
     @IgnoreConfigurable
     private static MMDrivetrain instance;
@@ -84,7 +84,7 @@ public class MMDrivetrain extends MMSubsystem {
         PIDController headingPid = new PIDController(headingKP, headingKI, headingKD);
 
         return (CommandBase) new RunCommand(() -> {
-            double headingPower = headingPid.calculate(getPose().getHeading(), RobotUtils.getAngleToTarget().getRadians());
+            double headingPower = headingPid.calculate(Math.toRadians(getPose().getHeading()), RobotUtils.getAngleToTarget().getRadians());
             if (headingPower > 0.5){
                 headingPower = 0.5;
             }
