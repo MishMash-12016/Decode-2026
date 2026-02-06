@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib;
 
-import com.bylazar.configurables.annotations.IgnoreConfigurable;
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.Command;
@@ -9,9 +9,12 @@ import com.seattlesolvers.solverslib.command.RunCommand;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Drawing;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.HoldPointCommand;
+import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.PinpointVisionLocalizer;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 
@@ -23,6 +26,7 @@ import Ori.Coval.Logging.AutoLogPose2d;
 import Ori.Coval.Logging.Logger.KoalaLog;
 
 @AutoLog
+@Config
 public class MMDrivetrain extends MMSubsystem {
 
     public double slowModeRatioForward = 0.3;
@@ -32,8 +36,9 @@ public class MMDrivetrain extends MMSubsystem {
     public double headingKP = 0.3;
     public double headingKI = 0.0004;
     public double headingKD = 0.001;
+    public double headingTolarence = 5;
+    PIDController headingPid = new PIDController(headingKP, headingKI, headingKD);
 
-    @IgnoreConfigurable
     private static MMDrivetrain instance;
     private static Follower follower;
 
@@ -69,6 +74,7 @@ public class MMDrivetrain extends MMSubsystem {
     public MMDrivetrain() {
         follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
         follower.setStartingPose(new Pose(0, 0, 0));
+        withDebugPidSuppliers(()-> this.headingKP, ()-> this.headingKI,()-> this.headingKD,()-> this.headingTolarence);
     }
 
     @Override
@@ -81,10 +87,19 @@ public class MMDrivetrain extends MMSubsystem {
     }
 
     public CommandBase driveAligned(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, boolean robotCentric, BooleanSupplier slowMode) {
-        PIDController headingPid = new PIDController(headingKP, headingKI, headingKD);
 
         return (CommandBase) new RunCommand(() -> {
-            double headingPower = headingPid.calculate(Math.toRadians(getPose().getHeading()), RobotUtils.getAngleToTarget().getRadians());
+            //TODO check radians
+            double headingPower = KoalaLog.log("heading_pid/power:",
+                    headingPid.calculate(
+                            KoalaLog.log("heading_pid/current_heading",getPose().getHeading(),true),
+                            KoalaLog.log("heading_pid/target_heading",RobotUtils.getAngleToTarget().getRadians(), true)),
+                    true);
+
+            KoalaLog.log("heading_pid/target_pose",
+                    new double[]{getAScopePose()[0], getAScopePose()[1], Math.toDegrees(RobotUtils.getAngleToTarget().getRadians())},
+                    true);
+
             if (headingPower > 0.5){
                 headingPower = 0.5;
             }
@@ -196,15 +211,17 @@ public class MMDrivetrain extends MMSubsystem {
 
     @AutoLogPose2d
     public double[] getAScopeTargetPose(){
+        double inches_to_meter = 0.0254;
         Pose TargetPose = follower.getClosestPose().getPose();
-        return new double[]{TargetPose.getX(), TargetPose.getY(), TargetPose.getHeading()};
+        return new double[]{TargetPose.getX() * inches_to_meter, TargetPose.getY() * inches_to_meter, TargetPose.getHeading() * inches_to_meter};
     }
 
     @AutoLogPose2d
     public double[] getAScopePose(){
-
+//        double inches_to_meter = 0.0254;
+        double inches_to_meter = 1.0;
         Pose pose = follower.getPose();
-        return new double[]{pose.getX(), pose.getY(), pose.getHeading()};
+        return new double[]{pose.getX() * inches_to_meter, pose.getY() * inches_to_meter, pose.getHeading()};
     }
 
     /**
@@ -259,12 +276,74 @@ public class MMDrivetrain extends MMSubsystem {
         this.slowModeRatioRotation = slowModeRatioRotation;
     }
 
-//    public void addVisionMeasurement(Pose pose, double timestampSeconds){
-//        ((PinpointVisionLocalizer)follower.getPoseTracker().getLocalizer())
-//                .addVisionMeasurement(pose, timestampSeconds);
-//    }
+    public void addVisionMeasurement(Pose pose, double timestampSeconds){
+        ((PinpointVisionLocalizer)follower.getPoseTracker().getLocalizer())
+                .addVisionMeasurement(pose, timestampSeconds);
+    }
 
     public void reset() {
         instance = null;
+    }
+
+
+    private DoubleSupplier debugKpSupplier;
+    private DoubleSupplier debugKiSupplier;
+    private DoubleSupplier debugKdSupplier;
+    private DoubleSupplier debugPositionToleranceSupplier;
+
+    /**
+     * add suppliers that when changed will auto update the pid values.
+     * any value you don't need just put null
+     *
+     * @param debugKpSupplier                Kp
+     * @param debugKiSupplier                Kd
+     * @param debugKdSupplier                Ki
+     * @param debugPositionToleranceSupplier position tolerance
+     * @implNote !NOTICE THIS ONLY WORKS IF IN DEBUG MODE
+     */
+    public MMDrivetrain withDebugPidSuppliers(DoubleSupplier debugKpSupplier,
+                                                  DoubleSupplier debugKiSupplier,
+                                                  DoubleSupplier debugKdSupplier,
+                                                  DoubleSupplier debugPositionToleranceSupplier) {
+
+        this.debugKpSupplier = debugKpSupplier;
+        this.debugKiSupplier = debugKiSupplier;
+        this.debugKdSupplier = debugKdSupplier;
+        this.debugPositionToleranceSupplier = debugPositionToleranceSupplier;
+
+        return this;
+    }
+
+    @Override
+    public void periodic() {
+        super.periodic();
+
+        if (MMRobot.getInstance().currentOpMode != null &&
+                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG) {
+            try {
+                MMUtils.updateIfChanged(
+                        debugKpSupplier,
+                        headingPid::getP,
+                        headingPid::setP
+                );
+                MMUtils.updateIfChanged(
+                        debugKiSupplier,
+                        headingPid::getI,
+                        headingPid::setI
+                );
+                MMUtils.updateIfChanged(
+                        debugKdSupplier,
+                        headingPid::getD,
+                        headingPid::setD
+                );
+                MMUtils.updateIfChanged(
+                        debugPositionToleranceSupplier,
+                        headingPid::getErrorTolerance,
+                        headingPid::setTolerance
+                );
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
     }
 }

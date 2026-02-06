@@ -10,11 +10,11 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 
 public class RobotUtils {
     private static final Pose2d targetPoseBlue
-            = new Pose2d(13,140, new Rotation2d(Math.toRadians(315)));
+            = new Pose2d(72-55.6425,72 - 58.3727, new Rotation2d(Math.toRadians(315)));
 
     //144 = field length
     private static final Pose2d targetPoseRed
-            = new Pose2d(144 - targetPoseBlue.getX(),140, new Rotation2d(Math.toRadians(225)));
+            = new Pose2d(144 - targetPoseBlue.getX(),targetPoseBlue.getY(), new Rotation2d(Math.toRadians(225)));
 
     public static Pose2d getTargetPose(){
         AllianceColor allianceColor = MMRobot.getInstance().currentOpMode.allianceColor;
@@ -30,9 +30,14 @@ public class RobotUtils {
                 MMDrivetrain.getInstance().getFollower().getPose());
         Pose2d targetPose = getTargetPose();
 
-        Translation2d relativeTrl = targetPose.relativeTo(robotPose).getTranslation();
-        return new Rotation2d(relativeTrl.getX(), relativeTrl.getY());
+        Translation2d toTarget =
+                targetPose.getTranslation().minus(robotPose.getTranslation());
+
+        return new Rotation2d(
+                Math.atan2(toTarget.getY(), toTarget.getX())
+        );
     }
+
 
     public static double getDistanceToTarget() {
         Pose2d robotPose = MMUtils.PedroPoseToSolversPose2d(

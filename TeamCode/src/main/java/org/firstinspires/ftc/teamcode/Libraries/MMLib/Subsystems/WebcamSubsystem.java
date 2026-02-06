@@ -4,6 +4,8 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 
 import android.util.Size;
 
+import com.pedropathing.ftc.FTCCoordinates;
+import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
@@ -16,13 +18,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
-import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FusionLocalizer;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.ArrayList;
 
 import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.AutoLogOutput;
@@ -41,9 +44,9 @@ public class WebcamSubsystem extends MMSubsystem {
     }
 
     private final Position cameraPosition = new Position(DistanceUnit.INCH,
-            3.5, 5, 0, 0);
+            6, 0, 0, 0);
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
-            0, -65, 180, 0);
+            0, -0, 180, 0);
 
     private AprilTagProcessor aprilTag;
     public VisionPortal visionPortal;
@@ -64,16 +67,18 @@ public class WebcamSubsystem extends MMSubsystem {
         if (instance != null){
             KoalaLog.log("fps", instance.visionPortal.getFps(), true);
             KoalaLog.log("has detection", instance.aprilTag.getDetections().isEmpty(), true);
-            for (AprilTagDetection detection : instance.aprilTag.getDetections()) {
-                KoalaLog.log("decision margin", detection.decisionMargin, true);
+            ArrayList<AprilTagDetection> detections = instance.aprilTag.getFreshDetections();
+            if (detections != null){
+                for (AprilTagDetection detection : detections) {
+                    KoalaLog.log("decision margin", detection.decisionMargin, true);
 
-                //TODO: add filter by alliance
-                if(detection.decisionMargin > 28){
-                    instance.distance = detection.ftcPose.range;
-                    instance.angle = detection.ftcPose.bearing;
-                    instance.robotPose = detection.robotPose;
-
-                    ((FusionLocalizer)MMDrivetrain.getInstance().getFollower().getPoseTracker().getLocalizer()).addMeasurement(getInstance().getRobotPosePedro(), detection.frameAcquisitionNanoTime);
+                    //TODO: add filter by alliance
+                    if(detection.decisionMargin > 10){
+                        instance.distance = detection.ftcPose.range;
+                        instance.angle = detection.ftcPose.bearing;
+                        instance.robotPose = detection.robotPose;
+                        MMDrivetrain.getInstance().addVisionMeasurement(getInstance().getRobotPosePedro(), detection.frameAcquisitionNanoTime);
+                    }
                 }
             }
         }
@@ -89,20 +94,18 @@ public class WebcamSubsystem extends MMSubsystem {
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setTagLibrary(getPedroDecodeField())
-                .setOutputUnits(DistanceUnit.METER, AngleUnit.DEGREES)
+                .setTagLibrary(AprilTagGameDatabase.getDecodeTagLibrary())
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.RADIANS)
                 .setCameraPose(cameraPosition, cameraOrientation)
                 .setLensIntrinsics(458.939, 458.939, 424.652, 329.231)
+                .setNumThreads(1)
                 .build();
 
-        //aprilTag.setDecimation(3);
         VisionPortal.Builder builder = new VisionPortal.Builder();
-
         builder.setCamera(MMRobot.getInstance().currentOpMode.hardwareMap.get(WebcamName.class, "Webcam 1"));
-
-        builder.setCameraResolution(new Size(640, 480));
-
-        builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
+        builder.setCameraResolution(new Size(800, 600));
+        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
+        builder.enableLiveView(false);
 
         builder.addProcessor(aprilTag);
 
@@ -112,18 +115,21 @@ public class WebcamSubsystem extends MMSubsystem {
     }
 
     public Pose getRobotPosePedro(){
-        return new Pose(
-            robotPose.getPosition().x,
-            robotPose.getPosition().y,
-            robotPose.getOrientation().getYaw(AngleUnit.RADIANS));
-    }
+        KoalaLog.log("vision_raw_pose", new double[]{robotPose.getPosition().x,
+                robotPose.getPosition().y,
+                robotPose.getOrientation().getYaw(AngleUnit.RADIANS)}, true);
 
-    @AutoLogPose2d
-    public double[] getAScopePose(){
-        return new double[]{
+        Pose pedroPose = FTCCoordinates.INSTANCE.convertToPedro(new Pose(
+                robotPose.getPosition().x,
+                robotPose.getPosition().y,
+                robotPose.getOrientation().getYaw(AngleUnit.RADIANS)));
+        KoalaLog.log("vision_raw_pose", new double[]{pedroPose.getX(),
+                pedroPose.getY(),
+                pedroPose.getHeading()}, true);
+        return FTCCoordinates.INSTANCE.convertToPedro(new Pose(
             robotPose.getPosition().x,
             robotPose.getPosition().y,
-            robotPose.getOrientation().getYaw()};
+            robotPose.getOrientation().getYaw(AngleUnit.RADIANS)));
     }
 
     @AutoLogOutput
@@ -141,31 +147,8 @@ public class WebcamSubsystem extends MMSubsystem {
         for (AprilTagDetection detection : aprilTag.getDetections()){
             aprilTagID = detection.id;
         }
-        return aprilTagID;
-    }
+        new Pose(0,0,0, FTCCoordinates.INSTANCE).getAsCoordinateSystem(PedroCoordinates.INSTANCE);
 
-    /**
-     * Get the {@link AprilTagLibrary} for the Decode FTC game
-     * @return the {@link AprilTagLibrary} for the Decode FTC game
-     *
-     * !!!!!DO NOT CHANGE THIS EVERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-     * RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-     */
-    public static AprilTagLibrary getPedroDecodeField(){
-        //!!!!!DO NOT CHANGE THIS EVERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
-        return new AprilTagLibrary.Builder()
-                .addTag(20, "BlueTarget",
-                        6.5, new VectorF(-58.3727f + 72.0f, -55.6425f + 72.0f, 29.5f), DistanceUnit.INCH,
-                        new Quaternion(0.2182149f, -0.2182149f, -0.6725937f, 0.6725937f, 0))
-                .addTag(21, "Obelisk_GPP",
-                        6.5, DistanceUnit.INCH)
-                .addTag(22, "Obelisk_PGP",
-                        6.5, DistanceUnit.INCH)
-                .addTag(23, "Obelisk_PPG",
-                        6.5, DistanceUnit.INCH)
-                .addTag(24, "RedTarget",
-                        6.5, new VectorF(-58.3727f + 72.0f, 55.6425f + 72.0f, 29.5f), DistanceUnit.INCH,
-                        new Quaternion(0.6725937f, -0.6725937f, -0.2182149f, 0.2182149f, 0))
-                .build();
+        return aprilTagID;
     }
 }

@@ -146,7 +146,8 @@ public abstract class MMOpMode extends LinearOpMode {
      * Cancels all previous commands and deletes the {@link MMRobot Robot Singleton}
      */
     public void reset() {
-        CommandScheduler.getInstance().cancelAll();
+        //TODO reset also reset the default command
+        CommandScheduler.getInstance().reset();
         ShooterSubsystem.instance = null;
     }
 

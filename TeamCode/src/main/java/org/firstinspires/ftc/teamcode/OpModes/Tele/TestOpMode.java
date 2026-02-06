@@ -12,6 +12,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
@@ -36,6 +37,8 @@ public class TestOpMode extends MMOpMode {
     public void onInit() {
         MMDrivetrain.getInstance().setPose(startPose);
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
+        WebcamSubsystem.instance = null;
+
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
         GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
                 () -> slow = !slow
@@ -61,10 +64,5 @@ public class TestOpMode extends MMOpMode {
 
 
         telemetry.addData("drive pose: ", MMDrivetrain.getInstance().getPose());
-    }
-
-    @Override
-    public void onEnd() {
-        CommandScheduler.getInstance().reset();
     }
 }
