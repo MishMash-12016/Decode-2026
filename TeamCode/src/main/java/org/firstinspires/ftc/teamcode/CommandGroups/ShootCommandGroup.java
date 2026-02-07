@@ -8,7 +8,6 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.FunnelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class ShootCommandGroup {
@@ -18,18 +17,13 @@ public class ShootCommandGroup {
                 new WaitUntilCommand(
                         () -> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity()
                 ),
-                dumbUpShoot(),
-                new WaitUntilCommand(
-                        () -> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
-                ),
-                stopShoot()
+                dumbUpShoot()
         );
     }
 
     public static Command dumbUpShoot() {
         return new ParallelCommandGroup(
-                BallStopperSubsystem.getInstance().open(),
-                FunnelSubsystem.getInstance().setPowerInstantCommand(1)
+                BallStopperSubsystem.getInstance().open()
         );
     }
 
@@ -37,15 +31,8 @@ public class ShootCommandGroup {
         return MMDrivetrain.getInstance().enableDriveAligned(() -> slow).andThen(
                 new ParallelCommandGroup(
                         MMDrivetrain.getInstance().enableDriveAligned(() -> slow),
-                        BallStopperSubsystem.getInstance().open(),
-                        FunnelSubsystem.getInstance().setPowerInstantCommand(1)
+                        BallStopperSubsystem.getInstance().open()
                 )
-        );
-    }
-
-    public static Command stopShoot() {
-        return new ParallelCommandGroup(
-                FunnelSubsystem.getInstance().stopCommand()
         );
     }
 
