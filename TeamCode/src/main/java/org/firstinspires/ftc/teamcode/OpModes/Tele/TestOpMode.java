@@ -65,7 +65,8 @@ public class TestOpMode extends MMOpMode {
         );
 
         new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
-                ShootCommandGroup.shootAll()
+                ShootCommandGroup.shootAll(),
+                ShootCommandGroup.stopShoot()
         );
 
     }

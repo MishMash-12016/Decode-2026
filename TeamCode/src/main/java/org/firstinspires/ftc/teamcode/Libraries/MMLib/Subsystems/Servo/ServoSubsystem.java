@@ -205,9 +205,10 @@ public class ServoSubsystem extends MMSubsystem {
         return this;
     }
 
+
+    //todo y doesnt work with ballStopperSub
     @Override
     public void resetHub(){
-
         ArrayList<CuttleServo> tempList = new ArrayList<>();
         for(CuttleServo servo : servoList){
             if(servo.getFtcServo()){

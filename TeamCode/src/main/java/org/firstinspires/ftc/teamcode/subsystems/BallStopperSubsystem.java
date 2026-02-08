@@ -19,8 +19,8 @@ public class BallStopperSubsystem extends ServoSubsystem {
         ///sensors
 
     ///right pos
-    public static double stopR = 0.0;
-    public static double pushR = 0.5;
+    public static double stopR = 0.05;
+    public static double pushR = 0.6;
     ///mid pos
     public static double stopM = 0.65;
     public static double pushM = 0.1;

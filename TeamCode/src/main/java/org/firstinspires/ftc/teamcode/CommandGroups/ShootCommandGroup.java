@@ -38,6 +38,10 @@ public class ShootCommandGroup {
         );
     }
 
+
+    public static Command stopShoot() {
+        return IntakeSubsystem.getInstance().stopCommand();
+    }
 /*
     public static Command smartUpShoot(boolean slow) {
         return MMDrivetrain.getInstance().enableDriveAligned(() -> slow);

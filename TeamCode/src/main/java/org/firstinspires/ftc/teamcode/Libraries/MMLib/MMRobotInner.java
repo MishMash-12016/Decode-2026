@@ -77,7 +77,7 @@ public class MMRobotInner extends Robot {
 
     public void initSubsystems(){
         for (MMSubsystem subsystem : subsystems){
-//            subsystem.resetHub();
+            subsystem.resetHub();
         }
     }
 
