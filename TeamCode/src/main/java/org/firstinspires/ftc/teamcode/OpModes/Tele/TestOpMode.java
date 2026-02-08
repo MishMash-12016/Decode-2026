@@ -37,7 +37,6 @@ public class TestOpMode extends MMOpMode {
     public void onInit() {
         MMDrivetrain.getInstance().setPose(startPose);
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
-        WebcamSubsystem.instance = null;
 
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
         GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
