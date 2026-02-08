@@ -13,26 +13,25 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class IntakeCommandGroup {
 
+
+    public static Command stoppersStop() {
+        return new ParallelCommandGroup(
+                BallStopperSubsystem.getInstance().stopL(),
+                BallStopperSubsystem.getInstance().stopM(),
+                BallStopperSubsystem.getInstance().stopR()
+        );
+    }
+
     public static Command dumbFeed() {
         return new ParallelCommandGroup(
-                BallStopperSubsystem.getInstance().close(),
+                stoppersStop(),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1)
         );
     }
 
-    public static Command smartFeed() {
-        return new SequentialCommandGroup(
-                dumbFeed(),
-                new WaitUntilCommand(()->/*sensor*/false),
-                new TimedConditionCommand(()->/*sensor*/false,2),
-                stopIntake()
-                );
-    }
-
     public static Command stopIntake() {
         return new ParallelCommandGroup(
-                IntakeSubsystem.getInstance().stopCommand(),
-                BallStopperSubsystem.getInstance().close()
+                IntakeSubsystem.getInstance().stopCommand()
         );
     }
 

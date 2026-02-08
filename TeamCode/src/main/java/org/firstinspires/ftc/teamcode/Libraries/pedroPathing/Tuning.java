@@ -104,7 +104,7 @@ public class Tuning extends SelectableOpMode {
         Drawing.drawDebug(follower);
     }
 
-    /** This creates a full stop of the robot by setting the drive motors to run at 0 power. */
+    /** This creates a full frstStop of the robot by setting the drive motors to run at 0 power. */
     public static void stopRobot() {
         follower.startTeleopDrive(true);
         follower.setTeleOpDrive(0,0,0,true);
@@ -332,7 +332,7 @@ class ForwardVelocityTuner extends OpMode {
         telemetryM.debug("The robot will run at 1 power until it reaches " + DISTANCE + " inches forward.");
         telemetryM.debug("Make sure you have enough room, since the robot has inertia after cutting power.");
         telemetryM.debug("After running the distance, the robot will cut power from the drivetrain and display the forward velocity.");
-        telemetryM.debug("Press B on game pad 1 to stop.");
+        telemetryM.debug("Press B on game pad 1 to frstStop.");
         telemetryM.debug("pose", follower.getPose());
         telemetryM.update(telemetry);
 
@@ -353,7 +353,7 @@ class ForwardVelocityTuner extends OpMode {
 
     /**
      * This runs the OpMode. At any point during the running of the OpMode, pressing B on
-     * game pad 1 will stop the OpMode. This continuously records the RECORD_NUMBER most recent
+     * game pad 1 will frstStop the OpMode. This continuously records the RECORD_NUMBER most recent
      * velocities, and when the robot has run forward enough, these last velocities recorded are
      * averaged and printed.
      */
@@ -441,7 +441,7 @@ class LateralVelocityTuner extends OpMode {
         telemetryM.debug("The robot will run at 1 power until it reaches " + DISTANCE + " inches to the left.");
         telemetryM.debug("Make sure you have enough room, since the robot has inertia after cutting power.");
         telemetryM.debug("After running the distance, the robot will cut power from the drivetrain and display the strafe velocity.");
-        telemetryM.debug("Press B on Gamepad 1 to stop.");
+        telemetryM.debug("Press B on Gamepad 1 to frstStop.");
         telemetryM.update(telemetry);
 
         follower.update();
@@ -460,7 +460,7 @@ class LateralVelocityTuner extends OpMode {
 
     /**
      * This runs the OpMode. At any point during the running of the OpMode, pressing B on
-     * game pad1 will stop the OpMode. This continuously records the RECORD_NUMBER most recent
+     * game pad1 will frstStop the OpMode. This continuously records the RECORD_NUMBER most recent
      * velocities, and when the robot has run sideways enough, these last velocities recorded are
      * averaged and printed.
      */
@@ -538,10 +538,10 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
     @Override
     public void init_loop() {
         telemetryM.debug("The robot will run forward until it reaches " + VELOCITY + " inches per second.");
-        telemetryM.debug("Then, it will cut power from the drivetrain and roll to a stop.");
+        telemetryM.debug("Then, it will cut power from the drivetrain and roll to a frstStop.");
         telemetryM.debug("Make sure you have enough room.");
         telemetryM.debug("After stopping, the forward zero power acceleration (natural deceleration) will be displayed.");
-        telemetryM.debug("Press B on Gamepad 1 to stop.");
+        telemetryM.debug("Press B on Gamepad 1 to frstStop.");
         telemetryM.update(telemetry);
         follower.update();
         drawOnlyCurrent();
@@ -557,7 +557,7 @@ class ForwardZeroPowerAccelerationTuner extends OpMode {
 
     /**
      * This runs the OpMode. At any point during the running of the OpMode, pressing B on
-     * game pad 1 will stop the OpMode. When the robot hits the specified velocity, the robot will
+     * game pad 1 will frstStop the OpMode. When the robot hits the specified velocity, the robot will
      * record its deceleration / negative acceleration until it stops. Then, it will average all the
      * recorded deceleration / negative acceleration and print that value.
      */
@@ -640,10 +640,10 @@ class LateralZeroPowerAccelerationTuner extends OpMode {
     @Override
     public void init_loop() {
         telemetryM.debug("The robot will run to the left until it reaches " + VELOCITY + " inches per second.");
-        telemetryM.debug("Then, it will cut power from the drivetrain and roll to a stop.");
+        telemetryM.debug("Then, it will cut power from the drivetrain and roll to a frstStop.");
         telemetryM.debug("Make sure you have enough room.");
         telemetryM.debug("After stopping, the lateral zero power acceleration (natural deceleration) will be displayed.");
-        telemetryM.debug("Press B on game pad 1 to stop.");
+        telemetryM.debug("Press B on game pad 1 to frstStop.");
         telemetryM.update(telemetry);
         follower.update();
         drawOnlyCurrent();
@@ -659,7 +659,7 @@ class LateralZeroPowerAccelerationTuner extends OpMode {
 
     /**
      * This runs the OpMode. At any point during the running of the OpMode, pressing B on
-     * game pad 1 will stop the OpMode. When the robot hits the specified velocity, the robot will
+     * game pad 1 will frstStop the OpMode. When the robot hits the specified velocity, the robot will
      * record its deceleration / negative acceleration until it stops. Then, it will average all the
      * recorded deceleration / negative acceleration and print that value.
      */

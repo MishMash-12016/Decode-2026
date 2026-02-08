@@ -8,33 +8,41 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class ShootCommandGroup {
+
+
+    public static Command stoppersPush() {
+        return new ParallelCommandGroup(
+                BallStopperSubsystem.getInstance().pushL(),
+                BallStopperSubsystem.getInstance().pushM(),
+                BallStopperSubsystem.getInstance().pushR()
+        );
+    }
 
     public static Command ballWithControl() {
         return new SequentialCommandGroup(
                 new WaitUntilCommand(
                         () -> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity()
                 ),
-                dumbUpShoot()
+                shootAll()
         );
     }
 
-    public static Command dumbUpShoot() {
+    public static Command shootAll() {
         return new ParallelCommandGroup(
-                BallStopperSubsystem.getInstance().open()
+            IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+            stoppersPush()
         );
     }
 
+/*
     public static Command smartUpShoot(boolean slow) {
-        return MMDrivetrain.getInstance().enableDriveAligned(() -> slow).andThen(
-                new ParallelCommandGroup(
-                        MMDrivetrain.getInstance().enableDriveAligned(() -> slow),
-                        BallStopperSubsystem.getInstance().open()
-                )
-        );
+        return MMDrivetrain.getInstance().enableDriveAligned(() -> slow);
     }
+*/
 
     public static Command closeDumbSpeed() {
         return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(48);

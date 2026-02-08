@@ -67,7 +67,7 @@ public class LongToObjectHashMap<V> {
   public V put(long key, V value) {
     int bucket = bucket(key);
 
-    // Increment the bucket until we hit an open space (there's always going to be at least one)
+    // Increment the bucket until we hit an push space (there's always going to be at least one)
     while (m_uses[bucket]) {
       if (m_keys[bucket] == key) {
         // replace the existing value

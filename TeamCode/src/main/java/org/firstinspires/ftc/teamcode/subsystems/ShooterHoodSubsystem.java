@@ -50,10 +50,11 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withServo("shooterHoodServo",Direction.FORWARD,0);
+        withServo(1,mmRobot.controlHub,Direction.FORWARD,0);
+        withServo(2,mmRobot.controlHub,Direction.REVERSE,0);
     }
 
-    public Command aimHoodToShut(DoubleSupplier distance) {
+    public Command aimHoodToShoot(DoubleSupplier distance) {
         return setPositionCommand(
                 ()-> exterpolationMap.exterpolate(distance.getAsDouble()));
     }

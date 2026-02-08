@@ -123,7 +123,7 @@ public class CloseRed extends MMOpMode {
                                                         ShootCommandGroup.ballWithControl(),
                                                         ShootCommandGroup.ballWithControl()
                                                                 .withTimeout(1500),
-                                                        ShootCommandGroup.dumbUpShoot(),
+                                                        ShootCommandGroup.shootAll(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
                                                 IntakeCommandGroup.stopIntake(),
@@ -150,7 +150,7 @@ public class CloseRed extends MMOpMode {
                                                         ShootCommandGroup.ballWithControl(),
                                                         ShootCommandGroup.ballWithControl()
                                                                 .withTimeout(1500),
-                                                        ShootCommandGroup.dumbUpShoot(),
+                                                        ShootCommandGroup.shootAll(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
                                                 IntakeCommandGroup.stopIntake(),
@@ -180,7 +180,7 @@ public class CloseRed extends MMOpMode {
                                                 ShootCommandGroup.ballWithControl(),
                                                 ShootCommandGroup.ballWithControl()
                                                         .withTimeout(1500),
-                                                ShootCommandGroup.dumbUpShoot()
+                                                ShootCommandGroup.shootAll()
                                                         .withTimeout(2000),
                                                 new WaitCommand(1000),
                                                 new FollowPathCommand(follower, THRD_SHOOT_TO_END)

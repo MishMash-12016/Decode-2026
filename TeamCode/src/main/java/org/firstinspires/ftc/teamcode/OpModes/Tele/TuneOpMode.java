@@ -6,10 +6,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
+import com.seattlesolvers.solverslib.hardware.motors.CRServo;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleServo;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
@@ -25,18 +28,23 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 public class TuneOpMode extends MMOpMode {
 
     public TuneOpMode() {
-        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
+        super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
     }
 
     CuttleMotor p0,p1,p2,p3;
     CuttleMotor ep0,ep1,ep2,ep3;
 
-//    CRServo left;
-//    MotorEx a;
+    CRServo a;
+    MotorEx b;
 
+    CuttleServo right;
+    CuttleServo middle;
+    CuttleServo left;
     @Override
     public void onInit() {
-//        right = hardwareMap.get(CRServo.class,"right");
+        MMRobot mmRobot = MMRobot.getInstance();
+
+/*        b = hardwareMap.get(CRServo.class,"right");
         p0 = new CuttleMotor(MMRobot.getInstance().controlHub, 0);
         p1 = new CuttleMotor(MMRobot.getInstance().controlHub, 1);
         p2 = new CuttleMotor(MMRobot.getInstance().controlHub, 2);
@@ -56,14 +64,33 @@ public class TuneOpMode extends MMOpMode {
         ep2 = new CuttleMotor(MMRobot.getInstance().expansionHub, 2);
         ep3 = new CuttleMotor(MMRobot.getInstance().expansionHub, 3);
 
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new InstantCommand(()->ep0.setPower(1))).whenInactive(
                 new InstantCommand(()->ep0.setPower(1)));
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
+                new InstantCommand(()->ep1.setPower(1))).whenInactive(
                 new InstantCommand(()->ep1.setPower(1)));
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.X).whileActiveOnce(
+                new InstantCommand(()->ep2.setPower(1))).whenInactive(
                 new InstantCommand(()->ep2.setPower(1)));
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
-                new InstantCommand(()->ep3.setPower(1)));
+                new InstantCommand(()->ep3.setPower(1))).whenInactive(
+                new InstantCommand(()->ep3.setPower(1)));*/
+        ep1 = new CuttleMotor(MMRobot.getInstance().expansionHub, 1);
+        ep2 = new CuttleMotor(MMRobot.getInstance().expansionHub, 2);
+        ep3 = new CuttleMotor(MMRobot.getInstance().expansionHub, 3);
+
+
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new InstantCommand(()->ep1.setPower(1))).whenInactive(
+                new InstantCommand(()->ep1.setPower(0)));
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                new InstantCommand(()->ep2.setPower(1))).whenInactive(
+                new InstantCommand(()->ep2.setPower(0)));
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                new InstantCommand(()->ep3.setPower(1))).whenInactive(
+                new InstantCommand(()->ep3.setPower(0)));
+
 
 
     }

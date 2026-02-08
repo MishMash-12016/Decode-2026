@@ -131,7 +131,7 @@ public class CloseBlueOpenGate extends MMOpMode {
                                                 new SequentialCommandGroup(
                                                         new FollowPathCommand(follower, START_TO_PRE_SHOOT),
                                                         ShootCommandGroup.ballWithControl(),
-                                                        ShootCommandGroup.dumbUpShoot(),
+                                                        ShootCommandGroup.shootAll(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
                                                 IntakeCommandGroup.stopIntake(),
@@ -158,7 +158,7 @@ public class CloseBlueOpenGate extends MMOpMode {
                                                         new WaitCommand(500),
                                                         new FollowPathCommand(follower, OPEN_GATE_TO_SCND_SHOOT),
                                                         ShootCommandGroup.ballWithControl(),
-                                                        ShootCommandGroup.dumbUpShoot(),
+                                                        ShootCommandGroup.shootAll(),
                                                         new WaitCommand(1000)
                                                 ).withTimeout(6000),
                                                 IntakeCommandGroup.stopIntake(),
@@ -186,7 +186,7 @@ public class CloseBlueOpenGate extends MMOpMode {
                                                 ).withTimeout(5000),
                                                 new WaitCommand(500),
                                                 ShootCommandGroup.ballWithControl(),
-                                                ShootCommandGroup.dumbUpShoot()
+                                                ShootCommandGroup.shootAll()
                                                         .withTimeout(2000),
                                                 new WaitCommand(1000),
                                                 new FollowPathCommand(follower, THRD_SHOOT_TO_END)

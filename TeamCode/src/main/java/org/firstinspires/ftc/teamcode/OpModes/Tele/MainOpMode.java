@@ -64,13 +64,13 @@ public class MainOpMode extends MMOpMode {
         );
 
 
-        new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
+/*        new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
                 ShootCommandGroup.smartUpShoot(slow),
                 ShootCommandGroup.stopShoot()
         );
         new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
                 ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot()
-        );
+        );*/
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
                 IntakeCommandGroup.stopAll()
