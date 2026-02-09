@@ -17,7 +17,7 @@ import Ori.Coval.Logging.AutoLog;
 
 public class LeftStopperSubsystem extends ServoSubsystem {
     ///sensor
-    public static double stop = 0.65;
+    public static double stop = 0.7;
     public static double push = 0.2;
 
     public static LeftStopperSubsystem instance;

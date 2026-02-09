@@ -18,7 +18,7 @@ import edu.wpi.first.units.measure.Voltage;
 public class SysidShooterOpMode extends MMOpMode {
 
   public SysidShooterOpMode() {
-    super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
+    super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
   }
 
   @Override

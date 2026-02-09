@@ -6,6 +6,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -57,12 +59,16 @@ public class TestOpMode extends MMOpMode {
 //        );
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.A).toggleWhenActive(
-                ShooterSubsystem.getInstance().setPowerInstantCommand(1),
+                ShootCommandGroup.closeDumbSpeed(),
                 ShooterSubsystem.getInstance().stopCommand()
         );
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.dumbFeed(),
+                IntakeCommandGroup.stopIntake()
+        );
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
+                IntakeCommandGroup.outIntake(),
                 IntakeCommandGroup.stopIntake()
         );
 
@@ -71,6 +77,15 @@ public class TestOpMode extends MMOpMode {
                 ShootCommandGroup.stopShoot()
         );
 
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                IntakeCommandGroup.stopAll()
+        );
+
+        ///temp
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+                ShooterSubsystem.getInstance().setPowerInstantCommand(1)
+        );
     }
 
     @Override
