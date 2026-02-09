@@ -68,7 +68,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         withMotor(mmRobot.expansionHub,2, Direction.FORWARD);
         withMotor(mmRobot.expansionHub,3, Direction.FORWARD);
 
-        withEncoder(mmRobot.expansionHub,1,RESOLUTION,Direction.FORWARD);
+        withEncoder(mmRobot.expansionHub,2,RESOLUTION,Direction.FORWARD);
 
         withPid(KP,KI,KD);
 

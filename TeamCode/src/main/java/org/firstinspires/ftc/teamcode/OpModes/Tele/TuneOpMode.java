@@ -44,21 +44,29 @@ public class TuneOpMode extends MMOpMode {
     public void onInit() {
         MMRobot mmRobot = MMRobot.getInstance();
 
-/*        b = hardwareMap.get(CRServo.class,"right");
+//        b = hardwareMap.get(CRServo.class,"right");
         p0 = new CuttleMotor(MMRobot.getInstance().controlHub, 0);
         p1 = new CuttleMotor(MMRobot.getInstance().controlHub, 1);
         p2 = new CuttleMotor(MMRobot.getInstance().controlHub, 2);
         p3 = new CuttleMotor(MMRobot.getInstance().controlHub, 3);
 
-        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                new InstantCommand(()->p0.setPower(1))).whenInactive(
                 new InstantCommand(()->p0.setPower(1)));
+
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.B).whileActiveOnce(
+                new InstantCommand(()->p1.setPower(1))).whenInactive(
                 new InstantCommand(()->p1.setPower(1)));
+
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.X).whileActiveOnce(
+                new InstantCommand(()->p2.setPower(1))).whenInactive(
                 new InstantCommand(()->p2.setPower(1)));
+
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
+                new InstantCommand(()->p3.setPower(1))).whenInactive(
                 new InstantCommand(()->p3.setPower(1)));
 
+/*
         ep0 = new CuttleMotor(MMRobot.getInstance().expansionHub, 0);
         ep1 = new CuttleMotor(MMRobot.getInstance().expansionHub, 1);
         ep2 = new CuttleMotor(MMRobot.getInstance().expansionHub, 2);
@@ -75,23 +83,8 @@ public class TuneOpMode extends MMOpMode {
                 new InstantCommand(()->ep2.setPower(1)));
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whileActiveOnce(
                 new InstantCommand(()->ep3.setPower(1))).whenInactive(
-                new InstantCommand(()->ep3.setPower(1)));*/
-        ep1 = new CuttleMotor(MMRobot.getInstance().expansionHub, 1);
-        ep2 = new CuttleMotor(MMRobot.getInstance().expansionHub, 2);
-        ep3 = new CuttleMotor(MMRobot.getInstance().expansionHub, 3);
-
-
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                new InstantCommand(()->ep1.setPower(1))).whenInactive(
-                new InstantCommand(()->ep1.setPower(0)));
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                new InstantCommand(()->ep2.setPower(1))).whenInactive(
-                new InstantCommand(()->ep2.setPower(0)));
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                new InstantCommand(()->ep3.setPower(1))).whenInactive(
-                new InstantCommand(()->ep3.setPower(0)));
-
-
+                new InstantCommand(()->ep3.setPower(1)));
+*/
 
     }
 

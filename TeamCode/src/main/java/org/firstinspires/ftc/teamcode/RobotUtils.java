@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 
 public class RobotUtils {
     private static final Pose2d targetPoseBlue
-            = new Pose2d(72-55.6425,72 - 58.3727, new Rotation2d(Math.toRadians(315)));
+            = new Pose2d(72 - 144,72 - 144, new Rotation2d(Math.toRadians(315)));
 
     //144 = field length
     private static final Pose2d targetPoseRed

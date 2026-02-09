@@ -13,12 +13,8 @@ import Ori.Coval.Logging.AutoLog;
 @AutoLog
 public class IntakeSubsystem extends MotorOrCrServoSubsystem {
 
-    // Singleton instance
     public static IntakeSubsystem instance;
 
-    /**
-     * Get the singleton instance of ElevatorSubsystem.
-     */
     public static synchronized IntakeSubsystem getInstance() {
         if (instance == null) {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
@@ -38,7 +34,6 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        //todo: change to right hub&port
         withMotor(mmRobot.expansionHub, 0,Direction.REVERSE);
 
     }

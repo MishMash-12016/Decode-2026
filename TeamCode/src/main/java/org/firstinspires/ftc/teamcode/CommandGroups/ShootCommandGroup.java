@@ -7,8 +7,10 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.RobotUtils;
-import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.LeftStopperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.MiddleStopperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.RightStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class ShootCommandGroup {
@@ -16,9 +18,9 @@ public class ShootCommandGroup {
 
     public static Command stoppersPush() {
         return new ParallelCommandGroup(
-                BallStopperSubsystem.getInstance().pushL(),
-                BallStopperSubsystem.getInstance().pushM(),
-                BallStopperSubsystem.getInstance().pushR()
+                RightStopperSubsystem.getInstance().push(),
+                MiddleStopperSubsystem.getInstance().push(),
+                LeftStopperSubsystem.getInstance().push()
         );
     }
 

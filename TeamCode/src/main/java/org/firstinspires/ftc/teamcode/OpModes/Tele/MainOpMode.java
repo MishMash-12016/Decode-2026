@@ -33,12 +33,12 @@ public class MainOpMode extends MMOpMode {
     @Override
     public void onInit() {
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
-        /** Auto things */
+        /// Auto things
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
         GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
                 () -> slow = !slow
         );
-
+        ///buttons
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS).whenPressed(
                 ()->MMDrivetrain.getInstance().resetYaw()

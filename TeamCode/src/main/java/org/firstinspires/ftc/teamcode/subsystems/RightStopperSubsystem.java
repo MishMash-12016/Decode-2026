@@ -16,21 +16,9 @@ import Ori.Coval.Logging.AutoLog;
 @AutoLog
 
 public class RightStopperSubsystem extends ServoSubsystem {
-    ///sensors
-
-    ///right pos
-    public static double stopR = 0.05;
-    public static double pushR = 0.6;
-    ///mid pos
-    public static double stopM = 0.65;
-    public static double pushM = 0.1;
-    ///left pos
-    public static double stopL = 0.65;
-    public static double pushL = 0.1;
-
-    CuttleServo right;
-    CuttleServo middle;
-    CuttleServo left;
+    ///sensor
+    public static double stop = 0.05;
+    public static double push = 0.5;
 
     public static RightStopperSubsystem instance;
 
@@ -52,25 +40,15 @@ public class RightStopperSubsystem extends ServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-
-        ///right ↓
         withServo(2,mmRobot.controlHub,Direction.FORWARD,0);
-
-        middle = new CuttleServo(mmRobot.controlHub, 1).setDirection(Direction.FORWARD);
-        left = new CuttleServo(mmRobot.controlHub, 0).setDirection(Direction.FORWARD);
-
-
     }
 
-    ///STOP
-
-    public Command stopR(){
-        return setPositionCommand(stopR);
+    public Command stop(){
+        return setPositionCommand(stop);
     }
 
-    ///PUSH
-    public Command pushR(){
-        return setPositionCommand(pushR);
+    public Command push(){
+        return setPositionCommand(push);
     }
 
 }

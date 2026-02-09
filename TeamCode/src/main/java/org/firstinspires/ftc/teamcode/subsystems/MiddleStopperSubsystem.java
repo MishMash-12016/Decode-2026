@@ -16,61 +16,38 @@ import Ori.Coval.Logging.AutoLog;
 @AutoLog
 
 public class MiddleStopperSubsystem extends ServoSubsystem {
-    ///sensors
+    ///sensor
+    public static double stop = 0.65;
+    public static double push = 0.4;
 
-    ///right pos
-    public static double stopR = 0.05;
-    public static double pushR = 0.6;
-    ///mid pos
-    public static double stopM = 0.65;
-    public static double pushM = 0.1;
-    ///left pos
-    public static double stopL = 0.65;
-    public static double pushL = 0.1;
+    public static MiddleStopperSubsystem instance;
 
-    CuttleServo right;
-    CuttleServo middle;
-    CuttleServo left;
-
-    public static RightStopperSubsystem instance;
-
-    public static synchronized RightStopperSubsystem getInstance() {
+    public static synchronized MiddleStopperSubsystem getInstance() {
         if (instance == null) {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new RightStopperSubsystemAutoLogged("RightStopperSubsystem");
+                instance = new MiddleStopperSubsystemAutoLogged("MiddleStopperSubsystem");
 
             } else {
-                instance = new RightStopperSubsystem("RightStopperSubsystem");
+                instance = new MiddleStopperSubsystem("MiddleStopperSubsystem");
             }
         }
         return instance;
     }
 
-    public RightStopperSubsystem(String subsystemName) {
+    public MiddleStopperSubsystem(String subsystemName) {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-
-        ///right ↓
-        withServo(2,mmRobot.controlHub, Direction.FORWARD,0);
-
-        middle = new CuttleServo(mmRobot.controlHub, 1).setDirection(Direction.FORWARD);
-        left = new CuttleServo(mmRobot.controlHub, 0).setDirection(Direction.FORWARD);
-
-
+        withServo(1,mmRobot.controlHub, Direction.FORWARD,0);
     }
 
-    ///STOP
-
-    public Command stopR(){
-        return setPositionCommand(stopR);
+    public Command stop(){
+        return setPositionCommand(stop);
     }
 
-    ///PUSH
-    public Command pushR(){
-        return setPositionCommand(pushR);
+    public Command push(){
+        return setPositionCommand(push);
     }
-
 }
