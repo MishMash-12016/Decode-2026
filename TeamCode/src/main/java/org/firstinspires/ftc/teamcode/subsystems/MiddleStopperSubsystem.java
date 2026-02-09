@@ -15,12 +15,12 @@ import Ori.Coval.Logging.AutoLog;
 @Config
 @AutoLog
 
-public class BallStopperSubsystem extends ServoSubsystem {
-        ///sensors
+public class MiddleStopperSubsystem extends ServoSubsystem {
+    ///sensors
 
     ///right pos
-    public static double stopR = 0.0;
-    public static double pushR = 0.5;
+    public static double stopR = 0.05;
+    public static double pushR = 0.6;
     ///mid pos
     public static double stopM = 0.65;
     public static double pushM = 0.1;
@@ -32,31 +32,30 @@ public class BallStopperSubsystem extends ServoSubsystem {
     CuttleServo middle;
     CuttleServo left;
 
-    public static BallStopperSubsystem instance;
+    public static RightStopperSubsystem instance;
 
-    public static synchronized BallStopperSubsystem getInstance() {
+    public static synchronized RightStopperSubsystem getInstance() {
         if (instance == null) {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new BallStopperSubsystemAutoLogged("BallStopperSubsystem");
+                instance = new RightStopperSubsystemAutoLogged("RightStopperSubsystem");
 
             } else {
-                instance = new BallStopperSubsystem("BallStopperSubsystem");
+                instance = new RightStopperSubsystem("RightStopperSubsystem");
             }
         }
         return instance;
     }
 
-    public BallStopperSubsystem(String subsystemName) {
+    public RightStopperSubsystem(String subsystemName) {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
 
         ///right ↓
-        withServo(2,mmRobot.controlHub,Direction.FORWARD,0);
+        withServo(2,mmRobot.controlHub, Direction.FORWARD,0);
 
-//        right = new CuttleServo(mmRobot.controlHub, 5).setDirection(Direction.FORWARD);
         middle = new CuttleServo(mmRobot.controlHub, 1).setDirection(Direction.FORWARD);
         left = new CuttleServo(mmRobot.controlHub, 0).setDirection(Direction.FORWARD);
 
@@ -64,30 +63,14 @@ public class BallStopperSubsystem extends ServoSubsystem {
     }
 
     ///STOP
-//    public Command stopR(){
-//        return new InstantCommand(()->right.setPosition(stopR));
-//    }
+
     public Command stopR(){
         return setPositionCommand(stopR);
     }
-    public Command stopM(){
-        return new InstantCommand(()->middle.setPosition(stopM));
-    }
-    public Command stopL(){
-        return new InstantCommand(()->left.setPosition(stopL));
-    }
 
     ///PUSH
-//    public Command pushR(){
-//        return new InstantCommand(()->right.setPosition(pushR));
-//    }
     public Command pushR(){
         return setPositionCommand(pushR);
     }
-    public Command pushM(){
-        return new InstantCommand(()->middle.setPosition(pushM));
-    }
-    public Command pushL(){
-        return new InstantCommand(()->left.setPosition(pushL));
-    }
+
 }
