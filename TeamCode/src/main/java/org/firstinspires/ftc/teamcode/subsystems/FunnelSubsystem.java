@@ -33,8 +33,6 @@ public class FunnelSubsystem extends MotorOrCrServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.expansionHub,3, Direction.REVERSE);
-
-//        withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        withMotor(mmRobot.controlHub,3, Direction.REVERSE);
     }
 }

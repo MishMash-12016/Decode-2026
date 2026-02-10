@@ -16,7 +16,7 @@ public class IntakeCommandGroup {
 
     public static Command dumbFeed() {
         return new ParallelCommandGroup(
-                BallStopperSubsystem.getInstance().close(),
+//                BallStopperSubsystem.getInstance().close(),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                 FunnelSubsystem.getInstance().setPowerInstantCommand(1)
         );
@@ -35,8 +35,8 @@ public class IntakeCommandGroup {
     public static Command stopIntake() {
         return new ParallelCommandGroup(
                 IntakeSubsystem.getInstance().stopCommand(),
-                FunnelSubsystem.getInstance().stopCommand(),
-                BallStopperSubsystem.getInstance().close()
+                FunnelSubsystem.getInstance().stopCommand()
+//                BallStopperSubsystem.getInstance().close()
         );
     }
 

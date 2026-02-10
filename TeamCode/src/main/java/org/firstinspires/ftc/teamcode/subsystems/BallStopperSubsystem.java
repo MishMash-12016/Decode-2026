@@ -15,8 +15,8 @@ import Ori.Coval.Logging.AutoLog;
 public class BallStopperSubsystem extends ServoSubsystem {
 
     //TODO: generic values
-    public static double stopperOpen = 1.0;
-    public static double stopperClose = 0.0;
+    public static double open = 1.0;
+    public static double close = 0.0;
 
     public static double POSITION_TOLERANCE = 0.1;
 
@@ -34,12 +34,12 @@ public class BallStopperSubsystem extends ServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withServo(0,mmRobot.controlHub,Direction.FORWARD,0);
+        withServo(2,mmRobot.servoHub,Direction.FORWARD,0);
     }
     public Command close(){
-        return setPositionCommand(stopperClose);
+        return setPositionCommand(close);
     }
     public Command open(){
-        return setPositionCommand(stopperOpen);
+        return setPositionCommand(open);
     }
 }

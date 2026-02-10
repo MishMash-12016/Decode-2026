@@ -48,12 +48,13 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
     public ShooterHoodSubsystem(String subsystemName) {
         super(subsystemName);
 
+
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withServo("shooterHoodServo",Direction.FORWARD,0);
+        withServo(1,mmRobot.servoHub,Direction.FORWARD,0);
     }
 
-    public Command aimHoodToShut(DoubleSupplier distance) {
+    public Command aimHoodToShoot(DoubleSupplier distance) {
         return setPositionCommand(
                 ()-> exterpolationMap.exterpolate(distance.getAsDouble()));
     }

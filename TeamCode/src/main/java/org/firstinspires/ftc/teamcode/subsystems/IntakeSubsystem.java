@@ -38,8 +38,7 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        //todo: change to right hub&port
-        withMotor(mmRobot.controlHub, 4,Direction.REVERSE);
+        withMotor(mmRobot.controlHub, 2,Direction.FORWARD);
 
     }
 }

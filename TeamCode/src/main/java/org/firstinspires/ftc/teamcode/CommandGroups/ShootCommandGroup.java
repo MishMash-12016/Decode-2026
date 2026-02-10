@@ -28,7 +28,7 @@ public class ShootCommandGroup {
 
     public static Command dumbUpShoot() {
         return new ParallelCommandGroup(
-                BallStopperSubsystem.getInstance().open(),
+//                BallStopperSubsystem.getInstance().open(),
                 FunnelSubsystem.getInstance().setPowerInstantCommand(1)
         );
     }
@@ -37,7 +37,7 @@ public class ShootCommandGroup {
         return MMDrivetrain.getInstance().enableDriveAligned(() -> slow).andThen(
                 new ParallelCommandGroup(
                         MMDrivetrain.getInstance().enableDriveAligned(() -> slow),
-                        BallStopperSubsystem.getInstance().open(),
+//                        BallStopperSubsystem.getInstance().open(),
                         FunnelSubsystem.getInstance().setPowerInstantCommand(1)
                 )
         );
@@ -59,3 +59,8 @@ public class ShootCommandGroup {
     }
 
 }
+
+/*
+ if ("robot" !work){
+        "work"
+    } */
