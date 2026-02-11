@@ -210,3 +210,97 @@ public class CloseBlue extends MMOpMode {
         CommandScheduler.getInstance().reset();
     }
 }
+///auto 3+9
+/*
+    public static class Paths {
+        public PathChain Path1;
+        public PathChain Path2;
+        public PathChain Path3;
+        public PathChain Path4;
+        public PathChain Path5;
+        public PathChain Path6;
+        public PathChain Path7;
+        public PathChain Path8;
+
+        public Paths(Follower follower) {
+            Path1 = follower.pathBuilder().addPath(
+                            new BezierLine(
+                                    new Pose(20.000, 123.000),
+
+                                    new Pose(39.000, 104.000)
+                            )
+                    ).setLinearHeadingInterpolation(Math.toRadians(324), Math.toRadians(316))
+
+                    .build();
+
+            Path2 = follower.pathBuilder().addPath(
+                            new BezierCurve(
+                                    new Pose(39.000, 104.000),
+                                    new Pose(25.000, 105.000),
+                                    new Pose(24.000, 90.000)
+                            )
+                    ).setConstantHeadingInterpolation(Math.toRadians(270))
+
+                    .build();
+
+            Path3 = follower.pathBuilder().addPath(
+                            new BezierLine(
+                                    new Pose(24.000, 90.000),
+
+                                    new Pose(39.000, 104.000)
+                            )
+                    ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(316))
+
+                    .build();
+
+            Path4 = follower.pathBuilder().addPath(
+                            new BezierCurve(
+                                    new Pose(39.000, 104.000),
+                                    new Pose(26.887, 72.468),
+                                    new Pose(14.000, 74.919)
+                            )
+                    ).setConstantHeadingInterpolation(Math.toRadians(270))
+
+                    .build();
+
+            Path5 = follower.pathBuilder().addPath(
+                            new BezierCurve(
+                                    new Pose(14.000, 74.919),
+                                    new Pose(25.000, 75.000),
+                                    new Pose(24.000, 65.000)
+                            )
+                    ).setConstantHeadingInterpolation(Math.toRadians(270))
+
+                    .build();
+
+            Path6 = follower.pathBuilder().addPath(
+                            new BezierLine(
+                                    new Pose(24.000, 65.000),
+
+                                    new Pose(39.000, 104.000)
+                            )
+                    ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(316))
+
+                    .build();
+
+            Path7 = follower.pathBuilder().addPath(
+                            new BezierCurve(
+                                    new Pose(39.000, 104.000),
+                                    new Pose(24.000, 76.000),
+                                    new Pose(24.000, 41.000)
+                            )
+                    ).setConstantHeadingInterpolation(Math.toRadians(270))
+
+                    .build();
+
+            Path8 = follower.pathBuilder().addPath(
+                            new BezierLine(
+                                    new Pose(24.000, 41.000),
+
+                                    new Pose(39.000, 104.000)
+                            )
+                    ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(316))
+
+                    .build();
+        }
+ */

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class ShootCommandGroup {
 
-
+    ///funnel
     public static Command stoppersPush() {
         return new ParallelCommandGroup(
                 RightStopperSubsystem.getInstance().push(),
@@ -44,12 +44,15 @@ public class ShootCommandGroup {
     public static Command stopShoot() {
         return IntakeSubsystem.getInstance().stopCommand();
     }
+
+
+
+    ///wheel
 /*
     public static Command smartUpShoot(boolean slow) {
         return MMDrivetrain.getInstance().enableDriveAligned(() -> slow);
     }
 */
-
     public static Command closeDumbSpeed() {
         return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(48);
     }
