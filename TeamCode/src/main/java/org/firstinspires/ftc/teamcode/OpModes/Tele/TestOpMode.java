@@ -41,10 +41,10 @@ public class TestOpMode extends MMOpMode {
 
     @Override
     public void onInit() {
+        GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
         MMDrivetrain.getInstance().setPose(startPose);
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
 
-        GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
         GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
                 () -> slow = !slow
         );
@@ -84,6 +84,10 @@ public class TestOpMode extends MMOpMode {
 //        );
         new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
                 ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot()
+        );
+
+        MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                IntakeCommandGroup.stopAll()
         );
 
         MMRobot.getInstance().gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(

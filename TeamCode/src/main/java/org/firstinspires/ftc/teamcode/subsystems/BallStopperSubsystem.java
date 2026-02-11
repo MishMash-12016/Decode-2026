@@ -29,12 +29,11 @@ public class BallStopperSubsystem extends ServoSubsystem {
         }
         return instance;
     }
-
     public BallStopperSubsystem(String subsystemName) {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withServo(2,mmRobot.servoHub,Direction.FORWARD,0);
+        withServo(0,mmRobot.servoHub,Direction.FORWARD,0);
     }
     public Command close(){
         return setPositionCommand(close);

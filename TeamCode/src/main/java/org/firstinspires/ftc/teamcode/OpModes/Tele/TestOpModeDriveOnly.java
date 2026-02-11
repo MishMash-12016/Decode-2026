@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
 
-@TeleOp
+//@TeleOp
 @Config
 @AutoLog
 public class TestOpModeDriveOnly extends MMOpMode {

@@ -18,7 +18,7 @@ public class IntakeCommandGroup {
         return new ParallelCommandGroup(
 //                BallStopperSubsystem.getInstance().close(),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                FunnelSubsystem.getInstance().setPowerInstantCommand(1)
+                FunnelSubsystem.getInstance().setPowerInstantCommand(0.4)
         );
     }
 

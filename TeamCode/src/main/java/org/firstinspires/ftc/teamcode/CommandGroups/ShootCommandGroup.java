@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.FunnelSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class ShootCommandGroup {
@@ -29,6 +30,7 @@ public class ShootCommandGroup {
     public static Command dumbUpShoot() {
         return new ParallelCommandGroup(
 //                BallStopperSubsystem.getInstance().open(),
+                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                 FunnelSubsystem.getInstance().setPowerInstantCommand(1)
         );
     }

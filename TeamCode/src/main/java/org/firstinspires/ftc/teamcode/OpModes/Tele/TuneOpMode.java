@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.button.Trigger;
+import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
@@ -15,6 +17,8 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 
 
 import Ori.Coval.Logging.AutoLog;
@@ -33,10 +37,13 @@ public class TuneOpMode extends MMOpMode {
 
 //    CRServo left;
 //    MotorEx a;
+    double pose;
 
     @Override
     public void onInit() {
-//        right = hardwareMap.get(CRServo.class,"right");
+        GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
+        GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
+/*//        right = hardwareMap.get(CRServo.class,"right");
         p0 = new CuttleMotor(MMRobot.getInstance().controlHub, 0);
         p1 = new CuttleMotor(MMRobot.getInstance().controlHub, 1);
         p2 = new CuttleMotor(MMRobot.getInstance().controlHub, 2);
@@ -79,13 +86,30 @@ public class TuneOpMode extends MMOpMode {
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
                 new InstantCommand(()->ep3.setPower(1))).whenInactive(
                 new InstantCommand(()->ep3.setPower(0))
+        );*/
+        pose = 0;
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                () -> pose += 0.05
         );
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                () -> pose -= 0.05
+        );
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                () -> pose += 0.2
+        );
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                () -> pose -= 0.2
+        );
+
     }
 
     @Override
     public void onPlayLoop() {
         telemetry.update();
-        telemetry.addData("run2", null);
+        telemetry.addData("pose", pose);
+
+        BallStopperSubsystem.getInstance().setPositionCommand(pose).schedule();
+//        ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
 
 //        KoalaLog.log("  : ",    , true);
 
