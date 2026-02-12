@@ -10,6 +10,8 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
+import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
+import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
@@ -19,6 +21,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 
 import Ori.Coval.Logging.AutoLog;
@@ -31,6 +34,7 @@ public class TuneOpMode extends MMOpMode {
     public TuneOpMode() {
         super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
     }
+    CuttleDigital sensor;
 
     CuttleMotor p0,p1,p2,p3;
     CuttleMotor ep0,ep1,ep2,ep3;
@@ -43,6 +47,7 @@ public class TuneOpMode extends MMOpMode {
     public void onInit() {
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
         GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
+
 /*//        right = hardwareMap.get(CRServo.class,"right");
         p0 = new CuttleMotor(MMRobot.getInstance().controlHub, 0);
         p1 = new CuttleMotor(MMRobot.getInstance().controlHub, 1);
@@ -87,31 +92,53 @@ public class TuneOpMode extends MMOpMode {
                 new InstantCommand(()->ep3.setPower(1))).whenInactive(
                 new InstantCommand(()->ep3.setPower(0))
         );*/
-        pose = 0;
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                () -> pose += 0.05
-        );
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                () -> pose -= 0.05
-        );
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                () -> pose += 0.2
-        );
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                () -> pose -= 0.2
+/*        GamepadEx1.getGamepadButton(GamepadKeys.Button.X).toggleWhenActive(
+                IntakeCommandGroup.dumbFeed(), IntakeCommandGroup.stopIntake()
         );
 
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.B).toggleWhenActive(
+                ShooterSubsystem.getInstance().setPowerInstantCommand(1),
+                ShooterSubsystem.getInstance().stopCommand()
+        );
+
+        pose = 0;
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                () -> pose += 0.1
+        );
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                () -> pose -= 0.1
+        );
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                () -> pose += 0.05
+        );
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                () -> pose -= 0.05
+        );*/
+
+    }
+
+    @Override
+    public void onPlay() {
+        super.onPlay();
     }
 
     @Override
     public void onPlayLoop() {
         telemetry.update();
-        telemetry.addData("pose", pose);
 
         BallStopperSubsystem.getInstance().setPositionCommand(pose).schedule();
-//        ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
+        ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
 
-//        KoalaLog.log("  : ",    , true);
+            telemetry.addData("sensor", sensor.getState());
+            telemetry.addData("pose", pose);
 
+        KoalaLog.log("null: ", 0, true);
+
+    }
+
+    @Override
+    public void onEnd() {
+        super.onEnd();
+        BallStopperSubsystem.getInstance().reset();
     }
 }

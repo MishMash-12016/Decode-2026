@@ -11,25 +11,25 @@ import Ori.Coval.Logging.AutoLog;
 
 @Config
 @AutoLog
-public class FunnelSubsystem extends MotorOrCrServoSubsystem {
+public class AccelSubsystem extends MotorOrCrServoSubsystem {
 
-    public static FunnelSubsystem instance;
+    public static AccelSubsystem instance;
 
-    public static synchronized FunnelSubsystem getInstance() {
+    public static synchronized AccelSubsystem getInstance() {
         if (instance == null) {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new FunnelSubsystemAutoLogged("FunnelSubsystem");
+                instance = new AccelSubsystemAutoLogged("AccelSubsystem");
 
             } else {
-                instance = new FunnelSubsystem("FunnelSubsystem");
+                instance = new AccelSubsystem("AccelSubsystem");
             }
         }
         return instance;
     }
 
-    public FunnelSubsystem(String subsystemName) {
+    public AccelSubsystem(String subsystemName) {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
