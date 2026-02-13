@@ -25,19 +25,19 @@ public class SysidShooterOpMode extends MMOpMode {
   public void onInit() {
     GamepadEx gamepadEx1 = MMRobot.getInstance().gamepadEx1;
 
-    gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+    gamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
             .whileActiveOnce(ShooterSubsystem.getInstance()
                     .sysidQuasistatic(SysIdRoutine.Direction.kForward));
 
-    gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT)
+    gamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
             .whileActiveOnce(ShooterSubsystem.getInstance()
                     .sysidQuasistatic(SysIdRoutine.Direction.kReverse));
 
-    gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+    gamepadEx1.getGamepadButton(GamepadKeys.Button.B)
             .whileActiveOnce(ShooterSubsystem.getInstance()
                     .sysidDynamic(SysIdRoutine.Direction.kForward));
 
-    gamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT)
+    gamepadEx1.getGamepadButton(GamepadKeys.Button.X)
             .whileActiveOnce(ShooterSubsystem.getInstance()
                     .sysidDynamic(SysIdRoutine.Direction.kReverse));
   }

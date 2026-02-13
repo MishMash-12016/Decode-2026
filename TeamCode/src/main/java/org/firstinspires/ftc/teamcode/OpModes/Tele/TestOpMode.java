@@ -62,17 +62,15 @@ public class TestOpMode extends MMOpMode {
                 IntakeCommandGroup.outIntake(), IntakeCommandGroup.stopIntake()
         );
 
+        ///Shooter
         GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 ShootCommandGroup.closeDumbSpeed()
-        );
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-                ShooterSubsystem.getInstance().setPowerInstantCommand(1)
         );GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                ShootCommandGroup.speedByLocation()
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(65)
         );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 ShooterSubsystem.getInstance().stopCommand()
         );
-
+        /// ↑
 
         new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
                 ShootCommandGroup.smartUpShoot(slow),

@@ -10,33 +10,30 @@ import com.seattlesolvers.solverslib.command.Command;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
-
-import java.util.function.DoubleSupplier;
 
 import Ori.Coval.Logging.AutoLog;
 import edu.wpi.first.sysid.SysIdRoutine;
 
 @Config
 @AutoLog
-public class ShooterSubsystem extends VelocityPidSubsystem {
+public class  ShooterSubsystem extends VelocityPidSubsystem {
 
     ExterpolationMap exterpolationMap = new ExterpolationMap()
             .put(1,6);
 
 
     //TODO: tuned not ideal
-    public static double KP = 0.0;
+    public static double KP = 0.04;
     public static double KI = 0.0;
     public static double KD = 0.0;
 
-    public static double KS = 0.14778;
-    public static double KV = 0.010213;
-    public static double KA = 0.017195;
+    public static double KS = 0.14;
+    public static double KV = 0.0113;
+    public static double KA = 0;
 /*
 ///frst V0
     public static double KS = 0.085176;
