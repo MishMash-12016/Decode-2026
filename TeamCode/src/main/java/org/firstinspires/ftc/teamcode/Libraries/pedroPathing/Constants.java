@@ -64,7 +64,9 @@ public class Constants {
             .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .odometryStdDevs(0, 0, 0)
-            .visionMeasurementStdDevs(0, 0, 0);
+            .visionMeasurementStdDevs(0, 0, 0)
+            /*.odometryStdDevs(0.001, 0.001, 0.001)
+            .visionMeasurementStdDevs(0.0, 0.0, 0.0)*/;
 
 
 

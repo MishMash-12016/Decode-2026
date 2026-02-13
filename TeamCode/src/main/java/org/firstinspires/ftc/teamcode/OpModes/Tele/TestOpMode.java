@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
@@ -54,6 +55,7 @@ public class TestOpMode extends MMOpMode {
                 ()->MMDrivetrain.getInstance().resetYaw()
         );
         /// ↑
+//        WebcamSubsystem.getInstance();
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.smartFeed(), IntakeCommandGroup.stopIntake()
@@ -121,6 +123,5 @@ public class TestOpMode extends MMOpMode {
     @Override
     public void onEnd() {
         super.onEnd();
-        BallStopperSubsystem.getInstance().reset();
     }
 }

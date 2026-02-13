@@ -20,7 +20,7 @@ import edu.wpi.first.sysid.SysIdRoutine;
 
 @Config
 @AutoLog
-public class  ShooterSubsystem extends VelocityPidSubsystem {
+public class ShooterSubsystem extends VelocityPidSubsystem {
 
     ExterpolationMap exterpolationMap = new ExterpolationMap()
             .put(1,6);

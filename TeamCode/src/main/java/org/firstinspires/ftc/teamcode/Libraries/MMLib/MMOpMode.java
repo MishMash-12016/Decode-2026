@@ -52,6 +52,7 @@ public abstract class MMOpMode extends LinearOpMode {
 
     private final List<Runnable> runOnInit = new ArrayList<>();
     private final List<Command> commandsOnRun = new ArrayList<>();
+    private double lastLoopTime = System.currentTimeMillis();
 
     /**
      * use this to choose a {@link OpModeType.NonCompetition NonComp} opmode.
@@ -90,7 +91,9 @@ public abstract class MMOpMode extends LinearOpMode {
         });
     }
 
-    public void onPlay() {}
+    public void onPlay() {
+        lastLoopTime = System.currentTimeMillis();
+    }
 
     /**
      * Updates the {@link CommandScheduler}, {@link org.firstinspires.ftc.robotcore.external.Telemetry Telemetry}
@@ -127,6 +130,9 @@ public abstract class MMOpMode extends LinearOpMode {
         });
         
         logCommandScheduler();
+
+        KoalaLog.log("looptime", lastLoopTime - System.currentTimeMillis(), true);
+        lastLoopTime = System.currentTimeMillis();
     }
 
     public void logCommandScheduler(){

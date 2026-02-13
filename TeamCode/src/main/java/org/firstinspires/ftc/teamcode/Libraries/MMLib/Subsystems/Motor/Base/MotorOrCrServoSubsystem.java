@@ -31,7 +31,6 @@ public class MotorOrCrServoSubsystem extends MMSubsystem {
     public MotorOrCrServoSubsystem(String subsystemName){
         super();
         this.subsystemName = subsystemName;
-        MMRobot.getInstance().subsystems.add(this);
     }
 
     /**

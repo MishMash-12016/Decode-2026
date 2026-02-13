@@ -139,6 +139,5 @@ public class TuneOpMode extends MMOpMode {
     @Override
     public void onEnd() {
         super.onEnd();
-        BallStopperSubsystem.getInstance().reset();
     }
 }

@@ -50,7 +50,9 @@ public class BallStopperSubsystem extends ServoSubsystem {
         return setPositionCommand(open);
     }
 
-    public void reset(){
+    @Override
+    public void resetHub() {
+        super.resetHub();
         instance = null;
     }
 }

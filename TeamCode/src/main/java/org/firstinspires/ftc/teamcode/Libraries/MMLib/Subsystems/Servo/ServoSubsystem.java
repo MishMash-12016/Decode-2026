@@ -36,7 +36,6 @@ public class ServoSubsystem extends MMSubsystem {
     public ServoSubsystem(String subsystemName) {
         super();
         this.subsystemName = subsystemName;
-        MMRobot.getInstance().subsystems.add(this);
     }
 
     /**

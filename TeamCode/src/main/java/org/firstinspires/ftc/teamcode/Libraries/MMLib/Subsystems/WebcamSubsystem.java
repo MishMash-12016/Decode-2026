@@ -44,7 +44,7 @@ public class WebcamSubsystem extends MMSubsystem {
     }
 
     private final Position cameraPosition = new Position(DistanceUnit.INCH,
-            6, 0, 0, 0);
+            0, 15/2.54, 0, 0);
     private final YawPitchRollAngles cameraOrientation = new YawPitchRollAngles(AngleUnit.DEGREES,
             0, -0, 180, 0);
 
@@ -65,12 +65,15 @@ public class WebcamSubsystem extends MMSubsystem {
 
     public static void update() {
         if (instance != null){
-            KoalaLog.log("fps", instance.visionPortal.getFps(), true);
-            KoalaLog.log("has detection", instance.aprilTag.getDetections().isEmpty(), true);
+            KoalaLog.log("WebcamSubsystem/cameraState", instance.visionPortal.getCameraState().toString(), true);
+            KoalaLog.log("WebcamSubsystem/cameraEnabled", instance.visionPortal.getProcessorEnabled(instance.aprilTag), true);
+            KoalaLog.log("WebcamSubsystem/" +
+                    "fps", instance.visionPortal.getFps(), true);
             ArrayList<AprilTagDetection> detections = instance.aprilTag.getFreshDetections();
             if (detections != null){
                 for (AprilTagDetection detection : detections) {
-                    KoalaLog.log("decision margin", detection.decisionMargin, true);
+                    KoalaLog.log("WebcamSubsystem/has detection", true, true);
+                    KoalaLog.log("WebcamSubsystem/decision margin", detection.decisionMargin, true);
 
                     //TODO: add filter by alliance
                     if(detection.decisionMargin > 10){
@@ -80,6 +83,9 @@ public class WebcamSubsystem extends MMSubsystem {
                         MMDrivetrain.getInstance().addVisionMeasurement(getInstance().getRobotPosePedro(), detection.frameAcquisitionNanoTime);
                     }
                 }
+            }
+            else {
+                KoalaLog.log("WebcamSubsystem/has detection", false, true);
             }
         }
     }
@@ -106,8 +112,8 @@ public class WebcamSubsystem extends MMSubsystem {
         builder.setCameraResolution(new Size(800, 600));
         builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
         builder.enableLiveView(false);
-
         builder.addProcessor(aprilTag);
+        builder.setAutoStartStreamOnBuild(true);
 
         visionPortal = builder.build();
         visionPortal.setProcessorEnabled(aprilTag, true);
