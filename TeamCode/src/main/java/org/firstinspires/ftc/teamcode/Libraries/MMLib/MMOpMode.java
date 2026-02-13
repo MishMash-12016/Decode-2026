@@ -64,9 +64,9 @@ public abstract class MMOpMode extends LinearOpMode {
     }
 
     private void robotInit() {
+        KoalaLog.setup(hardwareMap);
         MMRobot.getInstance().currentOpMode = this;
         MMRobot.getInstance().initializeSystems(opModeType);
-        KoalaLog.setup(hardwareMap);
 
         //FTCDash hardware thing
         FtcDashboard.getInstance().withHardwareRoot(hardwareRoot -> {
@@ -148,6 +148,7 @@ public abstract class MMOpMode extends LinearOpMode {
     public void reset() {
         //TODO reset also reset the default command
         CommandScheduler.getInstance().reset();
+        KoalaLog.close();
         ShooterSubsystem.instance = null;
     }
 
@@ -173,7 +174,6 @@ public abstract class MMOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-
         robotInit();
         onInit();
         scheduleCommandsAndRun();

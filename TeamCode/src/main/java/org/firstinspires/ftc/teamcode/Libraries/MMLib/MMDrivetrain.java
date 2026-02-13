@@ -6,6 +6,7 @@ import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.RunCommand;
+import com.seattlesolvers.solverslib.geometry.Rotation2d;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
@@ -37,7 +38,7 @@ public class MMDrivetrain extends MMSubsystem {
     public double headingKI = 0.0004;
     public double headingKD = 0.001;
     public double headingTolarence = 5;
-    PIDController headingPid = new PIDController(headingKP, headingKI, headingKD);
+    PIDController headingPid;
 
     private static MMDrivetrain instance;
     private static Follower follower;
@@ -72,6 +73,8 @@ public class MMDrivetrain extends MMSubsystem {
     }
 
     public MMDrivetrain() {
+        headingPid = new PIDController(headingKP, headingKI, headingKD);
+        headingPid.enableContinuousInput(0, Math.toRadians(360));
         follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
         follower.setStartingPose(new Pose(0, 0, 0));
         withDebugPidSuppliers(()-> this.headingKP, ()-> this.headingKI,()-> this.headingKD,()-> this.headingTolarence);
@@ -89,15 +92,16 @@ public class MMDrivetrain extends MMSubsystem {
     public CommandBase driveAligned(DoubleSupplier forwardDrive, DoubleSupplier lateralDrive, boolean robotCentric, BooleanSupplier slowMode) {
 
         return (CommandBase) new RunCommand(() -> {
+            Rotation2d target_angle = RobotUtils.getAngleToTarget().plus(Rotation2d.fromDegrees(180));
             //TODO check radians
             double headingPower = KoalaLog.log("heading_pid/power:",
                     headingPid.calculate(
                             KoalaLog.log("heading_pid/current_heading",getPose().getHeading(),true),
-                            KoalaLog.log("heading_pid/target_heading",RobotUtils.getAngleToTarget().getRadians(), true)),
+                            KoalaLog.log("heading_pid/target_heading",target_angle.getRadians(), true)),
                     true);
 
             KoalaLog.log("heading_pid/target_pose",
-                    new double[]{getAScopePose()[0], getAScopePose()[1], Math.toDegrees(RobotUtils.getAngleToTarget().getRadians())},
+                    new double[]{getAScopePose()[0], getAScopePose()[1], target_angle.getDegrees()},
                     true);
 
             if (headingPower > 0.5){
@@ -144,8 +148,8 @@ public class MMDrivetrain extends MMSubsystem {
             double headingPower = 0;
 
             if (slowMode.getAsBoolean()) {
-                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 5);
-                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 5);
+                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
+                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
                 headingPower = Math.pow(heading.getAsDouble(), 3);
             } else {
                 forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);

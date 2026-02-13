@@ -9,14 +9,14 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 
 public class RobotUtils {
-    private static final Pose2d targetPoseBlue
-            = new Pose2d(72-55.6425,72 - 58.3727, new Rotation2d(Math.toRadians(315)));
+    private static final Translation2d targetPoseBlue
+            = new Translation2d(0,144);
 
-    //144 = field length
-    private static final Pose2d targetPoseRed
-            = new Pose2d(144 - targetPoseBlue.getX(),targetPoseBlue.getY(), new Rotation2d(Math.toRadians(225)));
+    ///144 = field length
+    private static final Translation2d targetPoseRed
+            = new Translation2d(144,144);
 
-    public static Pose2d getTargetPose(){
+    public static Translation2d getTargetPose(){
         AllianceColor allianceColor = MMRobot.getInstance().currentOpMode.allianceColor;
         if(allianceColor == null || allianceColor == AllianceColor.BLUE){
             return targetPoseBlue;
@@ -28,10 +28,10 @@ public class RobotUtils {
     public static Rotation2d getAngleToTarget(){
         Pose2d robotPose = MMUtils.PedroPoseToSolversPose2d(
                 MMDrivetrain.getInstance().getFollower().getPose());
-        Pose2d targetPose = getTargetPose();
+        Translation2d targetPose = getTargetPose();
 
         Translation2d toTarget =
-                targetPose.getTranslation().minus(robotPose.getTranslation());
+                targetPose.minus(robotPose.getTranslation());
 
         return new Rotation2d(
                 Math.atan2(toTarget.getY(), toTarget.getX())
@@ -42,8 +42,8 @@ public class RobotUtils {
     public static double getDistanceToTarget() {
         Pose2d robotPose = MMUtils.PedroPoseToSolversPose2d(
                 MMDrivetrain.getInstance().getFollower().getPose());
-        Pose2d targetPose = getTargetPose();
+        Translation2d targetPose = getTargetPose();
 
-        return robotPose.getTranslation().getDistance(targetPose.getTranslation());
+        return robotPose.getTranslation().getDistance(targetPose);
     }
 }

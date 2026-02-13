@@ -56,14 +56,13 @@ public class Constants {
 //            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
 //            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED);
     public static PinpointVisionConstants localizerConstants = new PinpointVisionConstants()
-            .forwardPodY(0 / 2.54)
+            .forwardPodY(9.75 / 2.54)
             .strafePodX(0 / 2.54)
             .distanceUnit(DistanceUnit.INCH)
             .hardwareMapName("pinpoint")
             .encoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD)
-            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .forwardEncoderDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .strafeEncoderDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .odometryStdDevs(0, 0, 0)
             .visionMeasurementStdDevs(0, 0, 0);
 
