@@ -52,8 +52,8 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     public static synchronized ShooterSubsystem getInstance() {
         if (instance == null) {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
                 instance = new ShooterSubsystemAutoLogged("ShooterSubsystem");
 
             } else {

@@ -18,7 +18,7 @@ public class BallStopperSubsystem extends ServoSubsystem {
     static CuttleDigital sensor;
 
     public static double open = 0.8;
-    public static double close = 0.55;
+    public static double close = 0.58;
 
     public static double POSITION_TOLERANCE = 0.1;
 

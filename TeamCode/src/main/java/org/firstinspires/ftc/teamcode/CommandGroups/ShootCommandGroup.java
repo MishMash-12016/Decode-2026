@@ -47,7 +47,8 @@ public class ShootCommandGroup {
 
     public static Command stopShoot() {
         return new ParallelCommandGroup(
-                AccelSubsystem.getInstance().stopCommand()
+                AccelSubsystem.getInstance().stopCommand(),
+                IntakeSubsystem.getInstance().stopCommand()
         );
     }
 

@@ -34,10 +34,10 @@ public class MMDrivetrain extends MMSubsystem {
     public double slowModeRatioLateral = 0.3;
     public double slowModeRatioRotation = 0.2;
 
-    public double headingKP = 0.3;
-    public double headingKI = 0.0004;
-    public double headingKD = 0.001;
-    public double headingTolarence = 5;
+    public static double headingKP = 0.3;
+    public static double headingKI = 0.0004;
+    public static double headingKD = 0.001;
+    public static double headingTolarence = 5;
     PIDController headingPid;
 
     private static MMDrivetrain instance;
@@ -150,7 +150,7 @@ public class MMDrivetrain extends MMSubsystem {
             if (slowMode.getAsBoolean()) {
                 forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
                 lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
-                headingPower = Math.pow(heading.getAsDouble(), 3);
+                headingPower = Math.pow(heading.getAsDouble(), 1);
             } else {
                 forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
                 lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
@@ -174,7 +174,7 @@ public class MMDrivetrain extends MMSubsystem {
             follower.setTeleOpDrive(
                     forwardDrivePower * (slowMode.getAsBoolean() ? slowModeRatioForward : 1),
                     lateralDrivePower * (slowMode.getAsBoolean() ? slowModeRatioLateral : 1),
-                    headingPower * (slowMode.getAsBoolean() ? slowModeRatioRotation : 1),
+                    headingPower * (slowMode.getAsBoolean() ? slowModeRatioRotation : 0.9),
                     robotCentric);
             follower.update();
         }, this)
@@ -306,9 +306,9 @@ public class MMDrivetrain extends MMSubsystem {
      * @implNote !NOTICE THIS ONLY WORKS IF IN DEBUG MODE
      */
     public MMDrivetrain withDebugPidSuppliers(DoubleSupplier debugKpSupplier,
-                                                  DoubleSupplier debugKiSupplier,
-                                                  DoubleSupplier debugKdSupplier,
-                                                  DoubleSupplier debugPositionToleranceSupplier) {
+                                              DoubleSupplier debugKiSupplier,
+                                              DoubleSupplier debugKdSupplier,
+                                              DoubleSupplier debugPositionToleranceSupplier) {
 
         this.debugKpSupplier = debugKpSupplier;
         this.debugKiSupplier = debugKiSupplier;
@@ -322,8 +322,10 @@ public class MMDrivetrain extends MMSubsystem {
     public void periodic() {
         super.periodic();
 
-        if (MMRobot.getInstance().currentOpMode != null &&
-                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG) {
+        if /*(MMRobot.getInstance().currentOpMode != null &&
+                (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
+                 MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                 MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION))*/(false){
             try {
                 MMUtils.updateIfChanged(
                         debugKpSupplier,
