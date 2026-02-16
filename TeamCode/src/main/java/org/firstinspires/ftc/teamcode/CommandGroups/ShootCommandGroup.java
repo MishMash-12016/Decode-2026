@@ -28,11 +28,12 @@ public class ShootCommandGroup {
     }
 
     public static Command dumbUpShoot() {
-        return new ParallelCommandGroup(
-                BallStopperSubsystem.getInstance().open(),
-                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                AccelSubsystem.getInstance().setPowerInstantCommand(1)
-        );
+        return BallStopperSubsystem.getInstance().open()
+                .andThen(new ParallelCommandGroup(
+                        BallStopperSubsystem.getInstance().open(),
+                        IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                        AccelSubsystem.getInstance().setPowerInstantCommand(1)
+                ));
     }
 
     public static Command smartUpShoot(boolean slow) {

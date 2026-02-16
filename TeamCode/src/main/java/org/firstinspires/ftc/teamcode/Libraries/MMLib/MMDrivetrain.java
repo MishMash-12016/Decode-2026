@@ -34,9 +34,9 @@ public class MMDrivetrain extends MMSubsystem {
     public double slowModeRatioLateral = 0.3;
     public double slowModeRatioRotation = 0.2;
 
-    public static double headingKP = 0.3;
-    public static double headingKI = 0.0004;
-    public static double headingKD = 0.001;
+    public static double headingKP = 0.35;
+    public static double headingKI = 0.0006;
+    public static double headingKD = 0.0015;
     public static double headingTolarence = 5;
     PIDController headingPid;
 
