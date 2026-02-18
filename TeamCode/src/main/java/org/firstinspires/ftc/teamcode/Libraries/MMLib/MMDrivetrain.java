@@ -34,10 +34,10 @@ public class MMDrivetrain extends MMSubsystem {
     public double slowModeRatioLateral = 0.3;
     public double slowModeRatioRotation = 0.2;
 
-    public static double headingKP = 0.35;
-    public static double headingKI = 0.0006;
-    public static double headingKD = 0.0015;
-    public static double headingTolarence = 5;
+    public static double headingKP = 0.53;
+    public static double headingKI = 0.0009;
+    public static double headingKD = 0.0013;
+    public static double headingTolarence = 2;
     PIDController headingPid;
 
     private static MMDrivetrain instance;
@@ -77,7 +77,7 @@ public class MMDrivetrain extends MMSubsystem {
         headingPid.enableContinuousInput(0, Math.toRadians(360));
         follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
         follower.setStartingPose(new Pose(0, 0, 0));
-        withDebugPidSuppliers(()-> this.headingKP, ()-> this.headingKI,()-> this.headingKD,()-> this.headingTolarence);
+//        withDebugPidSuppliers(()-> headingKP, ()-> headingKI,()-> headingKD,()-> headingTolarence);
     }
 
     @Override
@@ -114,8 +114,8 @@ public class MMDrivetrain extends MMSubsystem {
             double translationPowerSum = 0;
 
             if (slowMode.getAsBoolean()) {
-                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 5);
-                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 5);
+                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
+                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
             } else {
                 forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
                 lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
@@ -148,13 +148,14 @@ public class MMDrivetrain extends MMSubsystem {
             double headingPower = 0;
 
             if (slowMode.getAsBoolean()) {
-                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
-                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
-                headingPower = Math.pow(heading.getAsDouble(), 1);
+                forwardDrivePower = forwardDrive.getAsDouble();
+                lateralDrivePower = lateralDrive.getAsDouble();
+                headingPower = heading.getAsDouble();
             } else {
-                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
-                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
-                headingPower = Math.pow(heading.getAsDouble(), 1);
+                forwardDrivePower = forwardDrive.getAsDouble();
+                lateralDrivePower = lateralDrive.getAsDouble();
+//                headingPower = Math.copySign(Math.sqrt(Math.abs(heading.getAsDouble())), heading.getAsDouble());
+                headingPower = heading.getAsDouble();
             }
 
             double powerSum = Math.max(
@@ -174,7 +175,7 @@ public class MMDrivetrain extends MMSubsystem {
             follower.setTeleOpDrive(
                     forwardDrivePower * (slowMode.getAsBoolean() ? slowModeRatioForward : 1),
                     lateralDrivePower * (slowMode.getAsBoolean() ? slowModeRatioLateral : 1),
-                    headingPower * (slowMode.getAsBoolean() ? slowModeRatioRotation : 0.9),
+                    headingPower * (slowMode.getAsBoolean() ? slowModeRatioRotation : 0.8),
                     robotCentric);
             follower.update();
         }, this)
@@ -322,10 +323,7 @@ public class MMDrivetrain extends MMSubsystem {
     public void periodic() {
         super.periodic();
 
-        if /*(MMRobot.getInstance().currentOpMode != null &&
-                (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
-                 MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
-                 MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION))*/(false){
+        if (false)/*(MMRobot.getInstance().currentOpMode != null)*/{
             try {
                 MMUtils.updateIfChanged(
                         debugKpSupplier,

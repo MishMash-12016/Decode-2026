@@ -33,6 +33,6 @@ public class AccelSubsystem extends MotorOrCrServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.controlHub,3, Direction.REVERSE);
+        withMotor(mmRobot.controlHub,3, Direction.FORWARD);
     }
 }

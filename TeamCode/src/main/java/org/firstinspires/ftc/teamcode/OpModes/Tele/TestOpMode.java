@@ -32,7 +32,7 @@ public class TestOpMode extends MMOpMode {
     boolean slow = false;
     boolean Shoot = false;
     double pow;
-    Pose startPose = new Pose(9,7,0);
+    Pose startPose = new Pose(8,10,180);
     public TestOpMode() {
         super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
     }
@@ -45,7 +45,7 @@ public class TestOpMode extends MMOpMode {
         ///DriveTrain
         MMDrivetrain.getInstance().setPose(startPose);
         MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(
+        new Trigger(() -> gamepad1.left_trigger > 0.1).whenActive(
                 () -> slow = !slow
         );
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).toggleWhenActive(
@@ -60,7 +60,7 @@ public class TestOpMode extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.smartFeed(), IntakeCommandGroup.stopIntake()
         );
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenActive(
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).toggleWhenActive(
                 IntakeCommandGroup.outIntake(), IntakeCommandGroup.stopIntake()
         );
 
@@ -68,40 +68,22 @@ public class TestOpMode extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 ShootCommandGroup.closeDumbSpeed()
         );GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(65)
+                ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(60)
         );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 ShooterSubsystem.getInstance().stopCommand()
         );
         /// ↑
 
-        new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
+/*        new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
                 ShootCommandGroup.smartUpShoot(slow),
                 ShootCommandGroup.stopShoot()
-        );
+        );*/
         new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
                 ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot()
         );
-                GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                 IntakeCommandGroup.stopAll()
         );
-
-        ///testing
-        GamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                () -> pow += 0.1
-        );
-        GamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                () -> pow -= 0.1
-        );
-        new Trigger(()->gamepad2.right_trigger > 0.01).whenActive(
-                AccelSubsystem.getInstance().setPowerInstantCommand(0)
-        );
-
-
-
-
-
-
-
 
     }
 

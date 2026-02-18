@@ -26,13 +26,12 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
             .put(1,6);
 
 
-    //TODO: tuned not ideal
-    public static double KP = 0.04;
-    public static double KI = 0.0;
+    public static double KP = 0.03;
+    public static double KI = 0.0001;
     public static double KD = 0.0;
 
-    public static double KS = 0.14;
-    public static double KV = 0.0113;
+    public static double KS = 0.12;
+    public static double KV = 0.0112;
     public static double KA = 0;
 
     public static double VelTol = 5;
