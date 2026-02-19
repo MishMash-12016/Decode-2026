@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class ShootCommandGroup {
@@ -59,6 +60,9 @@ public class ShootCommandGroup {
 
     //TODO: function by speed and hood angle
     public static Command speedByLocation() {
+        if(RobotUtils.getDistanceToTarget()<105)
+            return ShooterHoodSubsystem.getInstance().aimHoodToShoot(()->RobotUtils.getDistanceToTarget())
+                    .andThen(ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(45));
         return ShooterSubsystem.getInstance().speedByDistance(RobotUtils.getDistanceToTarget());
     }
 

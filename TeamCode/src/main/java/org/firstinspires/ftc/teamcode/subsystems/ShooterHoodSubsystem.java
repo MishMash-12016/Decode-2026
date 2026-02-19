@@ -18,10 +18,11 @@ import Ori.Coval.Logging.AutoLog;
 
 public class ShooterHoodSubsystem extends ServoSubsystem {
 
-    public static double hoodMax = 0.65;
-    public static double hoodMin = 0.0;
+    public static double hoodMax = 1.0;
+    public static double hoodMin = 0.05;
     ExterpolationMap exterpolationMap = new ExterpolationMap()
-            .put(5,5);
+            .put(89.9,0.1)
+            .put(100.17,0.08);
 
     //TODO: generic values
     public static double hoodUp = 0.09;

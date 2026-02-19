@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 
+import Ori.Coval.Logging.AutoLogOutput;
+
 public class RobotUtils {
     private static final Translation2d targetPoseBlue
             = new Translation2d(0,144);
@@ -39,6 +41,7 @@ public class RobotUtils {
     }
 
 
+    @AutoLogOutput
     public static double getDistanceToTarget() {
         Pose2d robotPose = MMUtils.PedroPoseToSolversPose2d(
                 MMDrivetrain.getInstance().getFollower().getPose());

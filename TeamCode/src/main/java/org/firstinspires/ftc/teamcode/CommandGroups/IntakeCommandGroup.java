@@ -23,7 +23,7 @@ public class IntakeCommandGroup {
         return new ParallelCommandGroup(
                 BallStopperSubsystem.getInstance().close(),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                AccelSubsystem.getInstance().setPowerInstantCommand(0.3)
+                AccelSubsystem.getInstance().setPowerInstantCommand(0.5)
         );
     }
 

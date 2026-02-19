@@ -4,9 +4,11 @@ import com.acmerobotics.dashboard.config.Config;
 
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
+import com.seattlesolvers.solverslib.geometry.Rotation2d;
 
 
 import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
@@ -17,6 +19,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -24,6 +27,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
 
 @TeleOp
 @Config
@@ -32,7 +36,7 @@ public class TestOpMode extends MMOpMode {
     boolean slow = false;
     boolean Shoot = false;
     double pow;
-    Pose startPose = new Pose(8,10,180);
+    Pose startPose = new Pose(8,10,0);
     public TestOpMode() {
         super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
     }
@@ -98,6 +102,9 @@ public class TestOpMode extends MMOpMode {
         telemetry.update();
         MMDrivetrain.update();
 
+        KoalaLog.log("test/current_heading", Math.toDegrees(MMDrivetrain.getInstance().getPose().getHeading()),true);
+        KoalaLog.log("test/target_heading", RobotUtils.getAngleToTarget().getDegrees() + 180, true);
+
         telemetry.addData("ball_Sensor: ", BallStopperSubsystem.getInstance().getState());
         telemetry.addData("power: ", pow);
     }
@@ -105,5 +112,6 @@ public class TestOpMode extends MMOpMode {
     @Override
     public void onEnd() {
         super.onEnd();
+        CommandScheduler.getInstance().reset();
     }
 }
