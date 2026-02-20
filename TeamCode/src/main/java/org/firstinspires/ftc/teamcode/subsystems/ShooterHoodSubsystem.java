@@ -60,11 +60,12 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
         return setPositionCommand(
                 () -> farExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
     }
+    
     public Command aimHood() {
-        return new ConditionalCommand(
-                ShooterHoodSubsystem.getInstance().aimHoodToShootClose(),
-                ShooterHoodSubsystem.getInstance().aimHoodToShootFar(),
-                ()->RobotUtils.getDistanceToTarget()>110
-        );
+      return setPositionCommand(
+          () ->
+              RobotUtils.getDistanceToTarget() > 110
+                  ? closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget())
+                  : farExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
     }
 }
