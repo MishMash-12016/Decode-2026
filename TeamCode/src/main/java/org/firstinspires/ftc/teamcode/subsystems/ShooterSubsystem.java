@@ -126,6 +126,12 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         return getToAndHoldSetPointCommand(
                 () -> RobotUtils.getDistanceToTarget() < 110 ? 45 : 72);
     }
+
+    @Override
+    public void resetHub() {
+        super.resetHub();
+        instance = null;
+    }
 }
 
 
