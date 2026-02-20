@@ -52,8 +52,6 @@ public class TuneOpMode extends MMOpMode {
 //    MotorEx a;
     public static double pose;
     public static double pow;
-    public static double accelPower;
-
     boolean slow = false;
     @Override
     public void onInit() {
@@ -78,6 +76,9 @@ public class TuneOpMode extends MMOpMode {
         new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
                 ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot()
         );
+        new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
+                ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot()
+        );
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).toggleWhenActive(
                 IntakeCommandGroup.smartFeed(), IntakeCommandGroup.stopIntake()
@@ -88,7 +89,7 @@ public class TuneOpMode extends MMOpMode {
     public void onPlay() {
         super.onPlay();
         ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(()->pow).schedule();
-
+        ShooterHoodSubsystem.getInstance();
     }
 
     @Override

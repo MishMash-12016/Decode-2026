@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.Volts;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
@@ -108,12 +109,26 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         return sysIdRoutine.dynamic(direction);
     }
 
-    public Command speedByDistance(double distance) {
+
+    public Command closeSpeed() {
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(45);
+    }
+
+    public Command farSpeed() {
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(72);
+    }
+
+/*    public Command speedByDistance(double distance) {
         return getToAndHoldSetPointCommand(
                 ()-> exterpolationMap.exterpolate(distance));
     }
     public Command speedByLocation() {
         return speedByDistance(RobotUtils.getDistanceToTarget());
-    }
+    }*/
+/*
+    @Override
+    public void periodic() {
+        super.periodic();
+    }*/
 }
 

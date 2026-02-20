@@ -2,14 +2,14 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Servo.ServoSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
-
-import java.util.function.DoubleSupplier;
+import org.firstinspires.ftc.teamcode.RobotUtils;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -20,16 +20,12 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
     public static double hoodMax = 1.0;
     public static double hoodMin = 0.05;
-    ExterpolationMap exterpolationMap = new ExterpolationMap()
-            .put(89.9,0.1)
-            .put(100.17,0.08);
-
-    //TODO: generic values
-    public static double hoodUp = 0.09;
-    public static double hoodDown = 0.001;
-
-
-    public static double POSITION_TOLERANCE = 0.1;
+    ExterpolationMap closeExterpolationMap = new ExterpolationMap()
+            .put(63.02, 0.155)
+            .put(89.4, 0.21)
+            .put(105.8, 0.18);
+    ExterpolationMap farExterpolationMap = new ExterpolationMap()
+            .put(134.38, 0.68);
 
     public static ShooterHoodSubsystem instance;
 
@@ -38,25 +34,37 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new ShooterHoodSubsystemAutoLogged("ShooterHoodSubsystem");
+                instance = new ShooterHoodSubsystemAutoLogged("ShooterHoodSubsystem" );
 
             } else {
-                instance = new ShooterHoodSubsystem("ShooterHoodSubsystem");
+                instance = new ShooterHoodSubsystem("ShooterHoodSubsystem" );
             }
         }
         return instance;
     }
+
     public ShooterHoodSubsystem(String subsystemName) {
         super(subsystemName);
 
-
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withServo(1,mmRobot.servoHub,Direction.FORWARD,0);
+        withServo(1, mmRobot.servoHub, Direction.FORWARD, 0);
     }
 
-    public Command aimHoodToShoot(DoubleSupplier distance) {
+    public Command aimHoodToShootClose() {
         return setPositionCommand(
-                ()-> exterpolationMap.exterpolate(distance.getAsDouble()));
+                () -> closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
+    }
+
+    public Command aimHoodToShootFar() {
+        return setPositionCommand(
+                () -> farExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
+    }
+    public Command aimHood() {
+        return new ConditionalCommand(
+                ShooterHoodSubsystem.getInstance().aimHoodToShootClose(),
+                ShooterHoodSubsystem.getInstance().aimHoodToShootFar(),
+                ()->RobotUtils.getDistanceToTarget()>110
+        );
     }
 }

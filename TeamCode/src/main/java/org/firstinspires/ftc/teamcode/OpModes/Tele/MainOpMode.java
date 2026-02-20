@@ -55,13 +55,13 @@ public class MainOpMode extends MMOpMode {
                 )
         );
 
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                ShootCommandGroup.closeDumbSpeed()
-        );GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                ShootCommandGroup.speedByLocation()
-        );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
-                ShooterSubsystem.getInstance().stopCommand()
-        );
+//        GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+//                ShootCommandGroup.closeSpeed()
+//        );GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+//                ShootCommandGroup.speedByLocation()
+//        );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+//                ShooterSubsystem.getInstance().stopCommand()
+//        );
 
 
         new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(

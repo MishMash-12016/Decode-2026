@@ -12,17 +12,17 @@ import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-
 public class ShootCommandGroup {
 
     public static Command ballWithControl() {
+        ShooterSubsystem shooter = ShooterSubsystem.getInstance();
         return new SequentialCommandGroup(
                 new WaitUntilCommand(
-                        () -> ShooterSubsystem.getInstance().getSetPoint() < ShooterSubsystem.getInstance().getVelocity()
+                        () -> shooter.getSetPoint() < shooter.getVelocity() + 1
                 ),
                 dumbUpShoot(),
                 new WaitUntilCommand(
-                        () -> ShooterSubsystem.getInstance().getSetPoint() > ShooterSubsystem.getInstance().getVelocity()
+                        () -> shooter.getSetPoint() > shooter.getVelocity()
                 ),
                 stopShoot()
         );
@@ -35,6 +35,16 @@ public class ShootCommandGroup {
                         IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                         AccelSubsystem.getInstance().setPowerInstantCommand(1)
                 ));
+    }
+
+
+    public static Command superDumbUpShoot() {
+        return BallStopperSubsystem.getInstance().open()
+                .andThen(new SequentialCommandGroup(
+                                AccelSubsystem.getInstance().setPowerInstantCommand(1),
+                                dumbUpShoot()
+                        )
+                );
     }
 
     public static Command smartUpShoot(boolean slow) {
@@ -54,18 +64,18 @@ public class ShootCommandGroup {
         );
     }
 
-    public static Command closeDumbSpeed() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(48);
+/*    public static Command closeSpeed() {
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(45);
     }
+
+    public static Command farSpeed() {
+        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(72);
+    }*/
 
     //TODO: function by speed and hood angle
-    public static Command speedByLocation() {
-        if(RobotUtils.getDistanceToTarget()<105)
-            return ShooterHoodSubsystem.getInstance().aimHoodToShoot(()->RobotUtils.getDistanceToTarget())
-                    .andThen(ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(45));
-        return ShooterSubsystem.getInstance().speedByDistance(RobotUtils.getDistanceToTarget());
-    }
-
+/*    public static Command speedByLocation() {
+        return null;
+    }*/
 }
 
 /*
