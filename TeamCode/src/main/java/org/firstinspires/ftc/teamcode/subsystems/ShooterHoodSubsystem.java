@@ -45,6 +45,7 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
     public ShooterHoodSubsystem(String subsystemName) {
         super(subsystemName);
+        setDefaultCommand(aimHood());
 
         MMRobot mmRobot = MMRobot.getInstance();
 
@@ -64,8 +65,14 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
     public Command aimHood() {
       return setPositionCommand(
           () ->
-              RobotUtils.getDistanceToTarget() > 110
+              RobotUtils.getDistanceToTarget() < 110
                   ? closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget())
                   : farExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
+    }
+
+    @Override
+    public void resetHub() {
+        super.resetHub();
+        instance = null;
     }
 }

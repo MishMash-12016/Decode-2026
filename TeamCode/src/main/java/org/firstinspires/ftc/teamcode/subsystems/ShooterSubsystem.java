@@ -24,7 +24,7 @@ import edu.wpi.first.sysid.SysIdRoutine;
 public class ShooterSubsystem extends VelocityPidSubsystem {
 
     ExterpolationMap exterpolationMap = new ExterpolationMap()
-            .put(1,6);
+            .put(1, 6);
 
 
     public static double KP = 0.03;
@@ -44,8 +44,8 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     public static synchronized ShooterSubsystem getInstance() {
         if (instance == null) {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
-                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
-                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
                 instance = new ShooterSubsystemAutoLogged("ShooterSubsystem");
 
             } else {
@@ -60,34 +60,35 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.controlHub,1, Direction.REVERSE);
-        withMotor(mmRobot.controlHub,0, Direction.REVERSE);
+        withMotor(mmRobot.controlHub, 1, Direction.REVERSE);
+        withMotor(mmRobot.controlHub, 0, Direction.REVERSE);
 
-        withEncoder(mmRobot.expansionHub,0,RESOLUTION,Direction.REVERSE);
+        withEncoder(mmRobot.expansionHub, 0, RESOLUTION, Direction.REVERSE);
 
-        withPid(KP,KI,KD);
+        withPid(KP, KI, KD);
 
         withZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         withVelocityTolerance(VelTol);
 
-        withFeedforward(KS,KV,KA);
+        withFeedforward(KS, KV, KA);
 
         withDebugPidSuppliers(
-                ()-> KP,
-                ()->KI,
-                ()->KD,
+                () -> KP,
+                () -> KI,
+                () -> KD,
                 null,
-                ()-> VelTol,
+                () -> VelTol,
                 null,
                 null,
                 null,
-                ()-> KS,
-                ()->KV,
-                ()->KA
+                () -> KS,
+                () -> KV,
+                () -> KA
         );
 
     }
+
     SysIdRoutine sysIdRoutine = new SysIdRoutine(
             new SysIdRoutine.Config(
                     Volts.of(0.1).per(Second),
@@ -101,11 +102,11 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
             )
     );
 
-    public Command sysidQuasistatic(SysIdRoutine.Direction direction){
+    public Command sysidQuasistatic(SysIdRoutine.Direction direction) {
         return sysIdRoutine.quasistatic(direction);
     }
 
-    public Command sysidDynamic(SysIdRoutine.Direction direction){
+    public Command sysidDynamic(SysIdRoutine.Direction direction) {
         return sysIdRoutine.dynamic(direction);
     }
 
@@ -118,17 +119,17 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(72);
     }
 
-/*    public Command speedByDistance(double distance) {
-        return getToAndHoldSetPointCommand(
-                ()-> exterpolationMap.exterpolate(distance));
-    }
+    /*    public Command speedByDistance(double distance) {
+            return getToAndHoldSetPointCommand(
+                    ()-> exterpolationMap.exterpolate(distance));
+        }
+        public Command speedByLocation() {
+            return speedByDistance(RobotUtils.getDistanceToTarget());
+        }*/
     public Command speedByLocation() {
-        return speedByDistance(RobotUtils.getDistanceToTarget());
-    }*/
-/*
-    @Override
-    public void periodic() {
-        super.periodic();
-    }*/
+        return getToAndHoldSetPointCommand(
+                () -> RobotUtils.getDistanceToTarget() < 110 ? 45 : 72);
+    }
 }
+
 

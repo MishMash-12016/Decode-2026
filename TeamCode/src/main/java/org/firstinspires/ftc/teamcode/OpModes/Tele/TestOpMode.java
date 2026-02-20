@@ -63,9 +63,7 @@ public class TestOpMode extends MMOpMode {
 
         ///Shooter
         GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                ShooterSubsystem.getInstance().closeSpeed()
-        );GamepadEx1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                ShooterSubsystem.getInstance().farSpeed()
+                ShooterSubsystem.getInstance().speedByLocation()
         );GamepadEx1.getGamepadButton(GamepadKeys.Button.B).whenPressed(
                 ShooterSubsystem.getInstance().stopCommand()
         );
