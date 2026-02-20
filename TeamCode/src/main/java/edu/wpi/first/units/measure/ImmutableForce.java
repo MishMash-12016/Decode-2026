@@ -10,7 +10,8 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableForce(double magnitude, double baseUnitMagnitude, ForceUnit unit) implements Force {
+public record ImmutableForce(double magnitude, double baseUnitMagnitude, ForceUnit unit)
+    implements Force {
   @Override
   public Force copy() {
     return this;

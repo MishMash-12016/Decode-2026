@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base;
 
+import Ori.Coval.Logging.AutoLogOutput;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.controller.wpilibcontroller.ProfiledPIDController;
 import com.seattlesolvers.solverslib.trajectory.TrapezoidProfile;
-
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleEncoder;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
@@ -15,12 +17,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.FeedForwards.SimpleMot
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-import Ori.Coval.Logging.AutoLogOutput;
-
 
 public class ProfiledPidBase extends MotorOrCrServoSubsystem {
     private double positionTolarence = 0;

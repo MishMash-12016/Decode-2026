@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 
 /**

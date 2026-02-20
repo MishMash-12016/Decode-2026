@@ -7,13 +7,13 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public final class MutDistance
-  extends MutableMeasureBase<DistanceUnit, Distance, MutDistance>
-  implements Distance {
+public final class MutDistance extends MutableMeasureBase<DistanceUnit, Distance, MutDistance>
+    implements Distance {
   public MutDistance(double magnitude, double baseUnitMagnitude, DistanceUnit unit) {
     super(magnitude, baseUnitMagnitude, unit);
   }

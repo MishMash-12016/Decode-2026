@@ -7,10 +7,12 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableFrequency(double magnitude, double baseUnitMagnitude, FrequencyUnit unit) implements Frequency {
+public record ImmutableFrequency(double magnitude, double baseUnitMagnitude, FrequencyUnit unit)
+    implements Frequency {
   @Override
   public Frequency copy() {
     return this;

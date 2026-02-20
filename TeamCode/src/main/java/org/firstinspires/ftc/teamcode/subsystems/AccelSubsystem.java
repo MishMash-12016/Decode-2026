@@ -1,38 +1,37 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
-
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
-import Ori.Coval.Logging.AutoLog;
-
 @Config
 @AutoLog
 public class AccelSubsystem extends MotorOrCrServoSubsystem {
 
-    public static AccelSubsystem instance;
+  public static AccelSubsystem instance;
 
-    public static synchronized AccelSubsystem getInstance() {
-        if (instance == null) {
-            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new AccelSubsystemAutoLogged("AccelSubsystem");
+  public static synchronized AccelSubsystem getInstance() {
+    if (instance == null) {
+      if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB
+          || MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG
+          || MMRobot.getInstance().currentOpMode.opModeType
+              == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+        instance = new AccelSubsystemAutoLogged("AccelSubsystem");
 
-            } else {
-                instance = new AccelSubsystem("AccelSubsystem");
-            }
-        }
-        return instance;
+      } else {
+        instance = new AccelSubsystem("AccelSubsystem");
+      }
     }
+    return instance;
+  }
 
-    public AccelSubsystem(String subsystemName) {
-        super(subsystemName);
-        MMRobot mmRobot = MMRobot.getInstance();
+  public AccelSubsystem(String subsystemName) {
+    super(subsystemName);
+    MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.controlHub,3, Direction.FORWARD);
-    }
+    withMotor(mmRobot.controlHub, 3, Direction.FORWARD);
+  }
 }

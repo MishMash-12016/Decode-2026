@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Auto;
 
+import Ori.Coval.Logging.AutoLog;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
@@ -9,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-
 import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
@@ -17,8 +17,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-
-import Ori.Coval.Logging.AutoLog;
 
 @AutoLog
 @Autonomous

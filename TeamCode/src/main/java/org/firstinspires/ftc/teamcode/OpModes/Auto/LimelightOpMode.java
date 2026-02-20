@@ -5,12 +5,11 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
+import java.util.List;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 
-import java.util.List;
 @TeleOp
 @Config
 public class LimelightOpMode extends MMOpMode {

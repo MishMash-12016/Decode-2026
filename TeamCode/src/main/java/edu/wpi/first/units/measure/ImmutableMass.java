@@ -7,10 +7,12 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableMass(double magnitude, double baseUnitMagnitude, MassUnit unit) implements Mass {
+public record ImmutableMass(double magnitude, double baseUnitMagnitude, MassUnit unit)
+    implements Mass {
   @Override
   public Mass copy() {
     return this;

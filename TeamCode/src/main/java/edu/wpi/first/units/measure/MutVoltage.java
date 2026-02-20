@@ -7,6 +7,7 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 

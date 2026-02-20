@@ -7,10 +7,13 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableMomentOfInertia(double magnitude, double baseUnitMagnitude, MomentOfInertiaUnit unit) implements MomentOfInertia {
+public record ImmutableMomentOfInertia(
+    double magnitude, double baseUnitMagnitude, MomentOfInertiaUnit unit)
+    implements MomentOfInertia {
   @Override
   public MomentOfInertia copy() {
     return this;

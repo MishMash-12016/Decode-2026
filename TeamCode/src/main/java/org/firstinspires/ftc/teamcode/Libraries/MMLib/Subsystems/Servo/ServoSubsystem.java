@@ -1,25 +1,23 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Servo;
 
+import Ori.Coval.Logging.AutoLogOutput;
+import Ori.Coval.Logging.Logger.KoalaLog;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.Subsystem;
-
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleServo;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
-import java.util.ArrayList;
-import java.util.Set;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-import Ori.Coval.Logging.AutoLogOutput;
-import Ori.Coval.Logging.Logger.KoalaLog;
 /**
  * A subsystem that wraps and manages one or more {@link CuttleServo} instances, allowing
  * for position control and command generation. Supports instant positioning,

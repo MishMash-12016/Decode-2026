@@ -55,7 +55,7 @@ public class SysIdRoutine extends SysIdRoutineLog {
   /**
    * Create a new SysId characterization routine.
    *
-   * @param config    Hardware-independent parameters for the SysId routine.
+   * @param config Hardware-independent parameters for the SysId routine.
    * @param mechanism Hardware interface for the SysId routine.
    */
   public SysIdRoutine(Config config, Mechanism mechanism) {
@@ -65,42 +65,32 @@ public class SysIdRoutine extends SysIdRoutineLog {
     m_recordState = config.m_recordState != null ? config.m_recordState : this::recordState;
   }
 
-  /**
-   * Hardware-independent configuration for a SysId test routine.
-   */
+  /** Hardware-independent configuration for a SysId test routine. */
   public static class Config {
-    /**
-     * The voltage ramp rate used for quasistatic test routines.
-     */
+    /** The voltage ramp rate used for quasistatic test routines. */
     public final Velocity<VoltageUnit> m_rampRate;
 
-    /**
-     * The step voltage output used for dynamic test routines.
-     */
+    /** The step voltage output used for dynamic test routines. */
     public final Voltage m_stepVoltage;
 
-    /**
-     * Safety timeout for the test routine commands.
-     */
+    /** Safety timeout for the test routine commands. */
     public final Time m_timeout;
 
-    /**
-     * Optional handle for recording test state in a third-party logging solution.
-     */
+    /** Optional handle for recording test state in a third-party logging solution. */
     public final Consumer<State> m_recordState;
 
     /**
      * Create a new configuration for a SysId test routine.
      *
-     * @param rampRate    The voltage ramp rate used for quasistatic test routines. Defaults to 0.1 volt
-     *                    per second if left null.
+     * @param rampRate The voltage ramp rate used for quasistatic test routines. Defaults to 0.1
+     *     volt per second if left null.
      * @param stepVoltage The step voltage output used for dynamic test routines. Defaults to 0.6
-     *                    volts if left null.
-     * @param timeout     Safety timeout for the test routine commands. Defaults to 10 seconds if left
-     *                    null.
+     *     volts if left null.
+     * @param timeout Safety timeout for the test routine commands. Defaults to 10 seconds if left
+     *     null.
      * @param recordState Optional handle for recording test state in a third-party logging
-     *                    solution. If provided, the test routine state will be passed to this callback instead of
-     *                    logged in WPILog.
+     *     solution. If provided, the test routine state will be passed to this callback instead of
+     *     logged in WPILog.
      */
     public Config(
         Velocity<VoltageUnit> rampRate,
@@ -116,12 +106,12 @@ public class SysIdRoutine extends SysIdRoutineLog {
     /**
      * Create a new configuration for a SysId test routine.
      *
-     * @param rampRate    The voltage ramp rate used for quasistatic test routines. Defaults to 0.1 volt
-     *                    per second if left null.
+     * @param rampRate The voltage ramp rate used for quasistatic test routines. Defaults to 0.1
+     *     volt per second if left null.
      * @param stepVoltage The step voltage output used for dynamic test routines. Defaults to 0.6
-     *                    volts if left null.
-     * @param timeout     Safety timeout for the test routine commands. Defaults to 10 seconds if left
-     *                    null.
+     *     volts if left null.
+     * @param timeout Safety timeout for the test routine commands. Defaults to 10 seconds if left
+     *     null.
      */
     public Config(Velocity<VoltageUnit> rampRate, Voltage stepVoltage, Time timeout) {
       this(rampRate, stepVoltage, timeout, null);
@@ -146,9 +136,7 @@ public class SysIdRoutine extends SysIdRoutineLog {
    * routine to control and record data from the mechanism.
    */
   public static class Mechanism {
-    /**
-     * Sends the SysId-specified drive signal to the mechanism motors during test routines.
-     */
+    /** Sends the SysId-specified drive signal to the mechanism motors during test routines. */
     public final Consumer<? super Voltage> m_drive;
 
     /**
@@ -157,37 +145,35 @@ public class SysIdRoutine extends SysIdRoutineLog {
      */
     public final Consumer<SysIdRoutineLog> m_log;
 
-    /**
-     * The subsystem containing the motor(s) that is (or are) being characterized.
-     */
+    /** The subsystem containing the motor(s) that is (or are) being characterized. */
     public final SubsystemBase m_subsystem;
 
-    /**
-     * The name of the mechanism being tested.
-     */
+    /** The name of the mechanism being tested. */
     public final String m_name;
 
     /**
      * Create a new mechanism specification for a SysId routine.
      *
-     * @param drive     Sends the SysId-specified drive signal to the mechanism motors during test
-     *                  routines.
-     * @param log       Returns measured data of the mechanism motors during test routines. To return
-     *                  data, call `motor(string motorName)` on the supplied `SysIdRoutineLog` instance, and then
-     *                  call one or more of the chainable logging handles (e.g. `voltage`) on the returned
-     *                  `MotorLog`. Multiple motors can be logged in a single callback by calling `motor`
-     *                  multiple times.
+     * @param drive Sends the SysId-specified drive signal to the mechanism motors during test
+     *     routines.
+     * @param log Returns measured data of the mechanism motors during test routines. To return
+     *     data, call `motor(string motorName)` on the supplied `SysIdRoutineLog` instance, and then
+     *     call one or more of the chainable logging handles (e.g. `voltage`) on the returned
+     *     `MotorLog`. Multiple motors can be logged in a single callback by calling `motor`
+     *     multiple times.
      * @param subsystem The subsystem containing the motor(s) that is (or are) being characterized.
-     *                  Will be declared as a requirement for the returned test commands.
-     * @param name      The name of the mechanism being tested. Will be appended to the log entry title
-     *                  for the routine's test state, e.g. "sysid-test-state-mechanism". Defaults to the name of
-     *                  the subsystem if left null.
+     *     Will be declared as a requirement for the returned test commands.
+     * @param name The name of the mechanism being tested. Will be appended to the log entry title
+     *     for the routine's test state, e.g. "sysid-test-state-mechanism". Defaults to the name of
+     *     the subsystem if left null.
      */
     public Mechanism(
-        Consumer<Voltage> drive, Consumer<SysIdRoutineLog> log, SubsystemBase subsystem, String name) {
+        Consumer<Voltage> drive,
+        Consumer<SysIdRoutineLog> log,
+        SubsystemBase subsystem,
+        String name) {
       m_drive = drive;
-      m_log = log != null ? log : l -> {
-      };
+      m_log = log != null ? log : l -> {};
       m_subsystem = subsystem;
       m_name = name != null ? name : subsystem.getName();
     }
@@ -196,34 +182,29 @@ public class SysIdRoutine extends SysIdRoutineLog {
      * Create a new mechanism specification for a SysId routine. Defaults the mechanism name to the
      * subsystem name.
      *
-     * @param drive     Sends the SysId-specified drive signal to the mechanism motors during test
-     *                  routines.
-     * @param log       Returns measured data of the mechanism motors during test routines. To return
-     *                  data, call `motor(string motorName)` on the supplied `SysIdRoutineLog` instance, and then
-     *                  call one or more of the chainable logging handles (e.g. `voltage`) on the returned
-     *                  `MotorLog`. Multiple motors can be logged in a single callback by calling `motor`
-     *                  multiple times.
+     * @param drive Sends the SysId-specified drive signal to the mechanism motors during test
+     *     routines.
+     * @param log Returns measured data of the mechanism motors during test routines. To return
+     *     data, call `motor(string motorName)` on the supplied `SysIdRoutineLog` instance, and then
+     *     call one or more of the chainable logging handles (e.g. `voltage`) on the returned
+     *     `MotorLog`. Multiple motors can be logged in a single callback by calling `motor`
+     *     multiple times.
      * @param subsystem The subsystem containing the motor(s) that is (or are) being characterized.
-     *                  Will be declared as a requirement for the returned test commands. The subsystem's `name`
-     *                  will be appended to the log entry title for the routine's test state, e.g.
-     *                  "sysid-test-state-subsystem".
+     *     Will be declared as a requirement for the returned test commands. The subsystem's `name`
+     *     will be appended to the log entry title for the routine's test state, e.g.
+     *     "sysid-test-state-subsystem".
      */
-    public Mechanism(Consumer<Voltage> drive, Consumer<SysIdRoutineLog> log, SubsystemBase subsystem) {
+    public Mechanism(
+        Consumer<Voltage> drive, Consumer<SysIdRoutineLog> log, SubsystemBase subsystem) {
       this(drive, log, subsystem, null);
     }
   }
 
-  /**
-   * Motor direction for a SysId test.
-   */
+  /** Motor direction for a SysId test. */
   public enum Direction {
-    /**
-     * Forward.
-     */
+    /** Forward. */
     kForward,
-    /**
-     * Reverse.
-     */
+    /** Reverse. */
     kReverse
   }
 
@@ -256,13 +237,15 @@ public class SysIdRoutine extends SysIdRoutineLog {
                         () -> {
                           m_mechanism.m_drive.accept(
                               m_outputVolts.mut_replace(
-                                  outputSign * timer.seconds() * m_config.m_rampRate.in(Volts.per(Second)),
+                                  outputSign
+                                      * timer.seconds()
+                                      * m_config.m_rampRate.in(Volts.per(Second)),
                                   Volts));
                           m_mechanism.m_log.accept(this);
                           m_recordState.accept(state);
-                        }, m_mechanism.m_subsystem))
+                        },
+                        m_mechanism.m_subsystem))
                 .withTimeout((long) m_config.m_timeout.in(Milliseconds)),
-
             () -> {
               m_mechanism.m_drive.accept(Volts.of(0));
               m_recordState.accept(State.kNone);
@@ -294,18 +277,19 @@ public class SysIdRoutine extends SysIdRoutineLog {
     CommandBase command =
         new WithFinally(
             new InstantCommand(
-                () -> m_outputVolts.mut_replace(m_config.m_stepVoltage.in(Volts) * outputSign, Volts),
-                m_mechanism.m_subsystem)
+                    () ->
+                        m_outputVolts.mut_replace(
+                            m_config.m_stepVoltage.in(Volts) * outputSign, Volts),
+                    m_mechanism.m_subsystem)
                 .andThen(
                     new RunCommand(
                         () -> {
                           m_mechanism.m_drive.accept(m_outputVolts);
                           m_mechanism.m_log.accept(this);
                           m_recordState.accept(state);
-                        }, m_mechanism.m_subsystem))
-
+                        },
+                        m_mechanism.m_subsystem))
                 .withTimeout((long) m_config.m_timeout.in(Milliseconds)),
-
             () -> {
               m_mechanism.m_drive.accept(Volts.of(0));
               m_recordState.accept(State.kNone);

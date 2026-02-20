@@ -10,7 +10,8 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableVoltage(double magnitude, double baseUnitMagnitude, VoltageUnit unit) implements Voltage {
+public record ImmutableVoltage(double magnitude, double baseUnitMagnitude, VoltageUnit unit)
+    implements Voltage {
   @Override
   public Voltage copy() {
     return this;

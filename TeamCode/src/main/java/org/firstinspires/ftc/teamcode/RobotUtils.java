@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import Ori.Coval.Logging.AutoLogOutput;
 import com.seattlesolvers.solverslib.geometry.Pose2d;
 import com.seattlesolvers.solverslib.geometry.Rotation2d;
 import com.seattlesolvers.solverslib.geometry.Translation2d;
-
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
-
-import Ori.Coval.Logging.AutoLogOutput;
 
 public class RobotUtils {
     private static final Translation2d targetPoseBlue

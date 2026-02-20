@@ -108,7 +108,6 @@ public class TrapezoidProfile {
       return this.position == rhs.position && this.velocity == rhs.velocity;
     }
 
-
     @Override
     public int hashCode() {
       return Objects.hash(position, velocity);

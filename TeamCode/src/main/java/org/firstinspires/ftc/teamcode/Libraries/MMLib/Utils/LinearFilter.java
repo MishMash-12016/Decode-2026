@@ -5,9 +5,8 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils;
 
 
-import org.ejml.simple.SimpleMatrix;
-
 import java.util.Arrays;
+import org.ejml.simple.SimpleMatrix;
 
 /**
  * This class implements a linear, digital filter. All types of FIR and IIR filters are supported.

@@ -10,7 +10,8 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableCurrent(double magnitude, double baseUnitMagnitude, CurrentUnit unit) implements Current {
+public record ImmutableCurrent(double magnitude, double baseUnitMagnitude, CurrentUnit unit)
+    implements Current {
   @Override
   public Current copy() {
     return this;

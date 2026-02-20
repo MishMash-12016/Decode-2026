@@ -11,9 +11,8 @@ import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public final class MutCurrent
-  extends MutableMeasureBase<CurrentUnit, Current, MutCurrent>
-  implements Current {
+public final class MutCurrent extends MutableMeasureBase<CurrentUnit, Current, MutCurrent>
+    implements Current {
   public MutCurrent(double magnitude, double baseUnitMagnitude, CurrentUnit unit) {
     super(magnitude, baseUnitMagnitude, unit);
   }

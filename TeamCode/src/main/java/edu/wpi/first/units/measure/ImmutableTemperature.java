@@ -10,7 +10,8 @@ import static edu.wpi.first.units.Units.*;
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableTemperature(double magnitude, double baseUnitMagnitude, TemperatureUnit unit) implements Temperature {
+public record ImmutableTemperature(double magnitude, double baseUnitMagnitude, TemperatureUnit unit)
+    implements Temperature {
   @Override
   public Temperature copy() {
     return this;

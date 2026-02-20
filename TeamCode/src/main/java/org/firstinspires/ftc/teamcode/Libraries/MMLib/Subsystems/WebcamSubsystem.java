@@ -1,35 +1,25 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems;
 
+import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.AutoLogOutput;
 import Ori.Coval.Logging.Logger.KoalaLog;
-
 import android.util.Size;
-
 import com.pedropathing.ftc.FTCCoordinates;
 import com.pedropathing.geometry.PedroCoordinates;
 import com.pedropathing.geometry.Pose;
-import com.seattlesolvers.solverslib.command.SubsystemBase;
-
+import java.util.ArrayList;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
-import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-
-import java.util.ArrayList;
-
-import Ori.Coval.Logging.AutoLog;
-import Ori.Coval.Logging.AutoLogOutput;
-import Ori.Coval.Logging.AutoLogPose2d;
 
 @AutoLog
 public class WebcamSubsystem extends MMSubsystem {

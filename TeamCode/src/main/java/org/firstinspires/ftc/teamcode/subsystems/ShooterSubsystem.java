@@ -4,20 +4,17 @@ import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
 
+import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
-
+import edu.wpi.first.sysid.SysIdRoutine;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
-
-import Ori.Coval.Logging.AutoLog;
-import edu.wpi.first.sysid.SysIdRoutine;
 
 @Config
 @AutoLog
@@ -84,8 +81,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
                 null,
                 () -> KS,
                 () -> KV,
-                () -> KA
-        );
+                () -> KA);
 
     }
 

@@ -7,14 +7,16 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
 public final class MutLinearAcceleration
-  extends MutableMeasureBase<LinearAccelerationUnit, LinearAcceleration, MutLinearAcceleration>
-  implements LinearAcceleration {
-  public MutLinearAcceleration(double magnitude, double baseUnitMagnitude, LinearAccelerationUnit unit) {
+    extends MutableMeasureBase<LinearAccelerationUnit, LinearAcceleration, MutLinearAcceleration>
+    implements LinearAcceleration {
+  public MutLinearAcceleration(
+      double magnitude, double baseUnitMagnitude, LinearAccelerationUnit unit) {
     super(magnitude, baseUnitMagnitude, unit);
   }
 

@@ -7,13 +7,14 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
 public final class MutVelocity<D extends Unit>
-  extends MutableMeasureBase<VelocityUnit<D>, Velocity<D>, MutVelocity<D>>
-  implements Velocity<D> {
+    extends MutableMeasureBase<VelocityUnit<D>, Velocity<D>, MutVelocity<D>>
+    implements Velocity<D> {
   public MutVelocity(double magnitude, double baseUnitMagnitude, VelocityUnit<D> unit) {
     super(magnitude, baseUnitMagnitude, unit);
   }

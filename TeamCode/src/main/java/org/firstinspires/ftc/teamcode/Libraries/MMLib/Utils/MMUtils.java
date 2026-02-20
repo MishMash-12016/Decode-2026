@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.geometry.Pose2d;
 import com.seattlesolvers.solverslib.geometry.Rotation2d;
-
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 

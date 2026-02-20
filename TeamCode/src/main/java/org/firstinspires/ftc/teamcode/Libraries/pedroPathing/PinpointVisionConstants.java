@@ -3,12 +3,9 @@ package org.firstinspires.ftc.teamcode.Libraries.pedroPathing;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.os.Build;
-
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import java.util.OptionalDouble;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /**
  * This is the PinpointVisionConstants class. It holds many constants and parameters for the Pinpoint Localizer.

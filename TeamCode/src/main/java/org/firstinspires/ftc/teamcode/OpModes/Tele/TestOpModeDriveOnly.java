@@ -1,19 +1,15 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
+import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
-
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-
-import Ori.Coval.Logging.AutoLog;
-import Ori.Coval.Logging.Logger.KoalaLog;
 
 //@TeleOp
 @Config

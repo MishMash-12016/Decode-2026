@@ -7,10 +7,12 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableTime(double magnitude, double baseUnitMagnitude, TimeUnit unit) implements Time {
+public record ImmutableTime(double magnitude, double baseUnitMagnitude, TimeUnit unit)
+    implements Time {
   @Override
   public Time copy() {
     return this;

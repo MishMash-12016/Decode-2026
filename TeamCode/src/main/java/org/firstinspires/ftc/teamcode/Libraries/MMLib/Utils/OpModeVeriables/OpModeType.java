@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables;
 
 import org.firstinspires.ftc.teamcode.MMRobot;
+
 /**
  * this represents the OpMode type that has been activated.
  * <p>

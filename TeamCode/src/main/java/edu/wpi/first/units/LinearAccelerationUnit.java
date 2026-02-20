@@ -8,9 +8,7 @@ import edu.wpi.first.units.measure.ImmutableLinearAcceleration;
 import edu.wpi.first.units.measure.LinearAcceleration;
 import edu.wpi.first.units.measure.MutLinearAcceleration;
 
-/**
- * A unit of linear acceleration like {@link Units#MetersPerSecondPerSecond}.
- */
+/** A unit of linear acceleration like {@link Units#MetersPerSecondPerSecond}. */
 public final class LinearAccelerationUnit extends PerUnit<LinearVelocityUnit, TimeUnit> {
   private static final CombinatoryUnitCache<LinearVelocityUnit, TimeUnit, LinearAccelerationUnit>
       cache = new CombinatoryUnitCache<>(LinearAccelerationUnit::new);

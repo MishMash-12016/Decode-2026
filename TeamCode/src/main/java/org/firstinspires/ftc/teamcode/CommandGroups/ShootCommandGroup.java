@@ -4,14 +4,12 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
-
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
-import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+
 public class ShootCommandGroup {
 
     public static Command ballWithControl() {

@@ -7,13 +7,13 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public final class MutPower
-  extends MutableMeasureBase<PowerUnit, Power, MutPower>
-  implements Power {
+public final class MutPower extends MutableMeasureBase<PowerUnit, Power, MutPower>
+    implements Power {
   public MutPower(double magnitude, double baseUnitMagnitude, PowerUnit unit) {
     super(magnitude, baseUnitMagnitude, unit);
   }

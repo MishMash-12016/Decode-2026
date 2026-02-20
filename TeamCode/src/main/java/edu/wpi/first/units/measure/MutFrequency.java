@@ -7,13 +7,13 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public final class MutFrequency
-  extends MutableMeasureBase<FrequencyUnit, Frequency, MutFrequency>
-  implements Frequency {
+public final class MutFrequency extends MutableMeasureBase<FrequencyUnit, Frequency, MutFrequency>
+    implements Frequency {
   public MutFrequency(double magnitude, double baseUnitMagnitude, FrequencyUnit unit) {
     super(magnitude, baseUnitMagnitude, unit);
   }

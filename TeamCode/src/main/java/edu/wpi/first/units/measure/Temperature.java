@@ -7,15 +7,16 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
 public interface Temperature extends Measure<TemperatureUnit> {
-  static  Temperature ofRelativeUnits(double magnitude, TemperatureUnit unit) {
+  static Temperature ofRelativeUnits(double magnitude, TemperatureUnit unit) {
     return new ImmutableTemperature(magnitude, unit.toBaseUnits(magnitude), unit);
   }
 
-  static  Temperature ofBaseUnits(double baseUnitMagnitude, TemperatureUnit unit) {
+  static Temperature ofBaseUnits(double baseUnitMagnitude, TemperatureUnit unit) {
     return new ImmutableTemperature(unit.fromBaseUnits(baseUnitMagnitude), baseUnitMagnitude, unit);
   }
 
@@ -31,7 +32,9 @@ public interface Temperature extends Measure<TemperatureUnit> {
   TemperatureUnit unit();
 
   @Override
-  default TemperatureUnit baseUnit() { return (TemperatureUnit) unit().getBaseUnit(); }
+  default TemperatureUnit baseUnit() {
+    return (TemperatureUnit) unit().getBaseUnit();
+  }
 
   @Override
   default double in(TemperatureUnit unit) {
@@ -44,10 +47,11 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use unaryMinus() instead. This was renamed for consistency with other WPILib classes like Rotation2d
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use unaryMinus() instead. This was renamed for consistency with other WPILib
+   *     classes like Rotation2d
+   */
   @Override
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
@@ -76,17 +80,16 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Override
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   default Temperature divide(double divisor) {
     return (Temperature) div(divisor);
   }
-
 
   @Override
   default Mult<TemperatureUnit, AccelerationUnit<?>> times(Acceleration<?> multiplier) {
@@ -99,10 +102,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -115,7 +118,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, AngleUnit> times(Angle multiplier) {
     return (Mult<TemperatureUnit, AngleUnit>) Measure.super.times(multiplier);
@@ -127,10 +129,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -143,7 +145,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, AngularAccelerationUnit> times(AngularAcceleration multiplier) {
     return (Mult<TemperatureUnit, AngularAccelerationUnit>) Measure.super.times(multiplier);
@@ -155,10 +156,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -171,7 +172,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, AngularMomentumUnit> times(AngularMomentum multiplier) {
     return (Mult<TemperatureUnit, AngularMomentumUnit>) Measure.super.times(multiplier);
@@ -183,10 +183,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -199,7 +199,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, AngularVelocityUnit> times(AngularVelocity multiplier) {
     return (Mult<TemperatureUnit, AngularVelocityUnit>) Measure.super.times(multiplier);
@@ -211,10 +210,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -227,7 +226,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, CurrentUnit> times(Current multiplier) {
     return (Mult<TemperatureUnit, CurrentUnit>) Measure.super.times(multiplier);
@@ -239,10 +237,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -261,10 +259,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Override
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
@@ -277,7 +275,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return (Temperature) Kelvin.of(baseUnitMagnitude() * multiplier.baseUnitMagnitude());
   }
 
-
   @Override
   default Mult<TemperatureUnit, DistanceUnit> times(Distance multiplier) {
     return (Mult<TemperatureUnit, DistanceUnit>) Measure.super.times(multiplier);
@@ -289,10 +286,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -305,7 +302,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, EnergyUnit> times(Energy multiplier) {
     return (Mult<TemperatureUnit, EnergyUnit>) Measure.super.times(multiplier);
@@ -317,10 +313,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -333,7 +329,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, ForceUnit> times(Force multiplier) {
     return (Mult<TemperatureUnit, ForceUnit>) Measure.super.times(multiplier);
@@ -345,10 +340,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -361,7 +356,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, FrequencyUnit> times(Frequency multiplier) {
     return (Mult<TemperatureUnit, FrequencyUnit>) Measure.super.times(multiplier);
@@ -373,10 +367,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -389,7 +383,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, LinearAccelerationUnit> times(LinearAcceleration multiplier) {
     return (Mult<TemperatureUnit, LinearAccelerationUnit>) Measure.super.times(multiplier);
@@ -401,10 +394,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -417,7 +410,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, LinearMomentumUnit> times(LinearMomentum multiplier) {
     return (Mult<TemperatureUnit, LinearMomentumUnit>) Measure.super.times(multiplier);
@@ -429,10 +421,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -445,7 +437,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, LinearVelocityUnit> times(LinearVelocity multiplier) {
     return (Mult<TemperatureUnit, LinearVelocityUnit>) Measure.super.times(multiplier);
@@ -457,10 +448,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -473,7 +464,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, MassUnit> times(Mass multiplier) {
     return (Mult<TemperatureUnit, MassUnit>) Measure.super.times(multiplier);
@@ -485,10 +475,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -501,7 +491,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, MomentOfInertiaUnit> times(MomentOfInertia multiplier) {
     return (Mult<TemperatureUnit, MomentOfInertiaUnit>) Measure.super.times(multiplier);
@@ -513,10 +502,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -529,7 +518,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, MultUnit<?, ?>> times(Mult<?, ?> multiplier) {
     return (Mult<TemperatureUnit, MultUnit<?, ?>>) Measure.super.times(multiplier);
@@ -541,10 +529,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -557,7 +545,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.ofNative(1));
   }
 
-
   @Override
   default Mult<TemperatureUnit, PerUnit<?, ?>> times(Per<?, ?> multiplier) {
     return (Mult<TemperatureUnit, PerUnit<?, ?>>) Measure.super.times(multiplier);
@@ -569,10 +556,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -585,7 +572,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.ofNative(1));
   }
 
-
   @Override
   default Mult<TemperatureUnit, PowerUnit> times(Power multiplier) {
     return (Mult<TemperatureUnit, PowerUnit>) Measure.super.times(multiplier);
@@ -597,10 +583,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -613,7 +599,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, ResistanceUnit> times(Resistance multiplier) {
     return (Mult<TemperatureUnit, ResistanceUnit>) Measure.super.times(multiplier);
@@ -625,10 +610,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -641,7 +626,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, TemperatureUnit> times(Temperature multiplier) {
     return (Mult<TemperatureUnit, TemperatureUnit>) Measure.super.times(multiplier);
@@ -653,10 +637,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -669,7 +653,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, TimeUnit> times(Time multiplier) {
     return (Mult<TemperatureUnit, TimeUnit>) Measure.super.times(multiplier);
@@ -677,14 +660,15 @@ public interface Temperature extends Measure<TemperatureUnit> {
 
   @Override
   default Velocity<TemperatureUnit> div(Time divisor) {
-    return VelocityUnit.combine(unit(), divisor.unit()).ofBaseUnits(baseUnitMagnitude() / divisor.baseUnitMagnitude());
+    return VelocityUnit.combine(unit(), divisor.unit())
+        .ofBaseUnits(baseUnitMagnitude() / divisor.baseUnitMagnitude());
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -697,7 +681,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, TorqueUnit> times(Torque multiplier) {
     return (Mult<TemperatureUnit, TorqueUnit>) Measure.super.times(multiplier);
@@ -709,10 +692,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -725,7 +708,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, VelocityUnit<?>> times(Velocity<?> multiplier) {
     return (Mult<TemperatureUnit, VelocityUnit<?>>) Measure.super.times(multiplier);
@@ -737,10 +719,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -753,7 +735,6 @@ public interface Temperature extends Measure<TemperatureUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<TemperatureUnit, VoltageUnit> times(Voltage multiplier) {
     return (Mult<TemperatureUnit, VoltageUnit>) Measure.super.times(multiplier);
@@ -765,10 +746,10 @@ public interface Temperature extends Measure<TemperatureUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -780,5 +761,4 @@ public interface Temperature extends Measure<TemperatureUnit> {
   default Per<TemperatureUnit, VoltageUnit> per(VoltageUnit divisorUnit) {
     return div(divisorUnit.one());
   }
-
 }

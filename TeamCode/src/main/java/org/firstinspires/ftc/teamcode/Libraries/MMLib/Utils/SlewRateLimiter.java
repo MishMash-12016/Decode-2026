@@ -52,10 +52,10 @@ public class SlewRateLimiter {
     double currentTime = getTimestamp();
     double elapsedTime = currentTime - m_prevTime;
     m_prevVal +=
-            MMUtils.clamp(
-                    input - m_prevVal,
-                    m_negativeRateLimit * elapsedTime,
-                    m_positiveRateLimit * elapsedTime);
+        MMUtils.clamp(
+            input - m_prevVal,
+            m_negativeRateLimit * elapsedTime,
+            m_positiveRateLimit * elapsedTime);
     m_prevTime = currentTime;
     return m_prevVal;
   }
@@ -79,7 +79,7 @@ public class SlewRateLimiter {
     m_prevTime = getTimestamp();
   }
 
-  public double getTimestamp(){
-    return System.nanoTime()/1000000000.0;
+  public double getTimestamp() {
+    return System.nanoTime() / 1000000000.0;
   }
 }

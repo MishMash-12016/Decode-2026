@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.Libraries.pedroPathing;
 
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.changes;
-import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.drawOnlyCurrent;
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.draw;
+import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.drawOnlyCurrent;
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.follower;
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.stopRobot;
 import static org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Tuning.telemetryM;
@@ -20,7 +20,6 @@ import com.pedropathing.telemetry.SelectableOpMode;
 import com.pedropathing.util.*;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
 import java.util.ArrayList;
 import java.util.List;
 

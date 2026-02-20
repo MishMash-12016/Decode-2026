@@ -1,23 +1,18 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base;
 
+import Ori.Coval.Logging.AutoLogOutput;
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
-
+import edu.wpi.first.units.measure.Voltage;
+import java.util.ArrayList;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleCrServo;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMMotorOrCrServo;
-import org.firstinspires.ftc.teamcode.MMRobot;
-
-import java.util.ArrayList;
-
-import Ori.Coval.Logging.AutoLogOutput;
-import edu.wpi.first.units.measure.Voltage;
-
 
 public class MotorOrCrServoSubsystem extends MMSubsystem {
     // List of motors or crServos driven by this subsystem

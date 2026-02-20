@@ -7,10 +7,12 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableDistance(double magnitude, double baseUnitMagnitude, DistanceUnit unit) implements Distance {
+public record ImmutableDistance(double magnitude, double baseUnitMagnitude, DistanceUnit unit)
+    implements Distance {
   @Override
   public Distance copy() {
     return this;

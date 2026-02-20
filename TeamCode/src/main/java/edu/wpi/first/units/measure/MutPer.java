@@ -7,13 +7,15 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
 public final class MutPer<Dividend extends Unit, Divisor extends Unit>
-  extends MutableMeasureBase<PerUnit<Dividend, Divisor>, Per<Dividend, Divisor>, MutPer<Dividend, Divisor>>
-  implements Per<Dividend, Divisor> {
+    extends MutableMeasureBase<
+        PerUnit<Dividend, Divisor>, Per<Dividend, Divisor>, MutPer<Dividend, Divisor>>
+    implements Per<Dividend, Divisor> {
   public MutPer(double magnitude, double baseUnitMagnitude, PerUnit<Dividend, Divisor> unit) {
     super(magnitude, baseUnitMagnitude, unit);
   }

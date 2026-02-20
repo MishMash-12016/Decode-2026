@@ -7,10 +7,12 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableTorque(double magnitude, double baseUnitMagnitude, TorqueUnit unit) implements Torque {
+public record ImmutableTorque(double magnitude, double baseUnitMagnitude, TorqueUnit unit)
+    implements Torque {
   @Override
   public Torque copy() {
     return this;

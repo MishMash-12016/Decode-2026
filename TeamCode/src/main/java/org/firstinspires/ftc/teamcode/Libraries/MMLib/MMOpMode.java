@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Libraries.MMLib;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit.AMPS;
 
+import Ori.Coval.Logging.AutoLogManager;
+import Ori.Coval.Logging.Logger.KoalaLog;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.ValueProvider;
 import com.acmerobotics.dashboard.config.VariableProvider;
@@ -19,19 +21,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceSide;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import Ori.Coval.Logging.AutoLogManager;
-import Ori.Coval.Logging.Logger.KoalaLog;
 
 /**
  * this class represents a wrapper for the default Teleop.

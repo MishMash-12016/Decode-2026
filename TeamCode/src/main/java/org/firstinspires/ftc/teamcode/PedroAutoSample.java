@@ -9,12 +9,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
-
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 
 @Autonomous

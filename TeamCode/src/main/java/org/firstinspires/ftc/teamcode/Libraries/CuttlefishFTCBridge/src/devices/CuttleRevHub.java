@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices;
 
 import android.graphics.Color;
-
 import com.qualcomm.hardware.lynx.LynxCommExceptionHandler;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.lynx.LynxNackException;
@@ -29,7 +28,6 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.hardware.usb.RobotArmingStateNotifier;
 import com.qualcomm.robotcore.util.Range;
-
 import java.util.concurrent.TimeUnit;
 
 /**

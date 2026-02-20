@@ -4,7 +4,6 @@
 
 package org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.FeedForwards;
 
-
 /** A helper class that computes feedforward outputs for a simple permanent-magnet DC motor. */
 public class SimpleMotorFeedforward {
   /** The static gain. */
@@ -74,14 +73,33 @@ public class SimpleMotorFeedforward {
     return calculate(velocity, 0);
   }
 
-  public double getKs() {return ks;}
-  public double getKv() {return kv;}
-  public double getKa() {return ka;}
-  public double getKg() {return 0;}
+  public double getKs() {
+    return ks;
+  }
 
-  public void setKs(double ks) {this.ks = ks;}
-  public void setKv(double kv) {this.kv = kv;}
-  public void setKa(double ka) {this.ka = ka;}
+  public double getKv() {
+    return kv;
+  }
+
+  public double getKa() {
+    return ka;
+  }
+
+  public double getKg() {
+    return 0;
+  }
+
+  public void setKs(double ks) {
+    this.ks = ks;
+  }
+
+  public void setKv(double kv) {
+    this.kv = kv;
+  }
+
+  public void setKa(double ka) {
+    this.ka = ka;
+  }
+
   public void setKg(double kg) {}
 }
-

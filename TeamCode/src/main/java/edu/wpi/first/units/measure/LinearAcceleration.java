@@ -7,16 +7,18 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
 public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
-  static  LinearAcceleration ofRelativeUnits(double magnitude, LinearAccelerationUnit unit) {
+  static LinearAcceleration ofRelativeUnits(double magnitude, LinearAccelerationUnit unit) {
     return new ImmutableLinearAcceleration(magnitude, unit.toBaseUnits(magnitude), unit);
   }
 
-  static  LinearAcceleration ofBaseUnits(double baseUnitMagnitude, LinearAccelerationUnit unit) {
-    return new ImmutableLinearAcceleration(unit.fromBaseUnits(baseUnitMagnitude), baseUnitMagnitude, unit);
+  static LinearAcceleration ofBaseUnits(double baseUnitMagnitude, LinearAccelerationUnit unit) {
+    return new ImmutableLinearAcceleration(
+        unit.fromBaseUnits(baseUnitMagnitude), baseUnitMagnitude, unit);
   }
 
   @Override
@@ -31,7 +33,9 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   LinearAccelerationUnit unit();
 
   @Override
-  default LinearAccelerationUnit baseUnit() { return (LinearAccelerationUnit) unit().getBaseUnit(); }
+  default LinearAccelerationUnit baseUnit() {
+    return (LinearAccelerationUnit) unit().getBaseUnit();
+  }
 
   @Override
   default double in(LinearAccelerationUnit unit) {
@@ -44,10 +48,11 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use unaryMinus() instead. This was renamed for consistency with other WPILib classes like Rotation2d
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use unaryMinus() instead. This was renamed for consistency with other WPILib
+   *     classes like Rotation2d
+   */
   @Override
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
@@ -76,17 +81,16 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Override
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   default LinearAcceleration divide(double divisor) {
     return (LinearAcceleration) div(divisor);
   }
-
 
   @Override
   default Mult<LinearAccelerationUnit, AccelerationUnit<?>> times(Acceleration<?> multiplier) {
@@ -99,10 +103,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -115,7 +119,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, AngleUnit> times(Angle multiplier) {
     return (Mult<LinearAccelerationUnit, AngleUnit>) Measure.super.times(multiplier);
@@ -127,10 +130,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -143,9 +146,9 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
-  default Mult<LinearAccelerationUnit, AngularAccelerationUnit> times(AngularAcceleration multiplier) {
+  default Mult<LinearAccelerationUnit, AngularAccelerationUnit> times(
+      AngularAcceleration multiplier) {
     return (Mult<LinearAccelerationUnit, AngularAccelerationUnit>) Measure.super.times(multiplier);
   }
 
@@ -155,10 +158,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -167,10 +170,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   @Override
-  default Per<LinearAccelerationUnit, AngularAccelerationUnit> per(AngularAccelerationUnit divisorUnit) {
+  default Per<LinearAccelerationUnit, AngularAccelerationUnit> per(
+      AngularAccelerationUnit divisorUnit) {
     return div(divisorUnit.one());
   }
-
 
   @Override
   default Mult<LinearAccelerationUnit, AngularMomentumUnit> times(AngularMomentum multiplier) {
@@ -183,10 +186,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -199,7 +202,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, AngularVelocityUnit> times(AngularVelocity multiplier) {
     return (Mult<LinearAccelerationUnit, AngularVelocityUnit>) Measure.super.times(multiplier);
@@ -211,10 +213,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -227,7 +229,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, CurrentUnit> times(Current multiplier) {
     return (Mult<LinearAccelerationUnit, CurrentUnit>) Measure.super.times(multiplier);
@@ -239,10 +240,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -257,14 +258,15 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
 
   @Override
   default LinearAcceleration div(Dimensionless divisor) {
-    return (LinearAcceleration) MetersPerSecondPerSecond.of(baseUnitMagnitude() / divisor.baseUnitMagnitude());
+    return (LinearAcceleration)
+        MetersPerSecondPerSecond.of(baseUnitMagnitude() / divisor.baseUnitMagnitude());
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Override
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
@@ -274,9 +276,9 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
 
   @Override
   default LinearAcceleration times(Dimensionless multiplier) {
-    return (LinearAcceleration) MetersPerSecondPerSecond.of(baseUnitMagnitude() * multiplier.baseUnitMagnitude());
+    return (LinearAcceleration)
+        MetersPerSecondPerSecond.of(baseUnitMagnitude() * multiplier.baseUnitMagnitude());
   }
-
 
   @Override
   default Mult<LinearAccelerationUnit, DistanceUnit> times(Distance multiplier) {
@@ -289,10 +291,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -305,7 +307,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, EnergyUnit> times(Energy multiplier) {
     return (Mult<LinearAccelerationUnit, EnergyUnit>) Measure.super.times(multiplier);
@@ -317,10 +318,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -333,7 +334,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, ForceUnit> times(Force multiplier) {
     return (Mult<LinearAccelerationUnit, ForceUnit>) Measure.super.times(multiplier);
@@ -345,10 +345,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -361,7 +361,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, FrequencyUnit> times(Frequency multiplier) {
     return (Mult<LinearAccelerationUnit, FrequencyUnit>) Measure.super.times(multiplier);
@@ -373,10 +372,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Override
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
@@ -389,9 +388,9 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
-  default Mult<LinearAccelerationUnit, LinearAccelerationUnit> times(LinearAcceleration multiplier) {
+  default Mult<LinearAccelerationUnit, LinearAccelerationUnit> times(
+      LinearAcceleration multiplier) {
     return (Mult<LinearAccelerationUnit, LinearAccelerationUnit>) Measure.super.times(multiplier);
   }
 
@@ -401,10 +400,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -417,7 +416,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, LinearMomentumUnit> times(LinearMomentum multiplier) {
     return (Mult<LinearAccelerationUnit, LinearMomentumUnit>) Measure.super.times(multiplier);
@@ -429,10 +427,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -445,7 +443,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, LinearVelocityUnit> times(LinearVelocity multiplier) {
     return (Mult<LinearAccelerationUnit, LinearVelocityUnit>) Measure.super.times(multiplier);
@@ -457,10 +454,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -473,7 +470,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, MassUnit> times(Mass multiplier) {
     return (Mult<LinearAccelerationUnit, MassUnit>) Measure.super.times(multiplier);
@@ -485,10 +481,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -501,7 +497,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, MomentOfInertiaUnit> times(MomentOfInertia multiplier) {
     return (Mult<LinearAccelerationUnit, MomentOfInertiaUnit>) Measure.super.times(multiplier);
@@ -513,10 +508,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -529,7 +524,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, MultUnit<?, ?>> times(Mult<?, ?> multiplier) {
     return (Mult<LinearAccelerationUnit, MultUnit<?, ?>>) Measure.super.times(multiplier);
@@ -541,10 +535,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -557,7 +551,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.ofNative(1));
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, PerUnit<?, ?>> times(Per<?, ?> multiplier) {
     return (Mult<LinearAccelerationUnit, PerUnit<?, ?>>) Measure.super.times(multiplier);
@@ -569,10 +562,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -585,7 +578,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.ofNative(1));
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, PowerUnit> times(Power multiplier) {
     return (Mult<LinearAccelerationUnit, PowerUnit>) Measure.super.times(multiplier);
@@ -597,10 +589,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -613,7 +605,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, ResistanceUnit> times(Resistance multiplier) {
     return (Mult<LinearAccelerationUnit, ResistanceUnit>) Measure.super.times(multiplier);
@@ -625,10 +616,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -641,7 +632,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, TemperatureUnit> times(Temperature multiplier) {
     return (Mult<LinearAccelerationUnit, TemperatureUnit>) Measure.super.times(multiplier);
@@ -653,10 +643,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -669,7 +659,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default LinearVelocity times(Time multiplier) {
     return MetersPerSecond.of(baseUnitMagnitude() * multiplier.baseUnitMagnitude());
@@ -677,14 +666,15 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
 
   @Override
   default Velocity<LinearAccelerationUnit> div(Time divisor) {
-    return VelocityUnit.combine(unit(), divisor.unit()).ofBaseUnits(baseUnitMagnitude() / divisor.baseUnitMagnitude());
+    return VelocityUnit.combine(unit(), divisor.unit())
+        .ofBaseUnits(baseUnitMagnitude() / divisor.baseUnitMagnitude());
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -697,7 +687,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, TorqueUnit> times(Torque multiplier) {
     return (Mult<LinearAccelerationUnit, TorqueUnit>) Measure.super.times(multiplier);
@@ -709,10 +698,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -725,7 +714,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, VelocityUnit<?>> times(Velocity<?> multiplier) {
     return (Mult<LinearAccelerationUnit, VelocityUnit<?>>) Measure.super.times(multiplier);
@@ -737,10 +725,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -753,7 +741,6 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
     return div(divisorUnit.one());
   }
 
-
   @Override
   default Mult<LinearAccelerationUnit, VoltageUnit> times(Voltage multiplier) {
     return (Mult<LinearAccelerationUnit, VoltageUnit>) Measure.super.times(multiplier);
@@ -765,10 +752,10 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   }
 
   /**
-  * {@inheritDoc}
-  *
-  * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
-  */
+   * {@inheritDoc}
+   *
+   * @deprecated use div instead. This was renamed for consistency with other languages like Kotlin
+   */
   @Deprecated(since = "2025", forRemoval = true)
   @SuppressWarnings({"deprecation", "removal"})
   @Override
@@ -780,5 +767,4 @@ public interface LinearAcceleration extends Measure<LinearAccelerationUnit> {
   default Per<LinearAccelerationUnit, VoltageUnit> per(VoltageUnit divisorUnit) {
     return div(divisorUnit.one());
   }
-
 }

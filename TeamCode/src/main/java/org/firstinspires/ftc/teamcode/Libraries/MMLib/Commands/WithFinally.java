@@ -9,7 +9,7 @@ public class WithFinally extends CommandBase {
   private final Command commandToRun;
   private final Runnable onEnd;
 
-  public WithFinally(Command commandToRun, Runnable onEnd){
+  public WithFinally(Command commandToRun, Runnable onEnd) {
     this.commandToRun = commandToRun;
     this.onEnd = onEnd;
     addRequirements(commandToRun.getRequirements().toArray(new Subsystem[0]));

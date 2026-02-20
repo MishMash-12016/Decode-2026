@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils;
 
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
-
 import java.util.ArrayList;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
 
 public class MotorInterlacer {
     public ArrayList<CuttleMotor[]> groups = new ArrayList<>();

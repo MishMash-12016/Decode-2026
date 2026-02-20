@@ -7,10 +7,12 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
-public record ImmutableEnergy(double magnitude, double baseUnitMagnitude, EnergyUnit unit) implements Energy {
+public record ImmutableEnergy(double magnitude, double baseUnitMagnitude, EnergyUnit unit)
+    implements Energy {
   @Override
   public Energy copy() {
     return this;

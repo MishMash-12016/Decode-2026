@@ -7,13 +7,14 @@
 package edu.wpi.first.units.measure;
 
 import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import edu.wpi.first.units.mutable.MutableMeasureBase;
 
 @SuppressWarnings({"unchecked", "cast", "checkstyle", "PMD"})
 public final class MutDimensionless
-  extends MutableMeasureBase<DimensionlessUnit, Dimensionless, MutDimensionless>
-  implements Dimensionless {
+    extends MutableMeasureBase<DimensionlessUnit, Dimensionless, MutDimensionless>
+    implements Dimensionless {
   public MutDimensionless(double magnitude, double baseUnitMagnitude, DimensionlessUnit unit) {
     super(magnitude, baseUnitMagnitude, unit);
   }
