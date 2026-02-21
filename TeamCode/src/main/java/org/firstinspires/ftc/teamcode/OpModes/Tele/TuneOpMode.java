@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -17,6 +20,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
@@ -69,17 +73,17 @@ public class TuneOpMode extends MMOpMode {
   public void onPlay() {
     super.onPlay();
     ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(() -> pow).schedule();
-    ShooterHoodSubsystem.getInstance();
   }
 
   @Override
   public void onPlayLoop() {
     telemetry.update();
+    ShooterHoodSubsystem.getInstance().aimHood().schedule();
 
     //        telemetry.addData("pose", pose);
     //        KoalaLog.log("pose: ", pose, true);
 
-    ShooterHoodSubsystem.getInstance().setPosition(pose);
+//    ShooterHoodSubsystem.getInstance().setPosition(pose);
   }
 
   @Override
