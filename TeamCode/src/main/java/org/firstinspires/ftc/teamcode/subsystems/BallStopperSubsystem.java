@@ -6,6 +6,7 @@ import com.seattlesolvers.solverslib.command.Command;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Servo.ServoSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 @Config
@@ -19,14 +20,22 @@ public class BallStopperSubsystem extends ServoSubsystem {
 
   public static double POSITION_TOLERANCE = 0.1;
 
-  public static BallStopperSubsystemAutoLogged instance;
+  public static BallStopperSubsystem instance;
 
-  public static synchronized BallStopperSubsystemAutoLogged getInstance() {
+  public static synchronized BallStopperSubsystem getInstance() {
     if (instance == null) {
-      instance = new BallStopperSubsystemAutoLogged("BallStopperSubsystem");
+      if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
+              MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+              MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+        instance = new BallStopperSubsystemAutoLogged("BallStopperSubsystem" );
+
+      } else {
+        instance = new BallStopperSubsystem("BallStopperSubsystem" );
+      }
     }
     return instance;
   }
+
 
   public BallStopperSubsystem(String subsystemName) {
     super(subsystemName);
@@ -49,9 +58,9 @@ public class BallStopperSubsystem extends ServoSubsystem {
     return setPositionCommand(open);
   }
 
-  @Override
-  public void resetHub() {
-    super.resetHub();
-    instance = null;
-  }
+//  @Override
+//  public void resetHub() {
+//    super.resetHub();
+//    instance = null;
+//  }
 }

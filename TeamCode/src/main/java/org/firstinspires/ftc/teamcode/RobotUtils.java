@@ -10,11 +10,11 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 
 public class RobotUtils {
     private static final Translation2d targetPoseBlue
-            = new Translation2d(0,144);
+            = new Translation2d(5,139);
 
     ///144 = field length
     private static final Translation2d targetPoseRed
-            = new Translation2d(144,144);
+            = new Translation2d(139,139);
 
     public static Translation2d getTargetPose(){
         AllianceColor allianceColor = MMRobot.getInstance().currentOpMode.allianceColor;

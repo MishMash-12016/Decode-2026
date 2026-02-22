@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 @TeleOp
@@ -38,6 +39,7 @@ public class TestOpMode extends MMOpMode {
     MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
     new Trigger(() -> gamepad1.left_trigger > 0.1).whenActive(() -> slow = !slow);
     GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
+
         .toggleWhenActive(MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
     GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
         .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
@@ -56,10 +58,10 @@ public class TestOpMode extends MMOpMode {
         .whenPressed(ShooterSubsystem.getInstance().stopCommand());
     /// ↑
 
-    new Trigger(() -> gamepad1.left_trigger > 0.1)
-        .toggleWhenActive(ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot());
+/*    new Trigger(() -> gamepad1.left_trigger > 0.1)
+        .toggleWhenActive(ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot());*/
     new Trigger(() -> gamepad1.right_trigger > 0.1)
-            .toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
+            .toggleWhenActive(ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot());
 
     GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
         .whenPressed(IntakeCommandGroup.stopAll());
@@ -75,7 +77,7 @@ public class TestOpMode extends MMOpMode {
   public void onPlayLoop() {
     telemetry.update();
     MMDrivetrain.update();
-    //        ShooterHoodSubsystem.getInstance().aimHood().schedule();
+    ShooterHoodSubsystem.getInstance().aimHood().schedule();
 
     telemetry.addData("run: ", 1);
   }

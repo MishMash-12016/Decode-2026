@@ -78,12 +78,12 @@ public class TuneOpMode extends MMOpMode {
   @Override
   public void onPlayLoop() {
     telemetry.update();
-    ShooterHoodSubsystem.getInstance().aimHood().schedule();
+//    ShooterHoodSubsystem.getInstance().aimHood().schedule();
 
     //        telemetry.addData("pose", pose);
     //        KoalaLog.log("pose: ", pose, true);
 
-//    ShooterHoodSubsystem.getInstance().setPosition(pose);
+    ShooterHoodSubsystem.getInstance().setPosition(pose);
   }
 
   @Override

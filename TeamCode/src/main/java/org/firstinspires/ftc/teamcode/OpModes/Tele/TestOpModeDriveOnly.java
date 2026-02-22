@@ -10,6 +10,7 @@ import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
+
 import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
@@ -83,9 +84,16 @@ public class TestOpModeDriveOnly extends MMOpMode {
         //        telemetry.addData("pose", pose);
         //        KoalaLog.log("pose: ", pose, true);
 
-        KoalaLog.log("shooter/farInterpolation",closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()),true);
 
-    ShooterHoodSubsystem.getInstance().setPosition(pose);
+//        ShooterHoodSubsystem.getInstance().setPosition(closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
+        if (KoalaLog.log("hood/dis_>_110", RobotUtils.getDistanceToTarget() > 110, true))
+            ShooterHoodSubsystem.getInstance().setPositionCommand(() ->
+                            KoalaLog.log("hood/close_interpolation_in_func", closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()), true))
+                    .schedule();
+        else
+            ShooterHoodSubsystem.getInstance().setPositionCommand(() ->
+                            KoalaLog.log("hood/far_interpolation_in_func", closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()), true))
+                    .schedule();
     }
 
     @Override

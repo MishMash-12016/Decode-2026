@@ -21,28 +21,19 @@ import java.util.function.DoubleSupplier;
 @AutoLog
 public class ShooterHoodSubsystem extends ServoSubsystem {
 
-  public static double hoodMax = 1.0;
-  public static double hoodMin = 0.05;
-  ExterpolationMap closeExterpolationMap =
-      new ExterpolationMap().put(63.02, 0.155).put(89.4, 0.21).put(105.8, 0.18);
-/*  public double getCloseInterpolation(double exter){
-    if(closeExterpolationMap.exterpolate(exter) > 1)
-      return 1.0;
-    if(closeExterpolationMap.exterpolate(exter) < 0.05)
-      return 0.05;
-    return closeExterpolationMap.exterpolate(exter);
-  }*/
+  public double hoodMax = 1.0;
+  public double hoodMin = 0.1;
+  public ExterpolationMap closeExterpolationMap =
+      new ExterpolationMap().put(61.129, 0.27).put(70.529, 0.32).put(88.529, 0.315).put(98.629,0.3);
+  public double getCloseInterpolation(double exter){
+     return closeExterpolationMap.exterpolate(exter);
+  }
 
-  ExterpolationMap farExterpolationMap = new ExterpolationMap().put(134.38, 0.68);
-/*
+public ExterpolationMap farExterpolationMap =
+        new ExterpolationMap().put(131.8, 0.53).put(135.4, 0.55).put(128.7, 0.59).put(141.5, 0.52);
   public double getFarInterpolation(double exter){
-    if(farExterpolationMap.exterpolate(exter) > 1)
-      return 1.0;
-    if(farExterpolationMap.exterpolate(exter) < 0)
-      return 0.0;
     return farExterpolationMap.exterpolate(exter);
   }
-*/
 
 
   public static ShooterHoodSubsystem instance;
@@ -71,15 +62,6 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
     withServo(1, mmRobot.servoHub, Direction.FORWARD, 0);
   }
 
-  public Command aimHoodToShootClose() {
-    return setPositionCommand(
-        () -> closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
-  }
-
-  public Command aimHoodToShootFar() {
-    return setPositionCommand(
-        () -> farExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
-  }
 
 /*  public Command aimHood() {
     return setPositionCommand(
@@ -89,21 +71,22 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
                 : farExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
   }*/
 
+
   public Command aimHood() {
     return setPositionCommand(
         () ->
             RobotUtils.getDistanceToTarget() < 110
-                ? KoalaLog.log("shooter/closeInterpolation",closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()),true)
-                : KoalaLog.log("shooter/farInterpolation",farExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()),true));
+                ? KoalaLog.log("hood/closeInterpolation",getCloseInterpolation(RobotUtils.getDistanceToTarget()),true)
+                : KoalaLog.log("hood/farInterpolation",getFarInterpolation(RobotUtils.getDistanceToTarget()),true));
   }
 
 
   @Override
   public void setPosition(double position) {
-    if(position < 0.05)
-      position = 0.05;
-    if(position > 1.0)
-      position = 1.0;
+    if(position < hoodMin)
+      position = hoodMin;
+    if(position > hoodMax)
+      position = hoodMax;
     super.setPosition(position);
   }
 
