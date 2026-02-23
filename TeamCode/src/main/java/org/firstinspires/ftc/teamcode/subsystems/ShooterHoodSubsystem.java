@@ -95,9 +95,9 @@ public ExterpolationMap farExterpolationMap =
     return new RunCommand(() -> setPosition(position.getAsDouble()), this);
   }
 
-  @Override
-  public void resetHub() {
-    super.resetHub();
-    instance = null;
-  }
+//  @Override
+//  public void resetHub() {
+//    super.resetHub();
+//    instance = null;
+//  }
 }

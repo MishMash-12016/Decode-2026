@@ -16,17 +16,29 @@ public class Constants {
 
   public static FollowerConstants followerConstants =
       new FollowerConstants()
+          .mass(13)
+          .forwardZeroPowerAcceleration(-54.8)
+          .lateralZeroPowerAcceleration(-89.7)
+          .useSecondaryTranslationalPIDF(false)
+          .useSecondaryDrivePIDF(false)
+          .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(2,0.6,0,0))
+          .centripetalScaling(0.0007)
+          .translationalPIDFCoefficients(new PIDFCoefficients(0.087, 0, 0, 0))
+          .headingPIDFCoefficients(new PIDFCoefficients(0.585, 0, 0, 0))
+          .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0075, 0, 0.001, 0, 0));
+/*  public static FollowerConstants followerConstants =
+      new FollowerConstants()
           .mass(10)
-          .forwardZeroPowerAcceleration(-36)
-          .lateralZeroPowerAcceleration(-78.6)
+          .forwardZeroPowerAcceleration(-54.8)
+          .lateralZeroPowerAcceleration(-89.7)
           .useSecondaryTranslationalPIDF(false)
           .useSecondaryHeadingPIDF(false)
           .useSecondaryDrivePIDF(false)
           .centripetalScaling(0)
-          .translationalPIDFCoefficients(new PIDFCoefficients(0.1, 0, 0, 0))
-          .headingPIDFCoefficients(new PIDFCoefficients(0.9, 0, 0, 0))
+          .translationalPIDFCoefficients(new PIDFCoefficients(0.087, 0, 0, 0))
+          .headingPIDFCoefficients(new PIDFCoefficients(0.585, 0, 0, 0))
           .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.005, 0, 0, 0, 0));
-
+*/
   public static MecanumConstants driveConstants =
       new MecanumConstants()
           .leftFrontMotorName("fl")
@@ -42,8 +54,8 @@ public class Constants {
           //            .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
           //            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
           .useBrakeModeInTeleOp(true)
-          .xVelocity(68.76)
-          .yVelocity(54.08);
+          .xVelocity(74)
+          .yVelocity(58.2);
 
   //    public static PinpointConstants localizerConstants = new PinpointConstants()
   //            .forwardPodY(0 / 2.54)
@@ -67,7 +79,9 @@ public class Constants {
       /*.odometryStdDevs(0.001, 0.001, 0.001)
       .visionMeasurementStdDevs(0.0, 0.0, 0.0)*/ ;
 
-  public static PathConstraints pathConstraints = new PathConstraints(0.995, 500, 1.2, 0.1);
+  public static PathConstraints pathConstraints =
+          //tune this shit
+          new PathConstraints(0.995, 500, 1, 1);
 
   public static Follower createFollower(HardwareMap hardwareMap) {
     return new FollowerBuilder(followerConstants, hardwareMap)

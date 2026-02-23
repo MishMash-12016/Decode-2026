@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 public class TestOpMode extends MMOpMode {
   boolean slow = false;
   boolean Shoot = false;
-  Pose startPose = new Pose(8, 10, 0);
+  Pose startPose = new Pose(8, 6, 0);
 
   public TestOpMode() {
     super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
@@ -37,10 +37,11 @@ public class TestOpMode extends MMOpMode {
     /// DriveTrain
     MMDrivetrain.getInstance().setPose(startPose);
     MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
-    new Trigger(() -> gamepad1.left_trigger > 0.1).whenActive(() -> slow = !slow);
-    GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
 
-        .toggleWhenActive(MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
+
+    new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
+            MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
     GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
         .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
     /// ↑
@@ -58,8 +59,6 @@ public class TestOpMode extends MMOpMode {
         .whenPressed(ShooterSubsystem.getInstance().stopCommand());
     /// ↑
 
-/*    new Trigger(() -> gamepad1.left_trigger > 0.1)
-        .toggleWhenActive(ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot());*/
     new Trigger(() -> gamepad1.right_trigger > 0.1)
             .toggleWhenActive(ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot());
 
@@ -79,7 +78,7 @@ public class TestOpMode extends MMOpMode {
     MMDrivetrain.update();
     ShooterHoodSubsystem.getInstance().aimHood().schedule();
 
-    telemetry.addData("run: ", 1);
+    telemetry.addData("run: ", 2);
   }
 
   @Override
