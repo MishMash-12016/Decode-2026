@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import Ori.Coval.Logging.AutoLog;
-import Ori.Coval.Logging.Logger.KoalaLog;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -20,7 +18,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
@@ -63,7 +60,7 @@ public class TuneOpMode extends MMOpMode {
     new Trigger(() -> gamepad1.right_trigger > 0.1)
         .toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
     new Trigger(() -> gamepad1.left_trigger > 0.1)
-        .toggleWhenActive(ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot());
+        .toggleWhenActive(ShootCommandGroup.twoOneShoot(), ShootCommandGroup.stopShoot());
 
     GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
         .toggleWhenActive(IntakeCommandGroup.smartFeed(), IntakeCommandGroup.stopIntake());

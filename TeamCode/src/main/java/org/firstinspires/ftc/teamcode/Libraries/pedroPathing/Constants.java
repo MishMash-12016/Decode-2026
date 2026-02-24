@@ -25,7 +25,7 @@ public class Constants {
           .centripetalScaling(0.0007)
           .translationalPIDFCoefficients(new PIDFCoefficients(0.087, 0, 0, 0))
           .headingPIDFCoefficients(new PIDFCoefficients(0.585, 0, 0, 0))
-          .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0075, 0, 0.001, 0, 0));
+          .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0092, 0, 0.00165, 0, 0));
 /*  public static FollowerConstants followerConstants =
       new FollowerConstants()
           .mass(10)
@@ -55,7 +55,8 @@ public class Constants {
           //            .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
           .useBrakeModeInTeleOp(true)
           .xVelocity(74)
-          .yVelocity(58.2);
+          .yVelocity(58.2)
+          .maxPower(0.5);
 
   //    public static PinpointConstants localizerConstants = new PinpointConstants()
   //            .forwardPodY(0 / 2.54)
@@ -81,7 +82,7 @@ public class Constants {
 
   public static PathConstraints pathConstraints =
           //tune this shit
-          new PathConstraints(0.995, 500, 1, 1);
+          new PathConstraints(0.99, 100, 0.01, 5);
 
   public static Follower createFollower(HardwareMap hardwareMap) {
     return new FollowerBuilder(followerConstants, hardwareMap)

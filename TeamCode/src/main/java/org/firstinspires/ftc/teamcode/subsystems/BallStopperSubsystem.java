@@ -41,7 +41,7 @@ public class BallStopperSubsystem extends ServoSubsystem {
     super(subsystemName);
     MMRobot mmRobot = MMRobot.getInstance();
 
-    sensor = new CuttleDigital(MMRobot.getInstance().controlHub, 6);
+    sensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
 
     withServo(0, mmRobot.servoHub, Direction.FORWARD, 0);
   }

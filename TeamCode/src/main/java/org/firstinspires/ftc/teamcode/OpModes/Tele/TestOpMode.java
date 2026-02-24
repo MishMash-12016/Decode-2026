@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -24,6 +26,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 public class TestOpMode extends MMOpMode {
   boolean slow = false;
   boolean Shoot = false;
+  boolean aligned = false;
   Pose startPose = new Pose(8, 6, 0);
 
   public TestOpMode() {
@@ -37,9 +40,7 @@ public class TestOpMode extends MMOpMode {
     /// DriveTrain
     MMDrivetrain.getInstance().setPose(startPose);
     MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
-
     GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
-
     new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
             MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
     GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
@@ -47,8 +48,8 @@ public class TestOpMode extends MMOpMode {
     /// ↑
     //        WebcamSubsystem.getInstance();
 
-    GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-        .toggleWhenActive(IntakeCommandGroup.smartFeed(), IntakeCommandGroup.stopIntake());
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+            IntakeCommandGroup.smartFeed()).whenInactive(IntakeCommandGroup.stopIntake());
     GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
         .toggleWhenActive(IntakeCommandGroup.outIntake(), IntakeCommandGroup.stopIntake());
 
@@ -60,7 +61,7 @@ public class TestOpMode extends MMOpMode {
     /// ↑
 
     new Trigger(() -> gamepad1.right_trigger > 0.1)
-            .toggleWhenActive(ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot());
+            .toggleWhenActive(ShootCommandGroup.twoOneShoot(), ShootCommandGroup.stopShoot());
 
     GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
         .whenPressed(IntakeCommandGroup.stopAll());
@@ -78,6 +79,7 @@ public class TestOpMode extends MMOpMode {
     MMDrivetrain.update();
     ShooterHoodSubsystem.getInstance().aimHood().schedule();
 
+    KoalaLog.log("",0,true);
     telemetry.addData("run: ", 2);
   }
 

@@ -36,9 +36,10 @@ public class ShootCommandGroup {
     }
 
 
-    public static Command superDumbUpShoot() {
+    public static Command twoOneShoot() {
         return BallStopperSubsystem.getInstance().open()
-                .andThen(new SequentialCommandGroup(
+                .andThen(
+                        new SequentialCommandGroup(
                                 AccelSubsystem.getInstance().setPowerInstantCommand(1),
                                 dumbUpShoot()
                         )

@@ -66,7 +66,7 @@ public class TestOpModeDriveOnly extends MMOpMode {
         new Trigger(() -> gamepad1.right_trigger > 0.1)
                 .toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
         new Trigger(() -> gamepad1.left_trigger > 0.1)
-                .toggleWhenActive(ShootCommandGroup.superDumbUpShoot(), ShootCommandGroup.stopShoot());
+                .toggleWhenActive(ShootCommandGroup.twoOneShoot(), ShootCommandGroup.stopShoot());
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
                 .toggleWhenActive(IntakeCommandGroup.smartFeed(), IntakeCommandGroup.stopIntake());
