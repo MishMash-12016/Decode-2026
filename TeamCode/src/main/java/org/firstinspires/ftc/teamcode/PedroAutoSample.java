@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 
-@Autonomous
+//@Autonomous
 public class PedroAutoSample extends MMOpMode {
     private Follower follower;
 //    TelemetryData telemetryData = new TelemetryData(telemetry);

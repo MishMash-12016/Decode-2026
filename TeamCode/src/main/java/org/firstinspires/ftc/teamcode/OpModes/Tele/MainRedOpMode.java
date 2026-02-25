@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
@@ -19,33 +21,29 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 @TeleOp
+@Config
 @AutoLog
-public class MainOpMode extends MMOpMode {
+public class MainRedOpMode extends MMOpMode {
     boolean slow = false;
-    boolean Shoot = false;
-    Pose startPose = new Pose(8, 10, 0);
-
-    public MainOpMode() {
+    public MainRedOpMode() {
         super(OpModeType.Competition.TELEOP, AllianceColor.RED);
     }
 
     @Override
     public void onInit() {
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
-        GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
-        /// DriveTrain
-        MMDrivetrain.getInstance().setPose(startPose);
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
-        new Trigger(() -> gamepad1.left_trigger > 0.1).whenActive(() -> slow = !slow);
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
 
-                .toggleWhenActive(MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
+        /// DriveTrain
+        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
+        new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
+                MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
         GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
                 .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
-        /// ↑
+        ///     ↑
 
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-                .toggleWhenActive(IntakeCommandGroup.smartFeed(), IntakeCommandGroup.stopIntake());
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                IntakeCommandGroup.smartFeed()).whenInactive(IntakeCommandGroup.stopIntake());
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .toggleWhenActive(IntakeCommandGroup.outIntake(), IntakeCommandGroup.stopIntake());
 
@@ -61,7 +59,25 @@ public class MainOpMode extends MMOpMode {
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
                 .whenPressed(IntakeCommandGroup.stopAll());
+
+
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(
+                ()->MMDrivetrain.getInstance().setPose(new Pose(9, 10, 0))
+        );
+
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                ()->ShooterSubsystem.farSpeed += 2
+        );
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                ()->ShooterSubsystem.farSpeed -= 2
+        );
     }
+
+    @Override
+    public void onInitLoop() {}
+
+    @Override
+    public void onPlay() {}
 
     @Override
     public void onPlayLoop() {
@@ -69,9 +85,7 @@ public class MainOpMode extends MMOpMode {
         MMDrivetrain.update();
         ShooterHoodSubsystem.getInstance().aimHood().schedule();
 
-        if(MMDrivetrain.getInstance().headingPid.getError() < 3
-                && ShooterSubsystem.getInstance().getSetPoint() - ShooterSubsystem.getInstance().getVelocity() < 2)
-            gamepad1.rumble(100);
+        telemetry.addData("FarSpeed: ", ShooterSubsystem.farSpeed);
 
     }
 

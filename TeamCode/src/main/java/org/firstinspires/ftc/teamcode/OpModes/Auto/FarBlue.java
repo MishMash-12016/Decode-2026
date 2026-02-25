@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 import Ori.Coval.Logging.AutoLog;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
@@ -28,17 +29,21 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 public class FarBlue extends MMOpMode {
 
     private PathChain
-            Path1,
-            Path2,
-            Path3,
-            Path4;
+            FRST_SHOOT,
+            INTAKE_05,
+            INTAKE_1,
+            INTAKE_1_TO_SHOOT,
+            INTAKE_15,
+            INTAKE_15_TO_INTAKE_2,
+            INTAKE_2_TO_SHOOT,
+            LEAVE;
 
     private final Pose startPose = new Pose(55, 8, Math.toRadians(270));
 
     Follower follower;
 
     public void buildPaths() {
-        Path1 = follower.pathBuilder().addPath(
+        FRST_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(55.000, 8.000),
 
@@ -47,7 +52,7 @@ public class FarBlue extends MMOpMode {
                 ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(290))
                 .build();
 
-        Path2 = follower.pathBuilder().addPath(
+        INTAKE_05 = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(55.000, 18.000),
 
@@ -56,7 +61,7 @@ public class FarBlue extends MMOpMode {
                 ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(180))
                 .build();
 
-        Path3 = follower.pathBuilder().addPath(
+        INTAKE_1 = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(50.000, 35.000),
 
@@ -65,13 +70,53 @@ public class FarBlue extends MMOpMode {
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
-        Path4 = follower.pathBuilder().addPath(
+        INTAKE_1_TO_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(12.00, 36.00),
 
                                 new Pose(55.000, 18.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(290)).setBrakingStart(1.5)
+                .build();
+
+        INTAKE_15 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(55.000, 18.000),
+
+                                new Pose(9.000, 30.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(235))
+
+                .build();
+
+        INTAKE_15_TO_INTAKE_2 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(9.000, 30.000),
+
+                                new Pose(5.000, 7.000)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(235))
+
+                .build();
+
+        INTAKE_2_TO_SHOOT = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(5.000, 7.000),
+
+                                new Pose(55.000, 18.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(292))
+
+                .build();
+
+        LEAVE = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(55.000, 18.000),
+
+                                new Pose(45.000, 20.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(230))
+
                 .build();
     }
 
@@ -102,28 +147,47 @@ public class FarBlue extends MMOpMode {
                         ShooterHoodSubsystem.getInstance().aimHood(),
                         ///                                   ↑
                         new SequentialCommandGroup(
-                                new FollowPathCommand(follower, Path1)
+                                new FollowPathCommand(follower, FRST_SHOOT)
                                         .andThen(new WaitCommand(2000))
                                         .withTimeout(5000)
                                         .andThen(ShootCommandGroup.twoOneShoot())
                                         .andThen(new WaitCommand(1000)),
 
-                                new FollowPathCommand(follower, Path2)
+                                new FollowPathCommand(follower, INTAKE_05)
                                         .andThen(new WaitCommand(1000))
                                         .withTimeout(4000),
 
-                                new FollowPathCommand(follower, Path3)
+                                new FollowPathCommand(follower, INTAKE_1)
                                         .alongWith(IntakeCommandGroup.smartFeed())
                                         .andThen(new WaitCommand(1000))
                                         .withTimeout(3000)
                                         .andThen(IntakeCommandGroup.stopIntake()),
 
-                                new FollowPathCommand(follower, Path4)
+                                new FollowPathCommand(follower, INTAKE_1_TO_SHOOT)
                                         .andThen(new WaitCommand(1000))
                                         .withTimeout(4000)
                                         .andThen(ShootCommandGroup.twoOneShoot())
                                         .andThen(new WaitCommand(2000))
-                                        .withTimeout(8000)
+                                        .withTimeout(8000),
+
+                                new FollowPathCommand(follower, INTAKE_15)
+                                        .alongWith(IntakeCommandGroup.smartFeed())
+                                        .andThen(new WaitCommand(1000))
+                                        .withTimeout(4000),
+
+                                new FollowPathCommand(follower, INTAKE_15_TO_INTAKE_2)
+                                        .andThen(new WaitCommand(1000))
+                                        .withTimeout(2000),
+
+                                new FollowPathCommand(follower, INTAKE_2_TO_SHOOT)
+                                        .alongWith(IntakeCommandGroup.stopIntake())
+                                        .andThen(new WaitCommand(1500))
+                                        .withTimeout(4000)
+                                        .andThen(ShootCommandGroup.twoOneShoot())
+                                        .andThen(new WaitCommand(2000))
+                                        .withTimeout(7000),
+
+                                new FollowPathCommand(follower, LEAVE)
                         )
                 ).andThen(IntakeCommandGroup.stopAll());
         autonomousSequence.schedule();
@@ -133,7 +197,6 @@ public class FarBlue extends MMOpMode {
     public void onPlayLoop() {
         MMDrivetrain.update();
         telemetry.update();
-        telemetry.addData("Shooter: ", ShooterSubsystem.getInstance().getVelocity());
     }
 
     @Override

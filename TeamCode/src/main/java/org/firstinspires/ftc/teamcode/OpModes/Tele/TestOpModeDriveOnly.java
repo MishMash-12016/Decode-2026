@@ -25,9 +25,9 @@ import org.firstinspires.ftc.teamcode.RobotUtils;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-@TeleOp
-@AutoLog
-@Config
+//@TeleOp
+//@AutoLog
+//@Config
 public class TestOpModeDriveOnly extends MMOpMode {
 
     public TestOpModeDriveOnly() {

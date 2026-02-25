@@ -70,7 +70,7 @@ public class CloseBlue extends MMOpMode {
                         ///       ↓
                                 new Pose(14.000, 55.000)
                         )
-                ).setConstantHeadingInterpolation(Math.toRadians(180))
+                ).setConstantHeadingInterpolation(Math.toRadians(180)).setBrakingStart(1.4)
                 .build();
 
         INTAKE_1_TO_SHOOT = follower.pathBuilder().addPath(

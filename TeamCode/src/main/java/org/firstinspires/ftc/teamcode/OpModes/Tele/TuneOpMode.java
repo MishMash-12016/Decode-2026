@@ -34,11 +34,11 @@ public class TuneOpMode extends MMOpMode {
 
   CuttleMotor p0, p1, p2, p3;
   CuttleMotor ep0, ep1, ep2, ep3;
-  Pose startPose = new Pose(8, 10, 0);
+  Pose startPose = new Pose(9, 10, 0);
 
-  //    CRServo left;
-  //    MotorEx a;
-  public static double pose;
+//      CRServo left;
+//      MotorEx a;
+  public static double pose = 0.1;
   public static double pow;
   boolean slow = false;
 
@@ -48,39 +48,26 @@ public class TuneOpMode extends MMOpMode {
     GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
     GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
 
-    /// DriveTrain
-    MMDrivetrain.getInstance().setPose(startPose);
-    MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
-    new Trigger(() -> gamepad1.left_trigger > 0.1).whenActive(() -> slow = !slow);
-    GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP)
-        .toggleWhenActive(MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
-    GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
-        .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
+    ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
 
-    new Trigger(() -> gamepad1.right_trigger > 0.1)
-        .toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
-    new Trigger(() -> gamepad1.left_trigger > 0.1)
-        .toggleWhenActive(ShootCommandGroup.twoOneShoot(), ShootCommandGroup.stopShoot());
-
-    GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
-        .toggleWhenActive(IntakeCommandGroup.smartFeed(), IntakeCommandGroup.stopIntake());
   }
 
   @Override
   public void onPlay() {
     super.onPlay();
-    ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(() -> pow).schedule();
   }
 
   @Override
   public void onPlayLoop() {
     telemetry.update();
-//    ShooterHoodSubsystem.getInstance().aimHood().schedule();
 
     //        telemetry.addData("pose", pose);
     //        KoalaLog.log("pose: ", pose, true);
 
-    ShooterHoodSubsystem.getInstance().setPosition(pose);
+
+            telemetry.addData(
+                    "The hood is now in " + pose + " it should be aligned straight with the panels.", null);
+
   }
 
   @Override

@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 
-@TeleOp
-@Config
+//@TeleOp
+//@Config
 public class LimelightOpMode extends MMOpMode {
     public LimelightOpMode() {
         super(OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION, AllianceColor.BLUE);

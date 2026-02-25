@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 
-@TeleOp
+//@TeleOp
 public class webcamOpMode extends MMOpMode {
 
   public webcamOpMode() {

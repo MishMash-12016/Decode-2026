@@ -35,7 +35,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     public static double VelTol = 5;
     public static double RESOLUTION = 28;
 
-
+    public static double farSpeed = 58;
     public static ShooterSubsystem instance;
 
     public static synchronized ShooterSubsystem getInstance() {
@@ -124,7 +124,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         }*/
     public Command speedByLocation() {
         return getToAndHoldSetPointCommand(
-                () -> RobotUtils.getDistanceToTarget() < 110 ? 45 : 58);
+                () -> RobotUtils.getDistanceToTarget() < 110 ? 45 : farSpeed);
     }
 
     @Override

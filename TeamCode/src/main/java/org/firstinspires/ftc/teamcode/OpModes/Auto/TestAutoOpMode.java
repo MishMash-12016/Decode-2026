@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 
-@AutoLog
+//@AutoLog
 // @Autonomous
 @Config
 public class TestAutoOpMode extends MMOpMode {
