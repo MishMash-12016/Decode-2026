@@ -201,10 +201,9 @@ public class ServoSubsystem extends MMSubsystem {
         setDefaultCommand(command);
         return this;
     }
-
     @Override
     public void resetHub(){
-
+        /*
         ArrayList<CuttleServo> tempList = new ArrayList<>();
         for(CuttleServo servo : servoList){
             if(servo.getFtcServo()){
@@ -228,6 +227,6 @@ public class ServoSubsystem extends MMSubsystem {
             }
         }
 
-        servoList = tempList;
+        servoList = tempList;*/
     }
 }

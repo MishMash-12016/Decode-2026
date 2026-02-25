@@ -129,7 +129,6 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
 
     @Override
     public void resetHub() {
-        super.resetHub();
         instance = null;
     }
 }

@@ -39,4 +39,9 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
         withMotor(mmRobot.controlHub, 2,Direction.FORWARD);
 
     }
+
+    @Override
+    public void resetHub() {
+        instance = null;
+    }
 }

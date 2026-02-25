@@ -246,7 +246,7 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
 
   @Override
   public void resetHub() {
-    super.resetHub();
+/*    super.resetHub();
     double pose = getPose();
     if (encoder.hub.getHubName().equals(MMRobot.getInstance().controlHub.getHubName())) {
       encoder =
@@ -264,6 +264,6 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
               encoder.direction == 1 ? Direction.FORWARD : Direction.REVERSE);
     }
     setPose(pose);
-    setSetpoint(pose);
+    setSetpoint(pose);*/
   }
 }

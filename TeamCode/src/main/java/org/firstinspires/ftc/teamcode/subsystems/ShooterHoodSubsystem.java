@@ -59,7 +59,8 @@ public ExterpolationMap farExterpolationMap =
 
     MMRobot mmRobot = MMRobot.getInstance();
 
-    withServo(1, mmRobot.servoHub, Direction.FORWARD, 0);
+//    withServo(1, mmRobot.servoHub, Direction.FORWARD, 0);
+    withServo("shooterHood",Direction.FORWARD,0);
   }
 
 
@@ -95,9 +96,8 @@ public ExterpolationMap farExterpolationMap =
     return new RunCommand(() -> setPosition(position.getAsDouble()), this);
   }
 
-//  @Override
-//  public void resetHub() {
-//    super.resetHub();
-//    instance = null;
-//  }
+  @Override
+  public void resetHub() {
+    instance = null;
+  }
 }

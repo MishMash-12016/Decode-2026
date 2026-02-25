@@ -30,7 +30,7 @@ public class TestOpMode extends MMOpMode {
   Pose startPose = new Pose(8, 6, 0);
 
   public TestOpMode() {
-    super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
+    super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
   }
 
   @Override

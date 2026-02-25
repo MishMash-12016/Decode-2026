@@ -81,7 +81,7 @@ public class Constants {
 
   public static PathConstraints pathConstraints =
           //tune this shit
-          new PathConstraints(0.99, 100, 0.01, 5);
+          new PathConstraints(0.99, 100, 0.7, 1.2);
 
   public static Follower createFollower(HardwareMap hardwareMap) {
     return new FollowerBuilder(followerConstants, hardwareMap)

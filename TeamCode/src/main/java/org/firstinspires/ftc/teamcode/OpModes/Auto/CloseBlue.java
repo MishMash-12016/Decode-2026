@@ -32,13 +32,15 @@ public class CloseBlue extends MMOpMode {
             INTAKE_05,
             INTAKE_1,
             INTAKE_1_TO_SHOOT,
-            SHOOT_TO_OPEN,
-            OPEN_TO_SHOOT,
+            SHOOT_TO_OPEN_05,
+            OPEN_05_TO_OPEN_1,
+            OPEN_1_TO_OPEN_15,
+            OPEN_15_TO_SHOOT,
             INTAKE_25,
             INTAKE_3,
             INTAKE_3_TO_SHOOT,
             LEAVE;
-    private final Pose startPos = new Pose(21.000, 122.000, Math.toRadians(324));
+    private final Pose startPos = new Pose(21.000, 123.000, Math.toRadians(324));
     private final Pose shoot = new Pose(62.000, 76.000, Math.toRadians(310));
     private final Pose endPos = null;
     Follower follower;
@@ -57,48 +59,66 @@ public class CloseBlue extends MMOpMode {
                         new BezierLine(
                                 new Pose(62.000, 76.000),
                         ///       ↓
-                                new Pose(46.000, 60.000)
+                                new Pose(55.000, 57.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(310), Math.toRadians(180))
+                ).setLinearHeadingInterpolation(Math.toRadians(310), Math.toRadians(180)).setBrakingStart(1.5)
                 .build();
 
         INTAKE_1 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(46.000, 60.000),
+                                new Pose(55.000, 57.000),
                         ///       ↓
-                                new Pose(10.000, 60.000)
+                                new Pose(14.000, 55.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
         INTAKE_1_TO_SHOOT = follower.pathBuilder().addPath(
                      new BezierLine(
-                             new Pose(10.000, 60.000),
+                             new Pose(14.000, 55.000),
                      ///       ↓
                              shoot
                      )
-                ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(310))
+                ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(309)).setBrakingStart(1.5)
                 .build();
 
-        SHOOT_TO_OPEN = follower.pathBuilder().addPath(
+        SHOOT_TO_OPEN_05 = follower.pathBuilder().addPath(
                         new BezierLine(
                                 shoot,
                         ///       ↓
-                                new Pose(10.000, 60.000)
+                                new Pose(20.000, 55.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(310), Math.toRadians(140))
+                ).setLinearHeadingInterpolation(Math.toRadians(310), Math.toRadians(140)).setBrakingStart(1.5)
                 .build();
 
-        OPEN_TO_SHOOT = follower.pathBuilder().addPath(
+        OPEN_05_TO_OPEN_1 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(10.000, 60.000),
+                                new Pose(17.000, 54.000),
                         ///       ↓
-                                new Pose(62.000, 76.000)
+                                new Pose(14.000, 60.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(140), Math.toRadians(310))
+                ).setConstantHeadingInterpolation(Math.toRadians(140)).setBrakingStart(1.5)
                 .build();
 
-        INTAKE_25 = follower.pathBuilder().addPath(
+        OPEN_1_TO_OPEN_15 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(14.000, 60.000),
+                        ///       ↓
+                                new Pose(14.000, 56.000)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(140)).setBrakingStart(1.5)
+                .build();
+
+        OPEN_15_TO_SHOOT = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(14.000, 56.000),
+                        ///       ↓
+                                new Pose(68.000, 90.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(140), Math.toRadians(321))
+                .build();
+
+/*        INTAKE_25 = follower.pathBuilder().addPath(
                                 new BezierLine(
                                         shoot,
                                 ///       ↓
@@ -132,7 +152,7 @@ public class CloseBlue extends MMOpMode {
                                 new Pose(25.000, 70.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(316), Math.toRadians(90))
-                .build();
+                .build();*/
 
     }
 
@@ -165,32 +185,50 @@ public class CloseBlue extends MMOpMode {
                 ///                                           ↑
                         new SequentialCommandGroup(
                                 new FollowPathCommand(follower, FRST_SHOOT)
-                                        .andThen(new WaitCommand(0))
+                                        .andThen(new WaitCommand(2000))
+                                        .withTimeout(4000)
                                         .andThen(ShootCommandGroup.twoOneShoot())
-                                        .andThen(new WaitCommand(0)),
+                                        .andThen(new WaitCommand(1000)),
 
                                 new FollowPathCommand(follower, INTAKE_05)
-                                        .andThen(IntakeCommandGroup.smartFeed()),
+                                        .andThen(new WaitCommand(1000))
+                                        .withTimeout(4000),
 
                                 new FollowPathCommand(follower, INTAKE_1)
+                                        .alongWith(IntakeCommandGroup.smartFeed())
+                                        .andThen(new WaitCommand(1000))
+                                        .withTimeout(2500)
                                         .andThen(IntakeCommandGroup.stopIntake()),
 
                                 new FollowPathCommand(follower, INTAKE_1_TO_SHOOT)
-                                        .andThen(new WaitCommand(0))
+                                        .andThen(new WaitCommand(1000))
+                                        .withTimeout(4000)
                                         .andThen(ShootCommandGroup.twoOneShoot())
-                                        .andThen(new WaitCommand(0)),
+                                        .andThen(new WaitCommand(2000))
+                                        .withTimeout(8000),
 
-                                new FollowPathCommand(follower, SHOOT_TO_OPEN)
+                                new FollowPathCommand(follower, SHOOT_TO_OPEN_05)
                                         .alongWith(IntakeCommandGroup.smartFeed())
-                                        .andThen(new WaitCommand(0))
+                                        .andThen(new WaitCommand(2000))
+                                        .withTimeout(2500),
+
+                                new FollowPathCommand(follower, OPEN_05_TO_OPEN_1)
+                                        .andThen(new WaitCommand(1000))
+                                        .withTimeout(2000),
+
+                                new FollowPathCommand(follower, OPEN_1_TO_OPEN_15)
+                                        .andThen(new WaitCommand(1000))
+                                        .withTimeout(2500)
                                         .andThen(IntakeCommandGroup.stopIntake()),
 
-                                new FollowPathCommand(follower, OPEN_TO_SHOOT)
-                                        .andThen(new WaitCommand(0))
+                                new FollowPathCommand(follower, OPEN_15_TO_SHOOT)
+                                        .andThen(new WaitCommand(1000))
+                                        .withTimeout(4000)
                                         .andThen(ShootCommandGroup.twoOneShoot())
-                                        .andThen(new WaitCommand(0)),
+                                        .andThen(new WaitCommand(2000))
+                                        .withTimeout(8000)
 
-                                new FollowPathCommand(follower, INTAKE_25)
+/*                              new FollowPathCommand(follower, INTAKE_25)
                                         .alongWith(IntakeCommandGroup.smartFeed()),
 
                                 new FollowPathCommand(follower, INTAKE_3)
@@ -199,7 +237,7 @@ public class CloseBlue extends MMOpMode {
                                 new FollowPathCommand(follower, INTAKE_3_TO_SHOOT)
                                         .andThen(new WaitCommand(0))
                                         .andThen(ShootCommandGroup.twoOneShoot())
-                                        .andThen(new WaitCommand(0))
+                                        .andThen(new WaitCommand(0))*/
                         )
                 ).andThen(
                     IntakeCommandGroup.stopAll()

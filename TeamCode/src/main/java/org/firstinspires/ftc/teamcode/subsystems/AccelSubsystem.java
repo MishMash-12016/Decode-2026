@@ -34,4 +34,8 @@ public class AccelSubsystem extends MotorOrCrServoSubsystem {
 
     withMotor(mmRobot.controlHub, 3, Direction.FORWARD);
   }
+  @Override
+  public void resetHub() {
+    instance = null;
+  }
 }

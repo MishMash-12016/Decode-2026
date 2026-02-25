@@ -151,8 +151,8 @@ public class MotorOrCrServoSubsystem extends MMSubsystem {
 
     @Override
     public void resetHub(){
-        for(MMMotorOrCrServo motorOrCrServo : motorOrCrServoList){
+/*        for(MMMotorOrCrServo motorOrCrServo : motorOrCrServoList){
             motorOrCrServo.resetHub();
-        }
+        }*/
     }
 }

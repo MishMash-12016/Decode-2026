@@ -43,7 +43,9 @@ public class BallStopperSubsystem extends ServoSubsystem {
 
     sensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
 
-    withServo(0, mmRobot.servoHub, Direction.FORWARD, 0);
+//    withServo(0, mmRobot.servoHub, Direction.FORWARD, 0);
+    withServo("BallStopper",Direction.FORWARD,0);
+
   }
 
   public boolean getState() {
@@ -58,9 +60,8 @@ public class BallStopperSubsystem extends ServoSubsystem {
     return setPositionCommand(open);
   }
 
-//  @Override
-//  public void resetHub() {
-//    super.resetHub();
-//    instance = null;
-//  }
+  @Override
+  public void resetHub() {
+    instance = null;
+  }
 }
