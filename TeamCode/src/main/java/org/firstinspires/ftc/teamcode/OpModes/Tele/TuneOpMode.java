@@ -50,6 +50,8 @@ public class TuneOpMode extends MMOpMode {
 
     ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
 
+    ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(pow).schedule();
+
   }
 
   @Override

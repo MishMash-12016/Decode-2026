@@ -272,11 +272,28 @@ public class MMDrivetrain extends MMSubsystem {
                         false,
                         slowMode));
     }
+    public void enableBlueDriveDefaultCommand(BooleanSupplier slowMode) {
+        MMRobot mmRobot = MMRobot.getInstance();
+        setDefaultCommand(
+                driveCommand(
+                        () -> -mmRobot.gamepadEx1.getLeftY(),
+                        () -> mmRobot.gamepadEx1.getLeftX(),
+                        () -> -mmRobot.gamepadEx1.getRightX(),
+                        false,
+                        slowMode));
+    }
 
     public Command enableDriveAligned(BooleanSupplier slowMode) {
         MMRobot mmRobot = MMRobot.getInstance();
         return driveAligned(
-                () -> mmRobot.gamepadEx1.getLeftY(), () -> -mmRobot.gamepadEx1.getLeftX(), false, slowMode);
+                () -> mmRobot.gamepadEx1.getLeftY(),
+                () -> -mmRobot.gamepadEx1.getLeftX(), false, slowMode);
+    }
+    public Command enableBlueAligned(BooleanSupplier slowMode) {
+        MMRobot mmRobot = MMRobot.getInstance();
+        return driveAligned(
+                () -> -mmRobot.gamepadEx1.getLeftY(),
+                () -> mmRobot.gamepadEx1.getLeftX(), false, slowMode);
     }
 
     public void setPose(Pose pose) {

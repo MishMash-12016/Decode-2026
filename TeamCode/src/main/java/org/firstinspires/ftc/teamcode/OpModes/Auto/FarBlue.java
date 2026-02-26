@@ -47,14 +47,14 @@ public class FarBlue extends MMOpMode {
                         new BezierLine(
                                 new Pose(55.000, 8.000),
 
-                                new Pose(55.000, 18.000)
+                                new Pose(55.000, 13.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(290))
                 .build();
 
         INTAKE_05 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(55.000, 18.000),
+                                new Pose(55.000, 13.000),
 
                                 new Pose(50.000, 35.000)
                         )
@@ -74,52 +74,51 @@ public class FarBlue extends MMOpMode {
                         new BezierLine(
                                 new Pose(12.00, 36.00),
 
-                                new Pose(55.000, 18.000)
+                                new Pose(55.000, 13.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(290)).setBrakingStart(1.5)
+                ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(292)).setBrakingStart(1.5)
                 .build();
 
         INTAKE_15 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(55.000, 18.000),
+                                new Pose(55.000, 13.000),
 
-                                new Pose(9.000, 30.000)
+                                new Pose(8.000, 30.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(235))
+                ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(270))
 
                 .build();
 
         INTAKE_15_TO_INTAKE_2 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(9.000, 30.000),
+                                new Pose(8.000, 30.000),
 
-                                new Pose(5.000, 7.000)
+                                new Pose(8.000, 11.000)
                         )
-                ).setConstantHeadingInterpolation(Math.toRadians(235))
+                ).setConstantHeadingInterpolation(Math.toRadians(270)).setBrakingStart(1.8)
 
                 .build();
 
         INTAKE_2_TO_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(5.000, 7.000),
+                                new Pose(8.000, 11.000),
 
-                                new Pose(55.000, 18.000)
+                                new Pose(55.000, 13.00)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(292))
+                ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(292)).setBrakingStart(1.8)
 
                 .build();
 
         LEAVE = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(55.000, 18.000),
+                                new Pose(55.000, 13.000),
 
                                 new Pose(45.000, 20.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(230))
+                ).setLinearHeadingInterpolation(Math.toRadians(292), Math.toRadians(230))
 
                 .build();
     }
-
 
     public FarBlue() {
         super(OpModeType.Competition.AUTO, AllianceColor.BLUE);
@@ -139,8 +138,7 @@ public class FarBlue extends MMOpMode {
         follower = MMDrivetrain.getInstance().getFollower();
         buildPaths();
 
-        ///PATH
-        Command autonomousSequence =
+                ///PATH
                 ///things that will happened along the auto   ↓
                 new ParallelCommandGroup(
                         ShooterSubsystem.getInstance().speedByLocation(),
@@ -189,8 +187,7 @@ public class FarBlue extends MMOpMode {
 
                                 new FollowPathCommand(follower, LEAVE)
                         )
-                ).andThen(IntakeCommandGroup.stopAll());
-        autonomousSequence.schedule();
+                ).andThen(IntakeCommandGroup.stopAll()).schedule();
     }
 
     @Override
@@ -201,7 +198,6 @@ public class FarBlue extends MMOpMode {
 
     @Override
     public void onEnd() {
-        super.onEnd();
         CommandScheduler.getInstance().reset();
     }
 }

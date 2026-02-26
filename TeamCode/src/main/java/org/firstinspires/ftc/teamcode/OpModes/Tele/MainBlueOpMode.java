@@ -34,11 +34,11 @@ public class MainBlueOpMode extends MMOpMode {
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
 
         /// DriveTrain
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
+        MMDrivetrain.getInstance().enableBlueDriveDefaultCommand(() -> slow);
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
         new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
-                MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
+                MMDrivetrain.getInstance().enableBlueAligned(() -> slow));
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
                 .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
         ///     ↑
 
@@ -61,7 +61,10 @@ public class MainBlueOpMode extends MMOpMode {
                 .whenPressed(IntakeCommandGroup.stopAll());
 
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                ()->MMDrivetrain.getInstance().setPose(new Pose(135, 10, 180))
+                ()-> MMDrivetrain.getInstance().setPose(new Pose(135, 7,Math.toRadians(180)))
+        );
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                ()->MMDrivetrain.getInstance().setPose(new Pose(72, 8,Math.toRadians(90)))
         );
 
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(

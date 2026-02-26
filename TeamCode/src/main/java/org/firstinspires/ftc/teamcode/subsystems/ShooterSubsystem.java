@@ -36,6 +36,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     public static double RESOLUTION = 28;
 
     public static double farSpeed = 58;
+
     public static ShooterSubsystem instance;
 
     public static synchronized ShooterSubsystem getInstance() {

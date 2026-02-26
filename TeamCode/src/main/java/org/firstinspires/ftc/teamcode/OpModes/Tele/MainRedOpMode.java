@@ -38,7 +38,7 @@ public class MainRedOpMode extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
         new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
                 MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
                 .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
         ///     ↑
 
@@ -63,6 +63,10 @@ public class MainRedOpMode extends MMOpMode {
 
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 ()->MMDrivetrain.getInstance().setPose(new Pose(9, 10, 0))
+        );
+
+        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+                ()->MMDrivetrain.getInstance().setPose(new Pose(72, 8,Math.toRadians(90)))
         );
 
         MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(

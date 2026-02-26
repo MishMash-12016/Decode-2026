@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes.Auto;
 import Ori.Coval.Logging.AutoLog;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
@@ -27,118 +28,177 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 @Autonomous
 public class FarRed extends MMOpMode {
 
-  private PathChain
-          FRST_SHOOT,
-          INTAKE_05,
-          INTAKE_1,
-          INTAKE_1_TO_SHOOT;
+    private PathChain
+            FRST_SHOOT,
+            INTAKE_05,
+            INTAKE_1,
+            INTAKE_1_TO_SHOOT,
+            INTAKE_15,
+            INTAKE_15_TO_INTAKE_2,
+            INTAKE_2_TO_SHOOT,
+            LEAVE;
 
-  private final Pose startPose = new Pose(144 - 55, 8, Math.toRadians(180 - 270));
+    private final Pose startPose = new Pose(144 - 55, 8, Math.toRadians(180 - 270));
 
-  Follower follower;
+    Follower follower;
 
-  public void buildPaths() {
-    FRST_SHOOT = follower.pathBuilder().addPath(
-                    new BezierLine(
-                            new Pose(144 - 55.000, 8.000),
+    public void buildPaths() {
+        FRST_SHOOT = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(144 - 55.000, 8.000),
 
-                            new Pose(144 - 55.000, 18.000)
-                    )
-            ).setLinearHeadingInterpolation(Math.toRadians(180 - 270), Math.toRadians(180 - 290))
-            .build();
+                                new Pose(144 - 55.000, 13.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 270), Math.toRadians(180 - 290))
+                .build();
 
-    INTAKE_05 = follower.pathBuilder().addPath(
-                    new BezierLine(
-                            new Pose(144 - 55.000, 18.000),
+        INTAKE_05 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(144 - 55.000, 13.000),
 
-                            new Pose(144 - 50.000, 35.000)
-                    )
-            ).setLinearHeadingInterpolation(Math.toRadians(180 - 290), Math.toRadians(180 - 180))
-            .build();
+                                new Pose(144 - 50.000, 35.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 290), Math.toRadians(180 - 180))
+                .build();
 
-    INTAKE_1 = follower.pathBuilder().addPath(
-                    new BezierLine(
-                            new Pose(144 - 50.000, 35.000),
+        INTAKE_1 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(144 - 50.000, 35.000),
 
-                            new Pose(144 - 12.00, 36.00)
-                    )
-            ).setConstantHeadingInterpolation(Math.toRadians(180 - 180))
-            .build();
+                                new Pose(144 - 12.00, 36.00)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180 - 180))
+                .build();
 
-    INTAKE_1_TO_SHOOT = follower.pathBuilder().addPath(
-                    new BezierLine(
-                            new Pose(144 - 12.00, 36.00),
+        INTAKE_1_TO_SHOOT = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(144 - 12.00, 36.00),
 
-                            new Pose(144 - 55.000, 18.000)
-                    )
-            ).setLinearHeadingInterpolation(Math.toRadians(180 - 180), Math.toRadians(180 - 290)).setBrakingStart(1.5)
-            .build();
-  }
+                                new Pose(144 - 55.000, 13.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 180), Math.toRadians(180 - 292)).setBrakingStart(1.5)
+                .build();
+
+        INTAKE_15 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(144 - 55.000, 13.000),
+
+                                new Pose(144 - 8.000, 30.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 290), Math.toRadians(180 - 270))
+
+                .build();
+
+        INTAKE_15_TO_INTAKE_2 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(144 - 8.000, 30.000),
+
+                                new Pose(144 - 8.000, 11.000)
+                        )
+                ).setConstantHeadingInterpolation(Math.toRadians(180 - 270)).setBrakingStart(1.8)
+
+                .build();
+
+        INTAKE_2_TO_SHOOT = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(144 - 8.000, 11.000),
+
+                                new Pose(144 - 55.000, 13.00)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 270), Math.toRadians(180 - 292)).setBrakingStart(1.8)
+
+                .build();
+
+        LEAVE = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(144 - 55.000, 13.000),
+
+                                new Pose(144 - 45.000, 20.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 292), Math.toRadians(180 - 230))
+
+                .build();
+    }
 
 
-  public FarRed() {
-    super(OpModeType.Competition.AUTO, AllianceColor.BLUE);
-  }
+    public FarRed() {
+        super(OpModeType.Competition.AUTO, AllianceColor.RED);
+    }
 
-  @Override
-  public void onInit() {
+    @Override
+    public void onInit() {
 
-  }
+    }
 
-  @Override
-  public void onPlay() {
-    CommandScheduler.getInstance().reset();
-    MMDrivetrain.getInstance().reset();
-    MMDrivetrain.getInstance().getFollower().setStartingPose(startPose);
-    MMDrivetrain.getInstance().getFollower().setPose(startPose);
-    follower = MMDrivetrain.getInstance().getFollower();
-    buildPaths();
+    @Override
+    public void onPlay() {
+        CommandScheduler.getInstance().reset();
+        MMDrivetrain.getInstance().reset();
+        MMDrivetrain.getInstance().getFollower().setStartingPose(startPose);
+        MMDrivetrain.getInstance().getFollower().setPose(startPose);
+        follower = MMDrivetrain.getInstance().getFollower();
+        buildPaths();
 
-    ///PATH
-    Command autonomousSequence =
-            ///things that will happened along the auto   ↓
-            new ParallelCommandGroup(
-                    ShooterSubsystem.getInstance().speedByLocation(),
-                    ShooterHoodSubsystem.getInstance().aimHood(),
-                    ///                                   ↑
-                    new SequentialCommandGroup(
-                            new FollowPathCommand(follower, FRST_SHOOT)
-                                    .andThen(new WaitCommand(2000))
-                                    .withTimeout(5000)
-                                    .andThen(ShootCommandGroup.twoOneShoot())
-                                    .andThen(new WaitCommand(1000)),
+        ///PATH
+        ///things that will happened along the auto   ↓
+        new ParallelCommandGroup(
+                ShooterSubsystem.getInstance().speedByLocation(),
+                ShooterHoodSubsystem.getInstance().aimHood(),
+                ///                                   ↑
+                new SequentialCommandGroup(
+                        new FollowPathCommand(follower, FRST_SHOOT)
+                                .andThen(new WaitCommand(2000))
+                                .withTimeout(5000)
+                                .andThen(ShootCommandGroup.twoOneShoot())
+                                .andThen(new WaitCommand(1000)),
 
-                            new FollowPathCommand(follower, INTAKE_05)
-                                    .andThen(new WaitCommand(1000))
-                                    .withTimeout(4000),
+                        new FollowPathCommand(follower, INTAKE_05)
+                                .andThen(new WaitCommand(1000))
+                                .withTimeout(4000),
 
-                            new FollowPathCommand(follower, INTAKE_1)
-                                    .alongWith(IntakeCommandGroup.smartFeed())
-                                    .andThen(new WaitCommand(1000))
-                                    .withTimeout(3000)
-                                    .andThen(IntakeCommandGroup.stopIntake()),
+                        new FollowPathCommand(follower, INTAKE_1)
+                                .alongWith(IntakeCommandGroup.smartFeed())
+                                .andThen(new WaitCommand(1000))
+                                .withTimeout(3000)
+                                .andThen(IntakeCommandGroup.stopIntake()),
 
-                            new FollowPathCommand(follower, INTAKE_1_TO_SHOOT)
-                                    .andThen(new WaitCommand(1000))
-                                    .withTimeout(4000)
-                                    .andThen(ShootCommandGroup.twoOneShoot())
-                                    .andThen(new WaitCommand(2000))
-                                    .withTimeout(8000)
-                    )
-            ).andThen(IntakeCommandGroup.stopAll());
-    autonomousSequence.schedule();
-  }
+                        new FollowPathCommand(follower, INTAKE_1_TO_SHOOT)
+                                .andThen(new WaitCommand(1000))
+                                .withTimeout(4000)
+                                .andThen(ShootCommandGroup.twoOneShoot())
+                                .andThen(new WaitCommand(2000))
+                                .withTimeout(8000),
 
-  @Override
-  public void onPlayLoop() {
-    MMDrivetrain.update();
-    telemetry.update();
-    telemetry.addData("Shooter: ", ShooterSubsystem.getInstance().getVelocity());
-  }
+                        new FollowPathCommand(follower, INTAKE_15)
+                                .alongWith(IntakeCommandGroup.smartFeed())
+                                .andThen(new WaitCommand(1000))
+                                .withTimeout(4000),
 
-  @Override
-  public void onEnd() {
-    super.onEnd();
-    CommandScheduler.getInstance().reset();
-  }
+                        new FollowPathCommand(follower, INTAKE_15_TO_INTAKE_2)
+                                .andThen(new WaitCommand(1000))
+                                .withTimeout(2000),
+
+                        new FollowPathCommand(follower, INTAKE_2_TO_SHOOT)
+                                .alongWith(IntakeCommandGroup.stopIntake())
+                                .andThen(new WaitCommand(1500))
+                                .withTimeout(4000)
+                                .andThen(ShootCommandGroup.twoOneShoot())
+                                .andThen(new WaitCommand(2000))
+                                .withTimeout(7000),
+
+                        new FollowPathCommand(follower, LEAVE)
+                )
+        ).andThen(IntakeCommandGroup.stopAll()).schedule();
+    }
+
+    @Override
+    public void onPlayLoop() {
+        MMDrivetrain.update();
+        telemetry.update();
+    }
+
+    @Override
+    public void onEnd() {
+        CommandScheduler.getInstance().reset();
+    }
 }
