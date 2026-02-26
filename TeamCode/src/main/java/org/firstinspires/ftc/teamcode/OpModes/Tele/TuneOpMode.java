@@ -48,10 +48,9 @@ public class TuneOpMode extends MMOpMode {
     GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
     GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
 
-    ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
-
-    ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(pow).schedule();
-
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
+            ShooterSubsystem.getInstance().setPowerInstantCommand(0)
+    );
   }
 
   @Override
@@ -62,6 +61,9 @@ public class TuneOpMode extends MMOpMode {
   @Override
   public void onPlayLoop() {
     telemetry.update();
+
+    ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
+    ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(pow).schedule();
 
     //        telemetry.addData("pose", pose);
     //        KoalaLog.log("pose: ", pose, true);
