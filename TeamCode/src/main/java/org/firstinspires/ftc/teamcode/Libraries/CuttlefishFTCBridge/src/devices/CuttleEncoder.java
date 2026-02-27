@@ -19,6 +19,9 @@ public class CuttleEncoder {
     hub = revHub;
     encTicks = countsPerRevolution;
     mPort = port;
+    hub.bulkData = new CuttleRevBulkData();
+    for(int i = 0; i < 10 ; i++){
+      hub.pullBulkData();}
     offsetTicks = getCounts();
   }
 

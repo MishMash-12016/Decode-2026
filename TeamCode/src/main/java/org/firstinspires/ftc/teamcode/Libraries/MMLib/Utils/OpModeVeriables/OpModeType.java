@@ -31,7 +31,6 @@ public interface OpModeType {
 
     enum NonCompetition implements OpModeType {
         DEBUG,
-        DEBUG_SERVOHUB,
         EXPERIMENTING_NO_EXPANSION
     }
 }

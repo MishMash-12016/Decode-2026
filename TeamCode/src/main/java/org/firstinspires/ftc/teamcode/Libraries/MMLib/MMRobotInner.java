@@ -18,7 +18,6 @@ public class MMRobotInner extends Robot {
   // basic robot things(control hub, expansion hub...)
   public CuttleRevHub controlHub;
   public CuttleRevHub expansionHub;
-  public CuttleRevHub servoHub;
   public MMBattery battery;
   public GamepadEx gamepadEx1;
   public GamepadEx gamepadEx2;
@@ -92,16 +91,18 @@ public class MMRobotInner extends Robot {
     gamepadEx2 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad2);
 
     controlHub = new CuttleRevHub(hardwareMap, controlHubName);
-    //        servoHub = new CuttleRevHub(hardwareMap, servoHubName);
-    if (MMRobot.getInstance().currentOpMode.opModeType
-        == OpModeType.NonCompetition.DEBUG_SERVOHUB) {
-      expansionHub = new CuttleRevHub(hardwareMap, expansionHubName);
-      servoHub = new CuttleRevHub(hardwareMap, servoHubName);
+    for(int i = 0; i < 10 ; i++){
+      controlHub.pullBulkData();
     }
+
     if (MMRobot.getInstance().currentOpMode.opModeType
         != OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
       expansionHub = new CuttleRevHub(hardwareMap, expansionHubName);
+      for(int i = 0; i < 10 ; i++){
+        expansionHub.pullBulkData();
+      }
     }
+
     battery = new MMBatteryAutoLogged(hardwareMap);
   }
 }

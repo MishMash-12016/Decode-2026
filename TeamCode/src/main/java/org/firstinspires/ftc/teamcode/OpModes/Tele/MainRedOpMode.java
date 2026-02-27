@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
 import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
-
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -24,78 +23,69 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 @Config
 @AutoLog
 public class MainRedOpMode extends MMOpMode {
-    boolean slow = false;
-    public MainRedOpMode() {
-        super(OpModeType.Competition.TELEOP, AllianceColor.RED);
-    }
+  boolean slow = false;
+  boolean Shoot = false;
+  boolean aligned = false;
+  Pose startPose = new Pose(9, 7, Math.toRadians(0));
 
-    @Override
-    public void onInit() {
-        GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
+  public MainRedOpMode() {
+    super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
+  }
 
-        /// DriveTrain
-        MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
-        new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
-                MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
-                .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
-        ///     ↑
+  @Override
+  public void onInit() {
+    GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
+    GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
+    /// DriveTrain
+    MMDrivetrain.getInstance().setPose(startPose);
+    MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
+    new Trigger(() -> gamepad1.left_trigger > 0.1)
+        .toggleWhenActive(MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
+        .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
+    /// ↑
+    //        WebcamSubsystem.getInstance();
 
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                IntakeCommandGroup.smartFeed()).whenInactive(IntakeCommandGroup.stopIntake());
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
-                .toggleWhenActive(IntakeCommandGroup.outIntake(), IntakeCommandGroup.stopIntake());
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+        .whenPressed(IntakeCommandGroup.smartFeed())
+        .whenInactive(IntakeCommandGroup.stopIntake());
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+        .toggleWhenActive(IntakeCommandGroup.outIntake(), IntakeCommandGroup.stopIntake());
 
-        /// Shooter
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-                .whenPressed(ShooterSubsystem.getInstance().speedByLocation());
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(ShooterSubsystem.getInstance().stopCommand());
-        /// ↑
+    /// Shooter
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+        .whenPressed(ShooterSubsystem.getInstance().speedByLocation());
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.B)
+        .whenPressed(ShooterSubsystem.getInstance().stopCommand());
+    ///   ↑
 
-        new Trigger(() -> gamepad1.right_trigger > 0.1)
-                .toggleWhenActive(ShootCommandGroup.twoOneShoot(), ShootCommandGroup.stopShoot());
+    new Trigger(() -> gamepad1.right_trigger > 0.1)
+        .toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
 
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-                .whenPressed(IntakeCommandGroup.stopAll());
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+        .whenPressed(IntakeCommandGroup.stopAll());
+  }
 
+  @Override
+  public void onInitLoop() {}
 
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.A).whenPressed(
-                ()->MMDrivetrain.getInstance().setPose(new Pose(9, 10, 0))
-        );
+  @Override
+  public void onPlay() {}
 
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
-                ()->MMDrivetrain.getInstance().setPose(new Pose(72, 8,Math.toRadians(90)))
-        );
+  @Override
+  public void onPlayLoop() {
+    telemetry.update();
+    MMDrivetrain.update();
+    ShooterHoodSubsystem.getInstance().aimHood().schedule();
 
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                ()->ShooterSubsystem.farSpeed += 2
-        );
-        MMRobot.getInstance().gamepadEx2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
-                ()->ShooterSubsystem.farSpeed -= 2
-        );
-    }
+    KoalaLog.log("", 0, true);
+    telemetry.addData("run: ", 2);
+  }
 
-    @Override
-    public void onInitLoop() {}
-
-    @Override
-    public void onPlay() {}
-
-    @Override
-    public void onPlayLoop() {
-        telemetry.update();
-        MMDrivetrain.update();
-        ShooterHoodSubsystem.getInstance().aimHood().schedule();
-
-        telemetry.addData("FarSpeed: ", ShooterSubsystem.farSpeed);
-
-    }
-
-    @Override
-    public void onEnd() {
-        super.onEnd();
-        CommandScheduler.getInstance().reset();
-    }
+  @Override
+  public void onEnd() {
+    super.onEnd();
+    CommandScheduler.getInstance().reset();
+  }
 }

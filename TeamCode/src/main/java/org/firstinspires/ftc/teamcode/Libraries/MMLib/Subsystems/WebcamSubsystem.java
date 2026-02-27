@@ -57,8 +57,7 @@ public class WebcamSubsystem extends MMSubsystem {
         if (instance != null){
             KoalaLog.log("WebcamSubsystem/cameraState", instance.visionPortal.getCameraState().toString(), true);
             KoalaLog.log("WebcamSubsystem/cameraEnabled", instance.visionPortal.getProcessorEnabled(instance.aprilTag), true);
-            KoalaLog.log("WebcamSubsystem/" +
-                    "fps", instance.visionPortal.getFps(), true);
+            KoalaLog.log("WebcamSubsystem/fps", instance.visionPortal.getFps(), true);
             ArrayList<AprilTagDetection> detections = instance.aprilTag.getFreshDetections();
             if (detections != null){
                 for (AprilTagDetection detection : detections) {
@@ -100,8 +99,8 @@ public class WebcamSubsystem extends MMSubsystem {
         VisionPortal.Builder builder = new VisionPortal.Builder();
         builder.setCamera(MMRobot.getInstance().currentOpMode.hardwareMap.get(WebcamName.class, "Webcam 1"));
         builder.setCameraResolution(new Size(800, 600));
-        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-        builder.enableLiveView(false);
+        builder.setStreamFormat(VisionPortal.StreamFormat.MJPEG);
+        builder.enableLiveView(true);
         builder.addProcessor(aprilTag);
         builder.setAutoStartStreamOnBuild(true);
 
@@ -111,7 +110,7 @@ public class WebcamSubsystem extends MMSubsystem {
     }
 
     public Pose getRobotPosePedro(){
-        KoalaLog.log("vision_raw_pose", new double[]{robotPose.getPosition().x,
+        KoalaLog.log("WebcamSubsystem/vision_raw_pose", new double[]{robotPose.getPosition().x,
                 robotPose.getPosition().y,
                 robotPose.getOrientation().getYaw(AngleUnit.RADIANS)}, true);
 
@@ -119,7 +118,7 @@ public class WebcamSubsystem extends MMSubsystem {
                 robotPose.getPosition().x,
                 robotPose.getPosition().y,
                 robotPose.getOrientation().getYaw(AngleUnit.RADIANS)));
-        KoalaLog.log("vision_raw_pose", new double[]{pedroPose.getX(),
+        KoalaLog.log("WebcamSubsystem/vision_raw_pose", new double[]{pedroPose.getX(),
                 pedroPose.getY(),
                 pedroPose.getHeading()}, true);
         return FTCCoordinates.INSTANCE.convertToPedro(new Pose(

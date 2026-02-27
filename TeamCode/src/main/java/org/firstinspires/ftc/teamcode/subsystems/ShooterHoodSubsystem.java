@@ -23,14 +23,23 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
   public double hoodMax = 1.0;
   public double hoodMin = 0.1;
+
   public ExterpolationMap closeExterpolationMap =
-      new ExterpolationMap().put(61.129, 0.27).put(70.529, 0.32).put(88.529, 0.315).put(98.629,0.3);
+      new ExterpolationMap().put(87.3, 0.3)
+                            .put(81.6, 0.36)
+                            .put(71.3, 0.38)
+                            .put(65.5,0.37)
+                            .put(111.4,0.36);
   public double getCloseInterpolation(double exter){
      return closeExterpolationMap.exterpolate(exter);
   }
 
 public ExterpolationMap farExterpolationMap =
-        new ExterpolationMap().put(131.8, 0.53).put(135.4, 0.55).put(128.7, 0.59).put(141.5, 0.52);
+        new ExterpolationMap().put(153.2, 0.5)
+                              .put(143.7,0.56)
+                              .put(135.3,0.6)
+                              .put(127.5,0.615)
+                              .put(118.08,0.628);
   public double getFarInterpolation(double exter){
     return farExterpolationMap.exterpolate(exter);
   }
@@ -40,8 +49,7 @@ public ExterpolationMap farExterpolationMap =
 
   public static synchronized ShooterHoodSubsystem getInstance() {
     if (instance == null) {
-      if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB
-          || MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG
+      if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG
           || MMRobot.getInstance().currentOpMode.opModeType
               == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
         instance = new ShooterHoodSubsystemAutoLogged("ShooterHoodSubsystem");

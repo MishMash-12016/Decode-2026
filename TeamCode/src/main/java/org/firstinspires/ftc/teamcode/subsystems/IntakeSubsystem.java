@@ -19,8 +19,7 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
      */
     public static synchronized IntakeSubsystem getInstance() {
         if (instance == null) {
-            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                     MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
                 instance = new IntakeSubsystemAutoLogged("IntakeSubsystem");
 

@@ -71,12 +71,6 @@ public class MMMotorOrCrServo {
                 MMRobot.getInstance().controlHub,
                 motor.mPort,
                 motor.sign == 1 ? Direction.FORWARD : Direction.REVERSE);
-      } else if (motor.hub.getHubName().equals(MMRobot.getInstance().servoHub.getHubName())) {
-        motor =
-            new CuttleMotor(
-                MMRobot.getInstance().servoHub,
-                motor.mPort,
-                motor.sign == 1 ? Direction.FORWARD : Direction.REVERSE);
       } else {
         motor =
             new CuttleMotor(
@@ -91,9 +85,6 @@ public class MMMotorOrCrServo {
       } else if (crServo.hub.getHubName().equals(MMRobot.getInstance().controlHub.getHubName())) {
         crServo =
             new CuttleCrServo(MMRobot.getInstance().controlHub, crServo.port, crServo.direction);
-      } else if (crServo.hub.getHubName().equals(MMRobot.getInstance().servoHubName)) {
-        crServo =
-            new CuttleCrServo(MMRobot.getInstance().servoHub, crServo.port, crServo.direction);
       } else {
         crServo =
             new CuttleCrServo(MMRobot.getInstance().expansionHub, crServo.port, crServo.direction);

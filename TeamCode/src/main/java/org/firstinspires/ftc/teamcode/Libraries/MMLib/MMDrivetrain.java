@@ -33,10 +33,12 @@ public class MMDrivetrain extends MMSubsystem {
     public double slowModeRatioLateral = 0.3;
     public double slowModeRatioRotation = 0.2;
 
-    public static double headingKP = 0.00797;
-    public static double headingKI = 0.00000575;
+    public static double headingKP = 0.0035;
+    public static double headingKI = 0.0;
     public static double headingKD = 0.00003;
-    public static double headingTolarence = 1;
+    public static double headingClockewiseKS = -0.09;
+    public static double headingCounterClockwiseKS = 0.09;
+     public static double headingTolarence = 1;
     public PIDController headingPid;
 
     private static MMDrivetrain instance;
@@ -111,6 +113,12 @@ public class MMDrivetrain extends MMSubsystem {
             KoalaLog.log("heading_pid/kp", headingPid.getP(), true);
             KoalaLog.log("heading_pid/supplier kp", debugKpSupplier.getAsDouble(), true);
             KoalaLog.log("heading_pid/target_pose", new double[]{getAScopePose()[0], getAScopePose()[1], target_angle.getDegrees()}, true);
+
+            if (headingPower < 0){
+                headingPower += headingClockewiseKS;
+            }else if(headingPower > 0){
+                headingPower += headingCounterClockwiseKS;
+            }
             if (headingPower > 0.5) {
                 headingPower = 0.5;
             }

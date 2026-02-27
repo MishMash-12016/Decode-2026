@@ -19,13 +19,13 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
-@TeleOp
-@AutoLog
-@Config
+//@TeleOp
+//@AutoLog
+//@Config
 public class MotorTestOpMode extends MMOpMode {
 
     public MotorTestOpMode() {
-        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
+        super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
     }
 
     CuttleDigital sensor;

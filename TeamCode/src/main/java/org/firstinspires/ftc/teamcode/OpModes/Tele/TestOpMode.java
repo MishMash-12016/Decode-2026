@@ -27,10 +27,10 @@ public class TestOpMode extends MMOpMode {
   boolean slow = false;
   boolean Shoot = false;
   boolean aligned = false;
-  Pose startPose = new Pose(8, 6, 0);
+  Pose startPose = new Pose(135, 7, Math.toRadians(180));
 
   public TestOpMode() {
-    super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
+    super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
   }
 
   @Override
@@ -39,11 +39,11 @@ public class TestOpMode extends MMOpMode {
     GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
     /// DriveTrain
     MMDrivetrain.getInstance().setPose(startPose);
-    MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow);
+    MMDrivetrain.getInstance().enableBlueDriveDefaultCommand(() -> slow);
     GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
     new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
-            MMDrivetrain.getInstance().enableDriveAligned(() -> slow));
-    GamepadEx1.getGamepadButton(GamepadKeys.Button.OPTIONS)
+            MMDrivetrain.getInstance().enableBlueAligned(() -> slow));
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
         .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
     /// ↑
     //        WebcamSubsystem.getInstance();
@@ -58,10 +58,9 @@ public class TestOpMode extends MMOpMode {
         .whenPressed(ShooterSubsystem.getInstance().speedByLocation());
     GamepadEx1.getGamepadButton(GamepadKeys.Button.B)
         .whenPressed(ShooterSubsystem.getInstance().stopCommand());
-    /// ↑
+    ///   ↑
 
-    new Trigger(() -> gamepad1.right_trigger > 0.1)
-            .toggleWhenActive(ShootCommandGroup.twoOneShoot(), ShootCommandGroup.stopShoot());
+    new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
 
     GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
         .whenPressed(IntakeCommandGroup.stopAll());

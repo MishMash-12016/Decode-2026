@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 public class TuneHoodOpMode extends MMOpMode {
 
     public TuneHoodOpMode() {
-        super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
+        super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
     }
 
     CuttleDigital sensor;

@@ -10,11 +10,11 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-@TeleOp
+//@TeleOp
 public class SysidShooterOpMode extends MMOpMode {
 
   public SysidShooterOpMode() {
-    super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.BLUE);
+    super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
   }
 
   @Override

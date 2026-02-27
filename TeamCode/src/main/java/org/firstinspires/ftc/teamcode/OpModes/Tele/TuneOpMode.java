@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -15,26 +16,27 @@ import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-@TeleOp
-@AutoLog
-@Config
+//@TeleOp
+//@AutoLog
+//@Config
 public class TuneOpMode extends MMOpMode {
 
   public TuneOpMode() {
-    super(OpModeType.NonCompetition.DEBUG_SERVOHUB, AllianceColor.RED);
+    super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
   }
 
   CuttleDigital sensor;
 
   CuttleMotor p0, p1, p2, p3;
   CuttleMotor ep0, ep1, ep2, ep3;
-  Pose startPose = new Pose(9, 10, 0);
+  Pose startPose = new Pose(135, 7, Math.toRadians(180));
 
 //      CRServo left;
 //      MotorEx a;
@@ -42,15 +44,29 @@ public class TuneOpMode extends MMOpMode {
   public static double pow;
   boolean slow = false;
 
+
   @Override
   public void onInit() {
     CommandScheduler.getInstance().reset();
     GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
     GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
+    /// DriveTrain
+    MMDrivetrain.getInstance().setPose(startPose);
+    MMDrivetrain.getInstance().enableBlueDriveDefaultCommand(() -> slow);
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
+    new Trigger(() -> gamepad1.left_trigger > 0.1).toggleWhenActive(
+            MMDrivetrain.getInstance().enableBlueAligned(() -> slow));
 
-    GamepadEx1.getGamepadButton(GamepadKeys.Button.A).whileActiveOnce(
-            ShooterSubsystem.getInstance().setPowerInstantCommand(0)
-    );
+    new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
+            ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
+
+
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+            IntakeCommandGroup.smartFeed()).whenInactive(IntakeCommandGroup.stopIntake());
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
+            .toggleWhenActive(IntakeCommandGroup.outIntake(), IntakeCommandGroup.stopIntake());
+    GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
+            .whenPressed(IntakeCommandGroup.stopAll());
   }
 
   @Override
@@ -67,10 +83,6 @@ public class TuneOpMode extends MMOpMode {
 
     //        telemetry.addData("pose", pose);
     //        KoalaLog.log("pose: ", pose, true);
-
-
-            telemetry.addData(
-                    "The hood is now in " + pose + " it should be aligned straight with the panels.", null);
 
   }
 

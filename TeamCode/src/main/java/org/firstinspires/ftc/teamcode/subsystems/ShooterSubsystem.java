@@ -24,26 +24,25 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
             .put(1, 6);
 
 
-    public static double KP = 0.04;
+    public static double KP = 0.04551724137;
     public static double KI = 0.00;
     public static double KD = 0.0;
 
-    public static double KS = 0.071063;
-    public static double KV = 0.011384;
+    public static double KS = 0.08086479310344;
+    public static double KV = 0.0128017241;
     public static double KA = 0;
 
     public static double VelTol = 5;
-    public static double RESOLUTION = 28;
+    public static double RESOLUTION = 28.0 / (29.0 / 33.0);
 
-    public static double farSpeed = 58;
+    public static double farSpeed = 57;
 
     public static ShooterSubsystem instance;
 
     public static synchronized ShooterSubsystem getInstance() {
         if (instance == null) {
-            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG_SERVOHUB ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
+                MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
                 instance = new ShooterSubsystemAutoLogged("ShooterSubsystem");
 
             } else {
@@ -125,7 +124,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         }*/
     public Command speedByLocation() {
         return getToAndHoldSetPointCommand(
-                () -> RobotUtils.getDistanceToTarget() < 110 ? 45 : farSpeed);
+                () -> RobotUtils.getDistanceToTarget() < 115 ? 45 : farSpeed);
     }
 
     @Override

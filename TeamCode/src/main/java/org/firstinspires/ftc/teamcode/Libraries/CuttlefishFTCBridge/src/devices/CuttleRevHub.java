@@ -91,8 +91,6 @@ public class CuttleRevHub extends LynxCommExceptionHandler implements RobotArmin
       }
       bulkData = new CuttleRevBulkData();
       pullBulkData();
-
-
    }
    /**
     * Create Rev hub object using using HubTypes enum. If this doesn't work get the hub by name.
