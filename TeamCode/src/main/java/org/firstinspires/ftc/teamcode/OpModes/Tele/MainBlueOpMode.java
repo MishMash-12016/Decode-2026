@@ -30,7 +30,7 @@ public class MainBlueOpMode extends MMOpMode {
     Pose startPose = new Pose(135, 7, Math.toRadians(180));
 
     public MainBlueOpMode() {
-        super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
+        super(OpModeType.Competition.TELEOP, AllianceColor.BLUE);
     }
 
     @Override

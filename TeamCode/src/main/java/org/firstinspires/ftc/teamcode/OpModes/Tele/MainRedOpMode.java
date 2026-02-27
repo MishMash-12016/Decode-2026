@@ -29,7 +29,7 @@ public class MainRedOpMode extends MMOpMode {
   Pose startPose = new Pose(9, 7, Math.toRadians(0));
 
   public MainRedOpMode() {
-    super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
+    super(OpModeType.Competition.TELEOP, AllianceColor.RED);
   }
 
   @Override
