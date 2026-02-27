@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.FeedForwards.SimpleMotorFeedforward;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.PidBaseSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 /**
@@ -158,7 +159,8 @@ public class VelocityPidSubsystem extends PidBaseSubsystem {
 
   @Override
   public void periodic() {
-    if (MMRobot.getInstance().currentOpMode != null) {
+    if (MMRobot.getInstance().currentOpMode == null
+        && MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG) {
       try {
         MMUtils.updateIfChanged(debugKpSupplier, pidController::getP, pidController::setP);
         MMUtils.updateIfChanged(debugKiSupplier, pidController::getI, pidController::setI);
