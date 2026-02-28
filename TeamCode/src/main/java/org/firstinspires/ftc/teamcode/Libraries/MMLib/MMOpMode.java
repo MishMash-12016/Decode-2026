@@ -90,9 +90,14 @@ public abstract class MMOpMode extends LinearOpMode {
         logCommandScheduler();
 
         KoalaLog.log("looptime", lastLoopTime - System.currentTimeMillis(), true);
+
+        // TODO: move to the if below after check
+        telemetry.addData("looptime", lastLoopTime - System.currentTimeMillis());
         lastLoopTime = System.currentTimeMillis();
         telemetry.update();                                       //updates the telemetry
-        FtcDashboard.getInstance().getTelemetry().update();       //updates the dashboard
+        if(opModeType == OpModeType.NonCompetition.DEBUG || opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION){
+            FtcDashboard.getInstance().getTelemetry().update();       //updates the dashboard
+        }
     }
 
     public void logCommandScheduler(){
