@@ -20,9 +20,9 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-@TeleOp
-@Config
-@AutoLog
+//@TeleOp(name="BlueOpMode", group="CompOpMods")
+//@Config
+//@AutoLog
 public class MainBlueOpMode extends MMOpMode {
     boolean slow = false;
     boolean Shoot = false;

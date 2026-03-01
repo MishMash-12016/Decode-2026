@@ -44,9 +44,6 @@ public class TuneHoodOpMode extends MMOpMode {
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
         GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
 
-        ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
-
-        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(pow).schedule();
 
     }
 
@@ -62,8 +59,10 @@ public class TuneHoodOpMode extends MMOpMode {
         //        telemetry.addData("pose", pose);
         //        KoalaLog.log("pose: ", pose, true);
 
+        ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
+        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(pow).schedule();
 
-        telemetry.addData("The hood is now in " + pose + " it should be aligned straight with the panels.", null);
+        telemetry.addLine("The hood is now in " + pose + " it should be aligned straight with the panels.");
 
     }
 

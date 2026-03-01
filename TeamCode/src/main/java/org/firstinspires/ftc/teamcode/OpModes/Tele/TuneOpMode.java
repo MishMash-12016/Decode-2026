@@ -23,9 +23,9 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-//@TeleOp
-//@AutoLog
-//@Config
+@TeleOp
+@AutoLog
+@Config
 public class TuneOpMode extends MMOpMode {
 
   public TuneOpMode() {
