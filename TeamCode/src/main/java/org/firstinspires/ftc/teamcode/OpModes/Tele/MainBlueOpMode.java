@@ -57,7 +57,7 @@ public class MainBlueOpMode extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(ShooterSubsystem.getInstance().speedByLocation());
         GamepadEx1.getGamepadButton(GamepadKeys.Button.B)
-                .whenPressed(ShooterSubsystem.getInstance().stopCommand());
+                .whenPressed(ShooterSubsystem.getInstance().rest());
         ///   ↑
 
         new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());

@@ -106,26 +106,15 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         return sysIdRoutine.dynamic(direction);
     }
 
-
-    public Command closeSpeed() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(45);
+    public Command rest() {
+        return getToAndHoldSetPointCommand(40);
     }
 
-    public Command farSpeed() {
-        return ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(72);
-    }
-
-    /*    public Command speedByDistance(double distance) {
-            return getToAndHoldSetPointCommand(
-                    ()-> exterpolationMap.exterpolate(distance));
-        }
-        public Command speedByLocation() {
-            return speedByDistance(RobotUtils.getDistanceToTarget());
-        }*/
     public Command speedByLocation() {
         return getToAndHoldSetPointCommand(
                 () -> RobotUtils.getDistanceToTarget() < 115 ? 45 : farSpeed);
     }
+
 
     @Override
     public void resetHub() {

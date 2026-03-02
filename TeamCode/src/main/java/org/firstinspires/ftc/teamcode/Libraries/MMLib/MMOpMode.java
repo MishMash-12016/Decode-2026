@@ -85,18 +85,18 @@ public abstract class MMOpMode extends LinearOpMode {
         CommandScheduler.getInstance().run();                     //runs the scheduler
         MMDrivetrain.update();
 
-        AutoLogManager.periodic();
         WebcamSubsystem.update();
         logCommandScheduler();
 
-        KoalaLog.log("looptime", lastLoopTime - System.currentTimeMillis(), true);
+        KoalaLog.log("looptime", System.currentTimeMillis() - lastLoopTime, true);
 
         // TODO: move to the if below after check
-        telemetry.addData("looptime", lastLoopTime - System.currentTimeMillis());
+        telemetry.addData("looptime", System.currentTimeMillis() - lastLoopTime);
         lastLoopTime = System.currentTimeMillis();
         telemetry.update();                                       //updates the telemetry
         if(opModeType == OpModeType.NonCompetition.DEBUG || opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION){
             FtcDashboard.getInstance().getTelemetry().update();       //updates the dashboard
+            AutoLogManager.periodic();
         }
     }
 

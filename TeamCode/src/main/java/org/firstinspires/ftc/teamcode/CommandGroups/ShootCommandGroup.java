@@ -46,15 +46,6 @@ public class ShootCommandGroup {
                 );
     }
 
-    public static Command smartUpShoot(boolean slow) {
-        return MMDrivetrain.getInstance().enableDriveAligned(() -> slow).andThen(
-                new ParallelCommandGroup(
-                        MMDrivetrain.getInstance().enableDriveAligned(() -> slow),
-                        BallStopperSubsystem.getInstance().open(),
-                        AccelSubsystem.getInstance().setPowerInstantCommand(1)
-                )
-        );
-    }
 
     public static Command stopShoot() {
         return new ParallelCommandGroup(

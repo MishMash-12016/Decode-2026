@@ -15,7 +15,6 @@ import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
 
 //@AutoLog
 // @Autonomous
-@Config
 public class TestAutoOpMode extends MMOpMode {
 
   // Path chains

@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.PrismSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class IntakeCommandGroup {
@@ -21,10 +22,11 @@ public class IntakeCommandGroup {
 
     public static Command smartFeed() {
         return new SequentialCommandGroup(
-                dumbFeed(),
+                PrismSubsystem.getInstance().blueCommand().alongWith(
+                dumbFeed()),
                 new WaitUntilCommand(()->BallStopperSubsystem.getInstance().getState()),
-//                AccelSubsystem.getInstance().setPowerInstantCommand(0.6),
 //                new TimedConditionCommand(()->/*sensor*/false,2),
+                PrismSubsystem.getInstance().yellowCommand(),
                 AccelSubsystem.getInstance().stopCommand()
                 );
     }
@@ -48,7 +50,7 @@ public class IntakeCommandGroup {
         return new ParallelCommandGroup(
                 AccelSubsystem.getInstance().stopCommand(),
                 IntakeSubsystem.getInstance().stopCommand(),
-                ShooterSubsystem.getInstance().stopCommand()
+                ShooterSubsystem.getInstance().rest()
         );
 
     }

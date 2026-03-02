@@ -45,7 +45,7 @@ public class TuneOpMode extends MMOpMode {
   boolean slow = false;
 
 
-  @Override
+/*  @Override
   public void onInit() {
     CommandScheduler.getInstance().reset();
     GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
@@ -67,6 +67,11 @@ public class TuneOpMode extends MMOpMode {
             .toggleWhenActive(IntakeCommandGroup.outIntake(), IntakeCommandGroup.stopIntake());
     GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
             .whenPressed(IntakeCommandGroup.stopAll());
+  }*/
+
+  @Override
+  public void onInit() {
+
   }
 
   @Override
