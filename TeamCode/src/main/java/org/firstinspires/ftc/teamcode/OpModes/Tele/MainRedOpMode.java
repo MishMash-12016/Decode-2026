@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
-import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
-import com.acmerobotics.dashboard.config.Config;
+
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -61,7 +59,7 @@ public class MainRedOpMode extends MMOpMode {
     ///   ↑
 
     new Trigger(() -> gamepad1.right_trigger > 0.1)
-        .toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
+        .toggleWhenActive(ShootCommandGroup.upShoot(), ShootCommandGroup.stopShoot());
 
     GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
         .whenPressed(IntakeCommandGroup.stopAll());

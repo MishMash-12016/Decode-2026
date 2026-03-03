@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
+
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
@@ -10,6 +12,7 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 @Config
 @AutoLog
 public class IntakeSubsystem extends MotorOrCrServoSubsystem {
+    static CuttleDigital sensor;
 
     // Singleton instance
     public static IntakeSubsystem instance;
@@ -35,8 +38,15 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
+        sensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
+
         withMotor(mmRobot.controlHub, 2,Direction.FORWARD);
 
+    }
+
+
+    public boolean getState() {
+        return sensor.getState();
     }
 
     @Override

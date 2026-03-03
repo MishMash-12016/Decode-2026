@@ -13,8 +13,6 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 @AutoLog
 public class BallStopperSubsystem extends ServoSubsystem {
 
-  static CuttleDigital sensor;
-
   public static double open = 0.8;
   public static double close = 0.53;
 
@@ -40,16 +38,12 @@ public class BallStopperSubsystem extends ServoSubsystem {
     super(subsystemName);
     MMRobot mmRobot = MMRobot.getInstance();
 
-    sensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
 
 //    withServo(0, mmRobot.servoHub, Direction.FORWARD, 0);
     withServo("BallStopper",Direction.FORWARD,0);
 
   }
 
-  public boolean getState() {
-    return sensor.getState();
-  }
 
   public Command close() {
     return setPositionCommand(close);

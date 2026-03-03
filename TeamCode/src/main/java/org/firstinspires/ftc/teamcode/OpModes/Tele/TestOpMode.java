@@ -26,7 +26,6 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 public class TestOpMode extends MMOpMode {
   boolean slow = false;
   boolean inShootMode = false;
-  boolean aligned = false;
   Pose startPose = new Pose(135, 7, Math.toRadians(180));
 
   public TestOpMode() {
@@ -41,7 +40,7 @@ public class TestOpMode extends MMOpMode {
     MMDrivetrain.getInstance().setPose(startPose);
     MMDrivetrain.getInstance().enableBlueDriveDefaultCommand(() -> slow);
     GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
-    new Trigger(() -> gamepad1.left_trigger > 0.1)
+    new Trigger(() -> gamepad1.left_trigger > 0.01)
         .toggleWhenActive(MMDrivetrain.getInstance().enableBlueAligned(() -> slow));
     GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
         .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
@@ -59,28 +58,21 @@ public class TestOpMode extends MMOpMode {
     /// Shooter
     GamepadEx1.getGamepadButton(GamepadKeys.Button.A)
         .whenPressed(
-            ShooterSubsystem.getInstance().speedByLocation()
-                    .andThen(
-                    new InstantCommand(() -> inShootMode = true)
-                    )
-        );
+            ShooterSubsystem.getInstance()
+                .speedByLocation()
+                .andThen(new InstantCommand(() -> inShootMode = true)));
 
     GamepadEx1.getGamepadButton(GamepadKeys.Button.B)
         .whenPressed(
-            ShooterSubsystem.getInstance().rest()
-                .andThen(
-                        new InstantCommand(() -> inShootMode = false)
-                )
-        );
+            ShooterSubsystem.getInstance()
+                .rest()
+                .andThen(new InstantCommand(() -> inShootMode = false)));
     ///   ↑
 
-    new Trigger(() -> gamepad1.right_trigger > 0.1)
-        .toggleWhenActive(ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
+    new Trigger(() -> gamepad1.right_trigger > 0.1).whenActive(ShootCommandGroup.upShoot());
 
     GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
         .whenPressed(IntakeCommandGroup.stopAll());
-
-    //    PrismSubsystem.getInstance().setState(PrismSubsystem.State.IDLE);
   }
 
   @Override
@@ -94,23 +86,26 @@ public class TestOpMode extends MMOpMode {
     telemetry.update();
     MMDrivetrain.update();
     ShooterHoodSubsystem.getInstance().aimHood().schedule();
+    ShooterSubsystem shooer = ShooterSubsystem.getInstance();
 
-    if (inShootMode)
-      if (ShooterSubsystem.getInstance().getSetPoint() <= ShooterSubsystem.getInstance().getVelocity() + 1
-          && ShooterSubsystem.getInstance().getSetPoint() >= ShooterSubsystem.getInstance().getVelocity() - 1
-          && ShooterSubsystem.getInstance().getSetPoint() < 40)
-        PrismSubsystem.getInstance().greenCommand();
-      else PrismSubsystem.getInstance().redCommand();
+    if (inShootMode) {
+      if (Math.abs(shooer.getSetPoint() - shooer.getVelocity()) < 2 && shooer.getSetPoint() > 40) {
+//        PrismSubsystem.getInstance().shootGreen().schedule();
+      } else {
+//        PrismSubsystem.getInstance().shootRed().schedule();
+      }
+    }
 
     //    KoalaLog.log("",0,true);
 
-    telemetry.addData("run: ", 2);
+    telemetry.addData("", inShootMode);
   }
 
   @Override
   public void onEnd() {
     super.onEnd();
+    PrismSubsystem.getInstance().intakeOff().schedule();
+    PrismSubsystem.getInstance().shootOff().schedule();
     CommandScheduler.getInstance().reset();
-    PrismSubsystem.getInstance().off();
   }
 }

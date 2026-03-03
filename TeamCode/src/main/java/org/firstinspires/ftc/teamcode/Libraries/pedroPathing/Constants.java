@@ -17,15 +17,15 @@ public class Constants {
   public static FollowerConstants followerConstants =
       new FollowerConstants()
           .mass(13)
-          .forwardZeroPowerAcceleration(-54.8)
-          .lateralZeroPowerAcceleration(-89.7)
+          .forwardZeroPowerAcceleration(-39.054)
+          .lateralZeroPowerAcceleration(-77.52)
           .useSecondaryTranslationalPIDF(false)
           .useSecondaryDrivePIDF(false)
-          .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(2,0.6,0,0))
-          .centripetalScaling(0.0007)
-          .translationalPIDFCoefficients(new PIDFCoefficients(0.087, 0, 0, 0))
-          .headingPIDFCoefficients(new PIDFCoefficients(0.585, 0, 0, 0))
-          .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0092, 0, 0.00165, 0, 0));
+          .secondaryHeadingPIDFCoefficients(new PIDFCoefficients(1.7,0,0,0.025))
+          .centripetalScaling(0.0003)
+          .translationalPIDFCoefficients(new PIDFCoefficients(0.17, 0, 0.021, 0.015))
+          .headingPIDFCoefficients(new PIDFCoefficients(1.4, 0, 0.06, 0.025))
+          .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.009, 0, 0.001, 0, 0));
 
   public static MecanumConstants driveConstants =
       new MecanumConstants()
@@ -38,9 +38,8 @@ public class Constants {
           .rightFrontMotorDirection(DcMotorSimple.Direction.FORWARD)
           .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
           .useBrakeModeInTeleOp(true)
-          .xVelocity(74)
-          .yVelocity(58.2);
-
+          .xVelocity(80.7)
+          .yVelocity(65);
 
   public static PinpointVisionConstants localizerConstants =
       new PinpointVisionConstants()
@@ -56,9 +55,7 @@ public class Constants {
       /*.odometryStdDevs(0.001, 0.001, 0.001)
       .visionMeasurementStdDevs(0.0, 0.0, 0.0)*/ ;
 
-  public static PathConstraints pathConstraints =
-          //tune this shit
-          new PathConstraints(0.99, 100, 0.7, 1.2);
+  public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
   public static Follower createFollower(HardwareMap hardwareMap) {
     return new FollowerBuilder(followerConstants, hardwareMap)

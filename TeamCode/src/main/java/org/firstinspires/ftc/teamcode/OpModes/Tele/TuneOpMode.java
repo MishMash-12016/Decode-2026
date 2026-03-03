@@ -58,7 +58,7 @@ public class TuneOpMode extends MMOpMode {
             MMDrivetrain.getInstance().enableBlueAligned(() -> slow));
 
     new Trigger(() -> gamepad1.right_trigger > 0.1).toggleWhenActive(
-            ShootCommandGroup.dumbUpShoot(), ShootCommandGroup.stopShoot());
+            ShootCommandGroup.upShoot(), ShootCommandGroup.stopShoot());
 
 
     GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
