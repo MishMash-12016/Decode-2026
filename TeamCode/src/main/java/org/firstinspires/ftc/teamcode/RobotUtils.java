@@ -9,8 +9,11 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 
 public class RobotUtils {
+//    private static final Translation2d targetPoseBlue
+//            = new Translation2d(5,139);
+
     private static final Translation2d targetPoseBlue
-            = new Translation2d(5,139);
+            = new Translation2d(10,139);
 
     ///144 = field length
     private static final Translation2d targetPoseRed

@@ -14,9 +14,7 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 public class BallStopperSubsystem extends ServoSubsystem {
 
   public static double open = 0.8;
-  public static double close = 0.53;
-
-  public static double POSITION_TOLERANCE = 0.1;
+  public static double close = 0.56;
 
   public static BallStopperSubsystem instance;
 
@@ -40,7 +38,7 @@ public class BallStopperSubsystem extends ServoSubsystem {
 
 
 //    withServo(0, mmRobot.servoHub, Direction.FORWARD, 0);
-    withServo("BallStopper",Direction.FORWARD,0);
+    withServo("ballStopper",Direction.FORWARD,0);
 
   }
 

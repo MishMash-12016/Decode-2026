@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-@TeleOp
+//@TeleOp
 @AutoLog
 @Config
 public class TuneHoodOpMode extends MMOpMode {
@@ -34,7 +34,7 @@ public class TuneHoodOpMode extends MMOpMode {
 
     //      CRServo left;
 //      MotorEx a;
-    public static double pose = 0.1;
+    public static double pose = 0.13;
     public static double pow;
     boolean slow = false;
 

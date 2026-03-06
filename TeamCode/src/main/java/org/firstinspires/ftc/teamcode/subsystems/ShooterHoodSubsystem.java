@@ -25,21 +25,33 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
   public double hoodMin = 0.1;
 
   public ExterpolationMap closeExterpolationMap =
-      new ExterpolationMap().put(87.3, 0.3)
-                            .put(81.6, 0.36)
-                            .put(71.3, 0.38)
-                            .put(65.5,0.37)
-                            .put(111.4,0.36);
+      new ExterpolationMap()
+              .put(50.94, 0.21)
+              .put(59.82, 0.23)
+              .put(70.51, 0.26)
+              .put(77.54,0.26)
+              .put(87.12,0.25)
+              .put(95.08,0.23)
+              .put(97.38, 0.15);
   public double getCloseInterpolation(double exter){
      return closeExterpolationMap.exterpolate(exter);
   }
 
+  public ExterpolationMap midExterpolationMap =
+      new ExterpolationMap()
+              .put(103.7, 0.3)
+              .put(114.3, 0.28)
+              .put(120.65, 0.25);
+  public double getMidInterpolation(double exter){
+     return midExterpolationMap.exterpolate(exter);
+  }
+
 public ExterpolationMap farExterpolationMap =
-        new ExterpolationMap().put(153.2, 0.5)
-                              .put(143.7,0.56)
-                              .put(135.3,0.6)
-                              .put(127.5,0.615)
-                              .put(118.08,0.628);
+        new ExterpolationMap()
+                .put(122.34, 0.44)
+                .put(125.09, 0.42)
+                .put(128.36, 0.43)
+                .put(145.38,0.327);
   public double getFarInterpolation(double exter){
     return farExterpolationMap.exterpolate(exter);
   }
@@ -63,30 +75,20 @@ public ExterpolationMap farExterpolationMap =
 
   public ShooterHoodSubsystem(String subsystemName) {
     super(subsystemName);
-//    setDefaultCommand(aimHood());
 
-    MMRobot mmRobot = MMRobot.getInstance();
-
-//    withServo(1, mmRobot.servoHub, Direction.FORWARD, 0);
     withServo("shooterHood",Direction.FORWARD,0);
   }
 
 
-/*  public Command aimHood() {
-    return setPositionCommand(
-        () ->
-            RobotUtils.getDistanceToTarget() < 110
-                ? closeExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget())
-                : farExterpolationMap.exterpolate(RobotUtils.getDistanceToTarget()));
-  }*/
-
-
   public Command aimHood() {
     return setPositionCommand(
-        () ->
-            RobotUtils.getDistanceToTarget() < 110
-                ? KoalaLog.log("hood/closeInterpolation",getCloseInterpolation(RobotUtils.getDistanceToTarget()),true)
-                : KoalaLog.log("hood/farInterpolation",getFarInterpolation(RobotUtils.getDistanceToTarget()),true));
+        () ->hoodDis(RobotUtils.getDistanceToTarget())
+    );
+  }
+  public double hoodDis(double dis){
+    if(dis < 101) return getCloseInterpolation(dis);
+    else if (dis < 121.5) return getCloseInterpolation(dis);
+    return getFarInterpolation(dis);
   }
 
 

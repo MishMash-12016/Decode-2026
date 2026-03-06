@@ -8,6 +8,9 @@ import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
+import com.seattlesolvers.solverslib.command.WaitUntilCommand;
+
 import edu.wpi.first.sysid.SysIdRoutine;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
@@ -23,19 +26,19 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     ExterpolationMap exterpolationMap = new ExterpolationMap()
             .put(1, 6);
 
+    public static double KP = 0.045;
+    public static double KI = 0;
+    public static double KD = 0;
 
-    public static double KP = 0.04551724137;
-    public static double KI = 0.00;
-    public static double KD = 0.0;
-
-    public static double KS = 0.08086479310344;
-    public static double KV = 0.0128017241;
+    public static double KS = 0.097;
+    public static double KV = 0.0121;
     public static double KA = 0;
 
-    public static double VelTol = 5;
     public static double RESOLUTION = 28.0 / (29.0 / 33.0);
-
-    public static double farSpeed = 57;
+    public static double VelTol = 1;
+    public static double closeSpeed = 42;
+    public static double midSpeed = 46;
+    public static double farSpeed = 52;
 
     public static ShooterSubsystem instance;
 
@@ -107,14 +110,26 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     }
 
     public Command rest() {
-        return getToAndHoldSetPointCommand(40);
+    return new SequentialCommandGroup(
+            stopCommand(),
+            new WaitUntilCommand(()-> getVelocity() < closeSpeed + 8),
+            closeSpeed());
     }
 
     public Command speedByLocation() {
         return getToAndHoldSetPointCommand(
-                () -> RobotUtils.getDistanceToTarget() < 115 ? 45 : farSpeed);
+                () -> RobotUtils.getDistanceToTarget() < 105 ? closeSpeed : midSpeed);
+    }
+    public Command closeSpeed() {
+        return getToAndHoldSetPointCommand(
+                () -> RobotUtils.getDistanceToTarget() < 101 ? closeSpeed : midSpeed);
     }
 
+    public Command inSpeed(){
+        if (Math.abs(getSetPoint() - getVelocity()) < 2 && getSetPoint() > 40)
+            return PrismSubsystem.getInstance().green();
+        return PrismSubsystem.getInstance().red();
+    }
 
     @Override
     public void resetHub() {

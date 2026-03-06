@@ -18,7 +18,7 @@ public class IntakeCommandGroup {
         return new ParallelCommandGroup(
                 BallStopperSubsystem.getInstance().close(),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
-                AccelSubsystem.getInstance().setPowerInstantCommand(0.5)
+                AccelSubsystem.getInstance().setPowerInstantCommand(0.6)
         );
     }
 
@@ -35,11 +35,9 @@ public class IntakeCommandGroup {
     public static Command smartFeed() {
         return new SequentialCommandGroup(
                 dumbFeed().alongWith(
-//                    PrismSubsystem.getInstance().intakeYellow()),
-                new TimedConditionCommand(()->IntakeSubsystem.getInstance().getState(),600),
-//                PrismSubsystem.getInstance().intakeBlue().alongWith(
-                    stopIntake())
-                );
+                PrismSubsystem.getInstance().yellow()),
+                new TimedConditionCommand(()->IntakeSubsystem.getInstance().getState(),650),
+                PrismSubsystem.getInstance().blinkBlueOrange());
     }
 
 
@@ -47,7 +45,6 @@ public class IntakeCommandGroup {
     return new ParallelCommandGroup(
         IntakeSubsystem.getInstance().stopCommand(),
         AccelSubsystem.getInstance().stopCommand()
-//        PrismSubsystem.getInstance().intakeOff()
         );
     }
 
@@ -62,9 +59,8 @@ public class IntakeCommandGroup {
         return new ParallelCommandGroup(
                 AccelSubsystem.getInstance().stopCommand(),
                 IntakeSubsystem.getInstance().stopCommand(),
-                ShooterSubsystem.getInstance().rest()
-//                PrismSubsystem.getInstance().intakeOff(),
-//                PrismSubsystem.getInstance().shootOff()
+                ShooterSubsystem.getInstance().rest(),
+                PrismSubsystem.getInstance().off()
         );
 
     }

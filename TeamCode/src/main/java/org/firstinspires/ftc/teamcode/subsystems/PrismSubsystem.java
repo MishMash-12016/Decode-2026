@@ -22,42 +22,41 @@ public class PrismSubsystem extends MMSubsystem {
 
   public PrismSubsystem() {
     prism = MMRobot.getInstance().currentOpMode.hardwareMap.get(GoBildaPrismDriver.class, "prism");
-    prism.setStripLength(60);
+    prism.setStripLength(36);
     prism.setTargetFPS(60);
     buildArtboards();
   }
 
   private void buildArtboards() {
 
-    // ---------- ARTBOARD 0 : SOLID RED ----------
+    //SOLID RED ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.RED));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.RED,8));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0);
 
-    // ---------- ARTBOARD 1 : SOLID GREEN ----------
+    //SOLID GREEN ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.GREEN));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.GREEN,8));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_1);
 
-    // ---------- ARTBOARD 2 : SOLID BLUE ----------
+    //SOLID BLUE ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.BLUE));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.BLUE,8));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_2);
 
-    // ---------- ARTBOARD 3 : SOLID YELLOW ----------
+    //SOLID YELLOW ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.YELLOW));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.YELLOW,8));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_3);
 
 
-    // ---------- ARTBOARD 4 : BLINK RED ----------
+    //BLINK ARTBOARD
     prism.clearAllAnimations();
-    PrismAnimations.Blink blinkRed =
-            new PrismAnimations.Blink(Color.RED, Color.ORANGE, 1000, 500);
+    PrismAnimations.Blink blinkRed = new PrismAnimations.Blink(Color.BLUE, Color.ORANGE, 200,200);
 
     prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, blinkRed);
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_4);
@@ -68,32 +67,32 @@ public class PrismSubsystem extends MMSubsystem {
 
 
 
-  public Command redCommand() {
+  public Command red() {
     return new InstantCommand(
             () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0));
   }
 
-  public Command greenCommand() {
+  public Command green() {
     return new InstantCommand(
         () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_1));
   }
 
-  public Command blueCommand() {
+  public Command blue() {
     return new InstantCommand(
         () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_2));
   }
 
-  public Command yellowCommand() {
+  public Command yellow() {
     return new InstantCommand(
         () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_3));
   }
-  public Command blinkRed() {
+  public Command blinkBlueOrange() {
     return new InstantCommand(
             () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_4)
     );
   }
   public Command off() {
-    return new InstantCommand(prism::clearAllAnimations);
+    return new InstantCommand(prism::clearAllAnimations,this);
   }
 
 

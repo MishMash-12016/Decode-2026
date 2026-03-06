@@ -8,6 +8,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.PrismSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
 public class ShootCommandGroup {
@@ -29,7 +30,7 @@ public class ShootCommandGroup {
             IntakeSubsystem.getInstance().setPowerInstantCommand(1),
             AccelSubsystem.getInstance().setPowerInstantCommand(1)),
         new WaitUntilCommand(() -> !IntakeSubsystem.getInstance().getState()),
-        new WaitCommand(700),
+        new WaitCommand(300),
         stopShoot());
   }
 
