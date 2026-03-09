@@ -1,10 +1,9 @@
-package org.firstinspires.ftc.teamcode.OpModes.Tele;
+package org.firstinspires.ftc.teamcode.OpModes.Tele.Test;
 
 import Ori.Coval.Logging.AutoLog;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 

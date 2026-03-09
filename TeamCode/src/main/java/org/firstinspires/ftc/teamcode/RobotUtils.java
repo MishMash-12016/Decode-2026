@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import Ori.Coval.Logging.AutoLogOutput;
+
+import com.pedropathing.follower.Follower;
 import com.seattlesolvers.solverslib.geometry.Pose2d;
 import com.seattlesolvers.solverslib.geometry.Rotation2d;
 import com.seattlesolvers.solverslib.geometry.Translation2d;
@@ -9,23 +11,25 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 
 public class RobotUtils {
-//    private static final Translation2d targetPoseBlue
-//            = new Translation2d(5,139);
 
-    private static final Translation2d targetPoseBlue
-            = new Translation2d(10,139);
+    private static final Translation2d closeBlueTargetPose
+            = new Translation2d(1,138);
+    private static final Translation2d farBlueTargetPose
+            = new Translation2d(7,143);
 
     ///144 = field length
-    private static final Translation2d targetPoseRed
-            = new Translation2d(139,139);
+    private static final Translation2d closeRedTargetPose
+            = new Translation2d(144 - 1,138);
+    private static final Translation2d farRedTargetPose
+            = new Translation2d(144 - 7,143);
 
     public static Translation2d getTargetPose(){
+        Follower follower = MMDrivetrain.getInstance().getFollower();
         AllianceColor allianceColor = MMRobot.getInstance().currentOpMode.allianceColor;
         if(allianceColor == null || allianceColor == AllianceColor.BLUE){
-            return targetPoseBlue;
+            return follower.getPose().getY() > 50 ? closeBlueTargetPose : farBlueTargetPose;
         }
-
-        return targetPoseRed;
+        return follower.getPose().getY() > 50 ? closeRedTargetPose : farRedTargetPose;
     }
 
     public static Rotation2d getAngleToTarget(){

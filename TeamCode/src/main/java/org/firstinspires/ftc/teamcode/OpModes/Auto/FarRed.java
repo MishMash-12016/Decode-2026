@@ -38,88 +38,74 @@ public class FarRed extends MMOpMode {
             INTAKE_2_TO_SHOOT,
             LEAVE;
 
-    private final Pose startPose = new Pose(144 - 55, 8, Math.toRadians(180 - 270));
-
+    private final Pose startPose = new Pose(144 - 54.000, 16.000, Math.toRadians(180 - 290));
     Follower follower;
 
     public void buildPaths() {
         FRST_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(144 - 55.000, 8.000),
-
-                                new Pose(144 - 55.000, 13.000)
+                                new Pose(144 - 54.000, 8.500),
+                                new Pose(144 - 54.000, 16.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180 - 270), Math.toRadians(180 - 290))
                 .build();
 
         INTAKE_05 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(144 - 55.000, 13.000),
-
-                                new Pose(144 - 50.000, 35.000)
+                                new Pose(144 - 54.000, 16.000),
+                                new Pose(144 - 50.000, 36.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180 - 290), Math.toRadians(180 - 180))
                 .build();
 
         INTAKE_1 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(144 - 50.000, 35.000),
-
-                                new Pose(144 - 12.00, 36.00)
+                                new Pose(144 - 50.000, 36.000),
+                                new Pose(144 - 12.000, 36.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180 - 180))
                 .build();
 
         INTAKE_1_TO_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(144 - 12.00, 36.00),
-
-                                new Pose(144 - 55.000, 13.000)
+                                new Pose(144 - 12.000, 36.000),
+                                new Pose(144 - 54.000, 16.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180 - 180), Math.toRadians(180 - 292)).setBrakingStart(1.5)
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 180), Math.toRadians(180 - 290))
                 .build();
 
         INTAKE_15 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(144 - 55.000, 13.000),
-
-                                new Pose(144 - 8.000, 30.000)
+                                new Pose(144 - 54.000, 16.000),
+                                new Pose(144 - 9.000, 30.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180 - 290), Math.toRadians(180 - 270))
-
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 290), Math.toRadians(180 - 235))
                 .build();
 
         INTAKE_15_TO_INTAKE_2 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(144 - 8.000, 30.000),
-
-                                new Pose(144 - 8.000, 11.000)
+                                new Pose(144 - 9.000, 30.000),
+                                new Pose(144 - 8.000, 8.000)
                         )
-                ).setConstantHeadingInterpolation(Math.toRadians(180 - 270)).setBrakingStart(1.8)
-
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 235), Math.toRadians(180 - 250))
                 .build();
 
         INTAKE_2_TO_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(144 - 8.000, 11.000),
-
-                                new Pose(144 - 55.000, 13.00)
+                                new Pose(144 - 8.000, 8.000),
+                                new Pose(144 - 54.000, 16.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(180 - 270), Math.toRadians(180 - 292)).setBrakingStart(1.8)
-
+                ).setLinearHeadingInterpolation(Math.toRadians(180 - 250), Math.toRadians(180 - 292))
                 .build();
 
         LEAVE = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(144 - 55.000, 13.000),
-
+                                new Pose(144 - 54.000, 16.000),
                                 new Pose(144 - 45.000, 20.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180 - 292), Math.toRadians(180 - 230))
-
                 .build();
     }
-
 
     public FarRed() {
         super(OpModeType.Competition.AUTO, AllianceColor.RED);
@@ -147,27 +133,27 @@ public class FarRed extends MMOpMode {
                 ///                                   ↑
                 new SequentialCommandGroup(
                         new FollowPathCommand(follower, FRST_SHOOT)
-                                .andThen(new WaitCommand(2000))
-                                .withTimeout(5000)
-                                .andThen(ShootCommandGroup.twoOneShoot())
-                                .andThen(new WaitCommand(1000)),
+                                .andThen(new WaitCommand(500))
+                                .withTimeout(2000)
+                                .andThen(ShootCommandGroup.upShoot())
+                                .andThen(new WaitCommand(800)),
 
                         new FollowPathCommand(follower, INTAKE_05)
-                                .andThen(new WaitCommand(1000))
-                                .withTimeout(4000),
+                                .andThen(new WaitCommand(500))
+                                .withTimeout(2000),
 
                         new FollowPathCommand(follower, INTAKE_1)
                                 .alongWith(IntakeCommandGroup.smartFeed())
-                                .andThen(new WaitCommand(1000))
+                                .andThen(new WaitCommand(500))
                                 .withTimeout(3000)
                                 .andThen(IntakeCommandGroup.stopIntake()),
 
                         new FollowPathCommand(follower, INTAKE_1_TO_SHOOT)
-                                .andThen(new WaitCommand(1000))
-                                .withTimeout(4000)
-                                .andThen(ShootCommandGroup.twoOneShoot())
-                                .andThen(new WaitCommand(2000))
-                                .withTimeout(8000),
+                                .andThen(new WaitCommand(500))
+                                .withTimeout(2500)
+                                .andThen(ShootCommandGroup.upShoot())
+                                .andThen(new WaitCommand(800))
+                                .withTimeout(5000),
 
                         new FollowPathCommand(follower, INTAKE_15)
                                 .alongWith(IntakeCommandGroup.smartFeed())
@@ -175,16 +161,16 @@ public class FarRed extends MMOpMode {
                                 .withTimeout(4000),
 
                         new FollowPathCommand(follower, INTAKE_15_TO_INTAKE_2)
-                                .andThen(new WaitCommand(1000))
-                                .withTimeout(2000),
+                                .andThen(new WaitCommand(500))
+                                .withTimeout(1500),
 
                         new FollowPathCommand(follower, INTAKE_2_TO_SHOOT)
                                 .alongWith(IntakeCommandGroup.stopIntake())
-                                .andThen(new WaitCommand(1500))
-                                .withTimeout(4000)
-                                .andThen(ShootCommandGroup.twoOneShoot())
-                                .andThen(new WaitCommand(2000))
-                                .withTimeout(7000),
+                                .andThen(new WaitCommand(500))
+                                .withTimeout(3000)
+                                .andThen(ShootCommandGroup.upShoot())
+                                .andThen(new WaitCommand(800))
+                                .withTimeout(5000),
 
                         new FollowPathCommand(follower, LEAVE)
                 )

@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.OpModes.Tele;
+package org.firstinspires.ftc.teamcode.OpModes.Tele.Test;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 import edu.wpi.first.sysid.SysIdRoutine;

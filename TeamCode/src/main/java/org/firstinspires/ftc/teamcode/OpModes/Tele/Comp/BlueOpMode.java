@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.OpModes.Tele;
+package org.firstinspires.ftc.teamcode.OpModes.Tele.Comp;
 
 import com.pedropathing.geometry.Pose;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -19,15 +18,15 @@ import org.firstinspires.ftc.teamcode.subsystems.PrismSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-@TeleOp
-public class MainBlueOpMode extends MMOpMode {
+//@TeleOp
+public class BlueOpMode extends MMOpMode {
   boolean slow = false;
   boolean alignd = false;
   boolean inShootMode = false;
   boolean a = false;
   Pose startPose = new Pose(135, 7, Math.toRadians(180));
 
-  public MainBlueOpMode() {
+  public BlueOpMode() {
     super(OpModeType.Competition.TELEOP, AllianceColor.BLUE);
   }
 
@@ -79,7 +78,7 @@ public class MainBlueOpMode extends MMOpMode {
             ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(ShooterSubsystem.farSpeed))
         .whenInactive(ShooterSubsystem.getInstance().rest());
 
-    new Trigger(() -> inShootMode).whileActiveOnce(ShooterSubsystem.getInstance().inSpeed());
+    new Trigger(() -> inShootMode).whileActiveOnce(PrismSubsystem.getInstance().inSpeed());
   }
 
   @Override

@@ -29,7 +29,7 @@ public class ShootCommandGroup {
             BallStopperSubsystem.getInstance().open(),
             IntakeSubsystem.getInstance().setPowerInstantCommand(1),
             AccelSubsystem.getInstance().setPowerInstantCommand(1)),
-        new WaitUntilCommand(() -> !IntakeSubsystem.getInstance().getState()),
+        new WaitUntilCommand(() -> !IntakeSubsystem.getInstance().getFrstState()),
         new WaitCommand(300),
         stopShoot());
   }
