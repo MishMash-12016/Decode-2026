@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
+
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
@@ -12,7 +14,8 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 @Config
 @AutoLog
 public class IntakeSubsystem extends MotorOrCrServoSubsystem {
-    static CuttleDigital sensor;
+    static CuttleDigital frstSensor;
+    static CuttleDigital scndSensor;
 
     // Singleton instance
     public static IntakeSubsystem instance;
@@ -38,15 +41,25 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        sensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
+        frstSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
+        scndSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 6);
 
         withMotor(mmRobot.controlHub, 2,Direction.FORWARD);
 
     }
 
 
-    public boolean getState() {
-        return sensor.getState();
+//    public boolean getFrstState() {
+//        return frstSensor.getState();
+//    }
+//    public boolean getScndState() {
+//        return scndSensor.getState();
+//    }
+    public boolean getFrstState() {
+        return KoalaLog.log("frstState", frstSensor.getState(),true);
+    }
+    public boolean getScndState() {
+        return KoalaLog.log("scndState", scndSensor.getState(),true);
     }
 
     @Override

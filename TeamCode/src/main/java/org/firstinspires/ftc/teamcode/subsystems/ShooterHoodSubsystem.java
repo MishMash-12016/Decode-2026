@@ -26,32 +26,32 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
   public ExterpolationMap closeExterpolationMap =
       new ExterpolationMap()
-              .put(50.94, 0.21)
-              .put(59.82, 0.23)
-              .put(70.51, 0.26)
-              .put(77.54,0.26)
-              .put(87.12,0.25)
-              .put(95.08,0.23)
-              .put(97.38, 0.15);
+              .put(50.94 + 5, 0.21)
+              .put(59.82 + 5, 0.23)
+              .put(70.51 + 5, 0.26)
+              .put(77.54 + 5, 0.26)
+              .put(87.12 + 5, 0.25)
+              .put(95.08 + 5, 0.23)
+              .put(97.38 + 5, 0.15);
   public double getCloseInterpolation(double exter){
      return closeExterpolationMap.exterpolate(exter);
   }
 
   public ExterpolationMap midExterpolationMap =
       new ExterpolationMap()
-              .put(103.7, 0.3)
-              .put(114.3, 0.28)
-              .put(120.65, 0.25);
+              .put(103.7  + 5,0.3 )
+              .put(114.3  + 5,0.28)
+              .put(120.65 + 5,0.25);
   public double getMidInterpolation(double exter){
      return midExterpolationMap.exterpolate(exter);
   }
 
 public ExterpolationMap farExterpolationMap =
         new ExterpolationMap()
-                .put(122.34, 0.44)
-                .put(125.09, 0.42)
-                .put(128.36, 0.43)
-                .put(145.38,0.327);
+                .put(122.34 + 5,0.44 )
+                .put(125.09 + 5,0.42 )
+                .put(128.36 + 5,0.43 )
+                .put(145.38 + 5,0.327);
   public double getFarInterpolation(double exter){
     return farExterpolationMap.exterpolate(exter);
   }

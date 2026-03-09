@@ -155,7 +155,7 @@ public class CloseBlue extends MMOpMode {
         Command autonomousSequence =
                 ///things that will happened along the auto   ↓
                 new ParallelCommandGroup(
-                        ShooterSubsystem.getInstance().speedByLocation(),
+                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(ShooterSubsystem.farSpeed),
                         ShooterHoodSubsystem.getInstance().aimHood(),
                 ///                                           ↑
                         new SequentialCommandGroup(

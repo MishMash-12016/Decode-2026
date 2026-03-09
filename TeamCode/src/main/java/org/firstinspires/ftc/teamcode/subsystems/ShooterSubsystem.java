@@ -125,11 +125,6 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
                 () -> RobotUtils.getDistanceToTarget() < 101 ? closeSpeed : midSpeed);
     }
 
-    public Command inSpeed(){
-        if (Math.abs(getSetPoint() - getVelocity()) < 2 && getSetPoint() > 40)
-            return PrismSubsystem.getInstance().green();
-        return PrismSubsystem.getInstance().red();
-    }
 
     @Override
     public void resetHub() {

@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.OpModes.Tele;
+package org.firstinspires.ftc.teamcode.OpModes.Tele.Test;
 
 import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
@@ -17,17 +17,20 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PrismSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-//@TeleOp
+@TeleOp
 @Config
 @AutoLog
 public class TestOpMode extends MMOpMode {
   boolean slow = false;
   boolean alignd = false;
-  boolean inShootMode = false;
+  boolean inShootMode = true;
   boolean a = false;
   Pose startPose = new Pose(135, 7, Math.toRadians(180));
 
@@ -62,14 +65,12 @@ public class TestOpMode extends MMOpMode {
 
     /// Shooter
     GamepadEx1.getGamepadButton(GamepadKeys.Button.A)
-        .whenPressed(new InstantCommand(()->a = !a)
-                      .alongWith(new InstantCommand(() -> inShootMode = true)));
+        .whenPressed(new InstantCommand(()->a = !a));
     ///   ↑
 
     new Trigger(() -> gamepad1.right_trigger > 0.1)
         .whenActive(
             ShootCommandGroup.upShoot()
-                .alongWith(new InstantCommand(() -> inShootMode = false))
                 .alongWith(new InstantCommand(() -> alignd = false))
                 .alongWith(new WaitCommand(2000)
                             .andThen(new InstantCommand(()->a = false))
@@ -84,9 +85,15 @@ public class TestOpMode extends MMOpMode {
             ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(ShooterSubsystem.farSpeed)
     ).whenInactive(ShooterSubsystem.getInstance().rest());
 
-    new Trigger(() -> inShootMode).whileActiveOnce(
-            ShooterSubsystem.getInstance().inSpeed()
-    );
+
+    GamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+            .whenPressed(
+                    new ParallelCommandGroup(
+                            BallStopperSubsystem.getInstance().close(),
+                            IntakeSubsystem.getInstance().setPowerInstantCommand(0.9),
+                            AccelSubsystem.getInstance().setPowerInstantCommand(1)
+                    )
+            ).whenInactive(IntakeCommandGroup.stopIntake());
   }
 
   @Override
@@ -100,6 +107,9 @@ public class TestOpMode extends MMOpMode {
     telemetry.update();
     MMDrivetrain.update();
 
+    if (inShootMode)
+      PrismSubsystem.getInstance().inSpeed().schedule();
+
     telemetry.addData("", inShootMode);
 //    if(gamepad2.a)throw new NullPointerException("im pointing to your moms ass");
   }
@@ -108,6 +118,5 @@ public class TestOpMode extends MMOpMode {
   public void onEnd() {
     super.onEnd();
     PrismSubsystem.getInstance().off().schedule();
-    CommandScheduler.getInstance().reset();
   }
 }

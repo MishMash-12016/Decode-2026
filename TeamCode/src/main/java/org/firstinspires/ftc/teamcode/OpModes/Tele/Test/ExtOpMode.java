@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.Tele;
+package org.firstinspires.ftc.teamcode.OpModes.Tele.Test;
 
 import Ori.Coval.Logging.AutoLog;
 
@@ -7,10 +7,8 @@ import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
-import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
@@ -28,7 +26,7 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
-//@TeleOp
+@TeleOp
 @AutoLog
 @Config
 public class ExtOpMode extends MMOpMode {
@@ -47,6 +45,7 @@ public class ExtOpMode extends MMOpMode {
     public void onInit() {
         CommandScheduler.getInstance().reset();
         GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
+        GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
         MMDrivetrain.getInstance().setPose(startPose);
         MMDrivetrain.getInstance().enableBlueDriveDefaultCommand(() -> slow);
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
@@ -65,14 +64,30 @@ public class ExtOpMode extends MMOpMode {
                                         AccelSubsystem.getInstance().setPowerInstantCommand(1)))
                 ).whenInactive(ShootCommandGroup.stopShoot());
 
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                IntakeCommandGroup.smartFeed())
-        .whenInactive(IntakeCommandGroup.stopIntake()
-        );
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(
+                        new ParallelCommandGroup(
+                                BallStopperSubsystem.getInstance().close(),
+                                IntakeSubsystem.getInstance().setPowerInstantCommand(0.9),
+                                AccelSubsystem.getInstance().setPowerInstantCommand(1)
+                        )
+                ).whenInactive(IntakeCommandGroup.stopIntake());
 
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(IntakeCommandGroup.outIntake())
                 .whenInactive(IntakeCommandGroup.stopIntake());
+
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.A)
+                .whenPressed(ShooterSubsystem.getInstance().stopCommand());
+
+        GamepadEx2.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(
+                        new ParallelCommandGroup(
+                                BallStopperSubsystem.getInstance().close(),
+                                IntakeSubsystem.getInstance().setPowerInstantCommand(1),
+                                AccelSubsystem.getInstance().setPowerInstantCommand(1)
+                        )
+                ).whenInactive(IntakeCommandGroup.stopIntake());
     }
 
     @Override

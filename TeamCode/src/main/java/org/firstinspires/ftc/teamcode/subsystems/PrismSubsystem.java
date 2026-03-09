@@ -94,6 +94,12 @@ public class PrismSubsystem extends MMSubsystem {
   public Command off() {
     return new InstantCommand(prism::clearAllAnimations,this);
   }
+  public Command inSpeed(){
+    ShooterSubsystem shooter = ShooterSubsystem.getInstance();
+    if (Math.abs(shooter.getSetPoint() - shooter.getVelocity()) < 2)
+      return PrismSubsystem.getInstance().green();
+    return PrismSubsystem.getInstance().red();
+  }
 
 
   @Override
