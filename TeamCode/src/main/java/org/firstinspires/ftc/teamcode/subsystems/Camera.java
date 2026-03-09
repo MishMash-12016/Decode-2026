@@ -29,7 +29,7 @@ public class Camera extends MMSubsystem {
 
     //detection parameters for distance and strafe:
     public static double CAMERA_HEIGHT = 445;  //mm
-    public static double CAMERA_ANGLE = 90 - 35.0; // degrees
+    public static double CAMERA_ANGLE = 90 - 30.0; // degrees
     public static double TARGET_HEIGHT = 39; //mm
 
 

@@ -62,20 +62,22 @@ public class CameraCommands {
             @Override
             public void initialize() {
                 LLResult last = Camera.getInstance().getLatestResult();
-                if (last == null) {
+                if (last == null || last.getDetectorResults().isEmpty()) {
                     KoalaLog.log("last result is null", "", true);
                     noResult = true;
                     return;
                 }
 
-                double distanceX = (Camera.distanceX + offsetX) / 25.4; // mm to inch
+                double distanceX = -(Camera.distanceX + offsetX) / 25.4; // mm to inch
                 double distanceY = (Camera.distanceY + offsetY) / 25.4; // mm to inch
+
+                distanceY += 2;
 
                 Pose currentPose = MMDrivetrain.getInstance().getFollower().getPose();
                 double currentHeading = currentPose.getHeading();
 
-                double dxField =  distanceX * Math.cos(currentHeading) - distanceY * Math.sin(currentHeading);
-                double dyField =  distanceX * Math.sin(currentHeading) + distanceY * Math.cos(currentHeading);
+                double dxField = distanceY * Math.cos(currentHeading) - distanceX * Math.sin(currentHeading);
+                double dyField = distanceY * Math.sin(currentHeading) + distanceX * Math.cos(currentHeading);
 
                 //  Camera distance from robot's center in inches, TODO: change that for the robot!!!
                 // Positive x is robot forward, positive y is robot left.
