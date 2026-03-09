@@ -72,10 +72,8 @@ dependencies {
     implementation 'com.pedropathing:telemetry:1.0.0'
     implementation 'com.bylazar:fullpanels:1.0.12'
 
-    implementation "org.ejml:ejml-simple:0.43.1"
-
-    implementation "com.bylazar:limelightproxy:1.0.2"
     //noinspection GradleDependency
+    implementation "com.bylazar:limelightproxy:1.0.2"
     implementation "org.ejml:ejml-simple:0.44.0"
     implementation 'gov.nist.math:jama:1.0.3'
 }

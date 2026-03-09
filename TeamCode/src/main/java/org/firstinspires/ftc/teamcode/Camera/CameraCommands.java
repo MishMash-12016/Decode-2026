@@ -71,7 +71,7 @@ public class CameraCommands {
                 double distanceX = (Camera.distanceX + offsetX) / 25.4; // mm to inch
                 double distanceY = (Camera.distanceY + offsetY) / 25.4; // mm to inch
 
-                Pose currentPose = MMDrivetrain.follower.getPose();
+                Pose currentPose = MMDrivetrain.getInstance().getFollower().getPose();
                 double currentHeading = currentPose.getHeading();
 
                 double dxField =  distanceX * Math.cos(currentHeading) - distanceY * Math.sin(currentHeading);
@@ -103,7 +103,7 @@ public class CameraCommands {
 
 
                 // Schedule the actual followPath command now that we have live data
-                strafeCommand = new FollowPathCommand(MMDrivetrain.follower, path);
+                strafeCommand = new FollowPathCommand(MMDrivetrain.getInstance().getFollower(), path);
                 strafeCommand.schedule();
             }
 
