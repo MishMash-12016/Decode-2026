@@ -72,7 +72,7 @@ public class MainTeleOp extends MMOpMode {
                 .whenActive(
                         ShootCommandGroup.upShoot()
                                 .alongWith(new InstantCommand(() -> aligned = false))
-                                .alongWith(new WaitCommand(1800).andThen(new InstantCommand(()->a = false)))
+                                .alongWith(new WaitCommand(2500).andThen(new InstantCommand(()->a = false)))
                 );
         new Trigger(() -> a).whileActiveOnce(
                 shooter.getToAndHoldSetPointCommand(ShooterSubsystem.farSpeed)

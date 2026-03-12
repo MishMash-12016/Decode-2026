@@ -21,7 +21,7 @@ import java.util.function.DoubleSupplier;
 @AutoLog
 public class ShooterHoodSubsystem extends ServoSubsystem {
 
-  public double hoodMax = 0.09;
+  public double hoodMax = 0.9;
   public double hoodMin = 0.15;
 
   ExterpolationMap closeExter = new ExterpolationMap()
@@ -86,8 +86,7 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
   @Override
   public void setPosition(double position) {
-    MMUtils.clamp(position, hoodMin,hoodMax);
-    super.setPosition(position);
+    super.setPosition(MMUtils.clamp(position, hoodMin,hoodMax));
   }
 
   @Override
