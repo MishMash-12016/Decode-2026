@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.PrismSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 
+import java.util.TreeSet;
+
 public class IntakeCommandGroup {
 
     public static Command dumbFeed() {
@@ -23,7 +25,18 @@ public class IntakeCommandGroup {
         );
     }
 
-    public static Command smartFeed() {
+        public static Command smartFeed() {
+            return new SequentialCommandGroup(
+                    dumbFeed().alongWith(
+                    PrismSubsystem.getInstance().off()),
+                    new TimedConditionCommand(()->IntakeSubsystem.getInstance().getScndState(),500),
+                    AccelSubsystem.getInstance().stopCommand(),
+                    new WaitCommand(100),
+                    new WaitUntilCommand(()->IntakeSubsystem.getInstance().getFrstState()),
+                    PrismSubsystem.getInstance().blue());
+        }
+
+    public static Command autoSmartFeed() {
         return new SequentialCommandGroup(
                 dumbFeed().alongWith(
                 PrismSubsystem.getInstance().yellow()),

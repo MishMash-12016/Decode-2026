@@ -1,36 +1,58 @@
 package org.firstinspires.ftc.teamcode;
 
 import Ori.Coval.Logging.AutoLogOutput;
+import Ori.Coval.Logging.Logger.KoalaLog;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.Pose;
+import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.geometry.Pose2d;
 import com.seattlesolvers.solverslib.geometry.Rotation2d;
 import com.seattlesolvers.solverslib.geometry.Translation2d;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMPoint2D;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 
 public class RobotUtils {
 
-    private static final Translation2d closeBlueTargetPose
-            = new Translation2d(1,138);
-    private static final Translation2d farBlueTargetPose
-            = new Translation2d(7,143);
+    private enum TargetPose {
+        CLOSE_BLUE(new Translation2d(1,138)),
+        MID_BLUE(new Translation2d(2,142)),
+        FAR_BLUE(new Translation2d(5,143)),
+        CLOSE_RED(new Translation2d(144 - 1,138)),
+        MID_RED(new Translation2d(144 - 2,142)),
+        FAR_RED(new Translation2d(144 - 5,143));
 
-    ///144 = field length
-    private static final Translation2d closeRedTargetPose
-            = new Translation2d(144 - 1,138);
-    private static final Translation2d farRedTargetPose
-            = new Translation2d(144 - 7,143);
+        public final Translation2d pose;
 
-    public static Translation2d getTargetPose(){
-        Follower follower = MMDrivetrain.getInstance().getFollower();
-        AllianceColor allianceColor = MMRobot.getInstance().currentOpMode.allianceColor;
-        if(allianceColor == null || allianceColor == AllianceColor.BLUE){
-            return follower.getPose().getY() > 50 ? closeBlueTargetPose : farBlueTargetPose;
+        TargetPose(Translation2d pose) {
+            this.pose = pose;
         }
-        return follower.getPose().getY() > 50 ? closeRedTargetPose : farRedTargetPose;
+
+        static Translation2d get(int index, AllianceColor allianceColor) {
+            if(allianceColor == AllianceColor.BLUE)
+                return TargetPose.values()[index].pose;
+            return TargetPose.values()[index + 3].pose;
+        }
     }
+    public static Translation2d getTargetPose(){
+        Pose followerPose = MMDrivetrain.getInstance().getFollower().getPose();
+        AllianceColor allianceColor = MMRobot.getInstance().currentOpMode.allianceColor;
+        double limitLineY = MMUtils.mapValuesLinear(
+                followerPose.getX(),
+                new MMPoint2D(0, 140),
+                new MMPoint2D(144, 90),
+                allianceColor
+        );
+        if(followerPose.getY() < 50)
+            return TargetPose.get(2, allianceColor);
+
+        return (followerPose.getY() < limitLineY) ?
+                TargetPose.get(1, allianceColor) : TargetPose.get(0, allianceColor);
+
+    }
+
 
     public static Rotation2d getAngleToTarget(){
         Pose2d robotPose = MMUtils.PedroPoseToSolversPose2d(

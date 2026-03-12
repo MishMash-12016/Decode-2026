@@ -36,112 +36,48 @@ public class FarBlue extends MMOpMode {
             INTAKE_15,
             INTAKE_15_TO_INTAKE_2,
             INTAKE_2_TO_SHOOT,
+            INTAKE_3,
+            INTAKE_3_TO_SHOOT,
             LEAVE;
-/*
-      FRSTSHOOT = follower.pathBuilder().addPath(
-          new BezierLine(
-            new Pose(54.000, 8.500),
-            new Pose(54.000, 16.000)
-          )
-        ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(290))
-        .build();
 
-INTAKE05 = follower.pathBuilder().addPath(
-          new BezierLine(
-            new Pose(54.000, 16.000),
-            new Pose(48.000, 36.000)
-          )
-        ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(180))
-        .build();
-
-INTAKE1 = follower.pathBuilder().addPath(
-          new BezierLine(
-            new Pose(48.000, 36.000),
-            new Pose(12.000, 36.000)
-          )
-        ).setConstantHeadingInterpolation(Math.toRadians(180))
-        .build();
-
-INTAKE1TOSHOOT = follower.pathBuilder().addPath(
-          new BezierLine(
-            new Pose(12.000, 36.000),
-            new Pose(54.000, 16.000)
-          )
-        ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(290))
-        .build();
-
-INTAKE15 = follower.pathBuilder().addPath(
-          new BezierLine(
-            new Pose(54.000, 16.000),
-            new Pose(9.000, 30.000)
-          )
-        ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(235))
-        .build();
-
-INTAKE15TOINTAKE2 = follower.pathBuilder().addPath(
-          new BezierLine(
-            new Pose(9.000, 30.000),
-            new Pose(8.000, 8.000)
-          )
-        ).setLinearHeadingInterpolation(Math.toRadians(235), Math.toRadians(250))
-        .build();
-
-INTAKE2TOSHOOT = follower.pathBuilder().addPath(
-          new BezierLine(
-            new Pose(8.000, 8.000),
-            new Pose(54.000, 16.000)
-          )
-        ).setLinearHeadingInterpolation(Math.toRadians(250), Math.toRadians(292))
-        .build();
-
-LEAVE = follower.pathBuilder().addPath(
-          new BezierLine(
-            new Pose(54.000, 16.000),
-            new Pose(45.000, 20.000)
-          )
-        ).setLinearHeadingInterpolation(Math.toRadians(292), Math.toRadians(230))
-        .build();
-
-  */
-    private final Pose startPose = new Pose(54.000, 16.000, Math.toRadians(290));
+    private final Pose startPose = new Pose(55.000, 8.000, Math.toRadians(270));
     Follower follower;
-
     public void buildPaths() {
         FRST_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(54.000, 8.500),
-                                new Pose(54.000, 16.000)
+                                startPose,
+                                new Pose(55.000, 15.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(270), Math.toRadians(290))
                 .build();
 
         INTAKE_05 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(54.000, 16.000),
-                                new Pose(50.000, 36.000)
+                                new Pose(55.000, 15.000),
+                                new Pose(50.000, 35.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(180))
                 .build();
 
         INTAKE_1 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(50.000, 36.000),
-                                new Pose(12.000, 36.000)
+                                new Pose(50.000, 35.000),
+                                new Pose(12.000, 35.000)
                         )
                 ).setConstantHeadingInterpolation(Math.toRadians(180))
                 .build();
 
         INTAKE_1_TO_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(12.000, 36.000),
-                                new Pose(54.000, 16.000)
+                                new Pose(12.000, 35.000),
+                                new Pose(55.000, 15.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(290))
                 .build();
 
         INTAKE_15 = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(54.000, 16.000),
+                                new Pose(55.000, 15.000),
                                 new Pose(9.000, 30.000)
                         )
                 ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(235))
@@ -158,17 +94,33 @@ LEAVE = follower.pathBuilder().addPath(
         INTAKE_2_TO_SHOOT = follower.pathBuilder().addPath(
                         new BezierLine(
                                 new Pose(8.000, 8.000),
-                                new Pose(54.000, 16.000)
+                                new Pose(55.000, 15.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(250), Math.toRadians(292))
+                ).setLinearHeadingInterpolation(Math.toRadians(250), Math.toRadians(290))
+                .build();
+
+        INTAKE_3 = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(55.000, 15.000),
+                                new Pose(8.000, 30.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(100))
+                .build();
+
+        INTAKE_3_TO_SHOOT = follower.pathBuilder().addPath(
+                        new BezierLine(
+                                new Pose(8.000, 30.000),
+                                new Pose(55.000, 15.000)
+                        )
+                ).setLinearHeadingInterpolation(Math.toRadians(100), Math.toRadians(290))
                 .build();
 
         LEAVE = follower.pathBuilder().addPath(
                         new BezierLine(
-                                new Pose(54.000, 16.000),
-                                new Pose(45.000, 20.000)
+                                new Pose(55.000, 15.000),
+                                new Pose(55.000, 25.000)
                         )
-                ).setLinearHeadingInterpolation(Math.toRadians(292), Math.toRadians(230))
+                ).setLinearHeadingInterpolation(Math.toRadians(290), Math.toRadians(230))
                 .build();
     }
 
@@ -193,13 +145,13 @@ LEAVE = follower.pathBuilder().addPath(
                 ///PATH
                 ///things that will happened along the auto   ↓
                 new ParallelCommandGroup(
-                        ShooterSubsystem.getInstance().speedByLocation(),
+                        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(ShooterSubsystem.farSpeed),
                         ShooterHoodSubsystem.getInstance().aimHood(),
                         ///                                   ↑
                         new SequentialCommandGroup(
                                 new FollowPathCommand(follower, FRST_SHOOT)
-                                        .andThen(new WaitCommand(500))
-                                        .withTimeout(1500)
+                                        .andThen(new WaitCommand(2000))
+                                        .withTimeout(3500)
                                         .andThen(ShootCommandGroup.upShoot())
                                         .andThen(new WaitCommand(800)),
 
@@ -210,10 +162,10 @@ LEAVE = follower.pathBuilder().addPath(
                                 new FollowPathCommand(follower, INTAKE_1)
                                         .alongWith(IntakeCommandGroup.smartFeed())
                                         .andThen(new WaitCommand(500))
-                                        .withTimeout(2000)
-                                        .andThen(IntakeCommandGroup.stopIntake()),
+                                        .withTimeout(2000),
 
                                 new FollowPathCommand(follower, INTAKE_1_TO_SHOOT)
+                                        .alongWith(IntakeCommandGroup.stopIntake())
                                         .andThen(new WaitCommand(500))
                                         .withTimeout(2500)
                                         .andThen(ShootCommandGroup.upShoot())
@@ -233,6 +185,19 @@ LEAVE = follower.pathBuilder().addPath(
                                         .alongWith(IntakeCommandGroup.stopIntake())
                                         .andThen(new WaitCommand(500))
                                         .withTimeout(3000)
+                                        .andThen(ShootCommandGroup.upShoot())
+                                        .andThen(new WaitCommand(800))
+                                        .withTimeout(5000),
+
+                                new FollowPathCommand(follower, INTAKE_3)
+                                        .alongWith(IntakeCommandGroup.smartFeed())
+                                        .andThen(new WaitCommand(500))
+                                        .withTimeout(2000),
+
+                                new FollowPathCommand(follower, INTAKE_3_TO_SHOOT)
+                                        .alongWith(IntakeCommandGroup.stopIntake())
+                                        .andThen(new WaitCommand(500))
+                                        .withTimeout(2500)
                                         .andThen(ShootCommandGroup.upShoot())
                                         .andThen(new WaitCommand(800))
                                         .withTimeout(5000),

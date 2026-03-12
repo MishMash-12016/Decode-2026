@@ -50,12 +50,12 @@ public class TuneOpMode extends MMOpMode {
     GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
     GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
     MMDrivetrain.getInstance().setPose(startPose);
-    MMDrivetrain.getInstance().enableBlueDriveDefaultCommand(() -> slow);
+    MMDrivetrain.getInstance().enableTeleopDriveDefaultCommand(() -> slow,allianceColor);
     GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
     GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER)
-            .toggleWhenActive(MMDrivetrain.getInstance().enableBlueAligned(() -> slow));
+            .toggleWhenActive(MMDrivetrain.getInstance().enableDriveAligned(() -> slow,allianceColor));
     GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE)
-            .whenPressed(() -> MMDrivetrain.getInstance().resetYaw());
+            .whenPressed(() -> MMDrivetrain.getInstance().resetYaw(allianceColor));
   }
 
   @Override

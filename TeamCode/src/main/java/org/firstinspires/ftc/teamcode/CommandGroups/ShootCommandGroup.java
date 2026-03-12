@@ -25,12 +25,13 @@ public class ShootCommandGroup {
   public static Command upShoot() {
     return new SequentialCommandGroup(
         BallStopperSubsystem.getInstance().open(),
+        new WaitCommand(200),
         new ParallelCommandGroup(
             BallStopperSubsystem.getInstance().open(),
             IntakeSubsystem.getInstance().setPowerInstantCommand(1),
             AccelSubsystem.getInstance().setPowerInstantCommand(1)),
-        new WaitUntilCommand(() -> !IntakeSubsystem.getInstance().getFrstState()),
-        new WaitCommand(300),
+        new WaitUntilCommand(() -> !IntakeSubsystem.getInstance().getScndState()),
+        new WaitCommand(150),
         stopShoot());
   }
 

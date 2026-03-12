@@ -25,25 +25,11 @@ public class TuneHoodOpMode extends MMOpMode {
         super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
     }
 
-    CuttleDigital sensor;
-
-    CuttleMotor p0, p1, p2, p3;
-    CuttleMotor ep0, ep1, ep2, ep3;
-    Pose startPose = new Pose(9, 10, 0);
-
-    //      CRServo left;
-//      MotorEx a;
-    public static double pose = 0.13;
-    public static double pow;
-    boolean slow = false;
+    public static double pose = 0.2;
 
     @Override
     public void onInit() {
         CommandScheduler.getInstance().reset();
-        GamepadEx GamepadEx1 = MMRobot.getInstance().gamepadEx1;
-        GamepadEx GamepadEx2 = MMRobot.getInstance().gamepadEx2;
-
-
     }
 
     @Override
@@ -54,13 +40,7 @@ public class TuneHoodOpMode extends MMOpMode {
     @Override
     public void onPlayLoop() {
         telemetry.update();
-
-        //        telemetry.addData("pose", pose);
-        //        KoalaLog.log("pose: ", pose, true);
-
         ShooterHoodSubsystem.getInstance().setPositionCommand(pose).schedule();
-        ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(pow).schedule();
-
         telemetry.addLine("The hood is now in " + pose + " it should be aligned straight with the panels.");
 
     }

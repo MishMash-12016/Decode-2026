@@ -18,6 +18,7 @@ import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Constants;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Drawing;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.HoldPointCommand;
@@ -241,8 +242,10 @@ public class MMDrivetrain extends MMSubsystem {
         return this.turnCommand(Math.toRadians(degrees), isLeft);
     }
 
-    public void resetYaw() {
-        Pose pose = follower.getPose().setHeading(0);
+    public void resetYaw(AllianceColor allianceColor) {
+        Pose pose = (allianceColor == AllianceColor.BLUE) ?
+            follower.getPose().setHeading(Math.toRadians(180)) :
+            follower.getPose().setHeading(Math.toRadians(0));
         follower.setPose(pose);
     }
 
@@ -270,39 +273,37 @@ public class MMDrivetrain extends MMSubsystem {
     /**
      * enables the Default Command(the default command is the drive field centric command)
      */
-    public void enableTeleopDriveDefaultCommand(BooleanSupplier slowMode) {
+    public void enableTeleopDriveDefaultCommand(BooleanSupplier slowMode, AllianceColor allianceColor) {
         MMRobot mmRobot = MMRobot.getInstance();
         setDefaultCommand(
-                driveCommand(
-                        () -> mmRobot.gamepadEx1.getLeftY(),
-                        () -> -mmRobot.gamepadEx1.getLeftX(),
-                        () -> -mmRobot.gamepadEx1.getRightX(),
-                        false,
-                        slowMode));
-    }
-    public void enableBlueDriveDefaultCommand(BooleanSupplier slowMode) {
-        MMRobot mmRobot = MMRobot.getInstance();
-        setDefaultCommand(
-                driveCommand(
-                        () -> -mmRobot.gamepadEx1.getLeftY(),
-                        () -> mmRobot.gamepadEx1.getLeftX(),
-                        () -> -mmRobot.gamepadEx1.getRightX(),
-                        false,
-                        slowMode));
+                (allianceColor == AllianceColor.BLUE) ?
+                        driveCommand(
+                                () -> -mmRobot.gamepadEx1.getLeftY(),
+                                () -> mmRobot.gamepadEx1.getLeftX(),
+                                () -> -mmRobot.gamepadEx1.getRightX(),
+                                false, slowMode)
+                        :
+                        driveCommand(
+                                () -> mmRobot.gamepadEx1.getLeftY(),
+                                () -> -mmRobot.gamepadEx1.getLeftX(),
+                                () -> -mmRobot.gamepadEx1.getRightX(),
+                                false, slowMode)
+                );
     }
 
-    public Command enableDriveAligned(BooleanSupplier slowMode) {
+
+    public Command enableDriveAligned(BooleanSupplier slowMode, AllianceColor allianceColor) {
         MMRobot mmRobot = MMRobot.getInstance();
-        return driveAligned(
-                () -> mmRobot.gamepadEx1.getLeftY(),
-                () -> -mmRobot.gamepadEx1.getLeftX(), false, slowMode);
+        return (allianceColor == AllianceColor.BLUE) ?
+                driveAligned(
+                     () -> -mmRobot.gamepadEx1.getLeftY(),
+                     () -> mmRobot.gamepadEx1.getLeftX(), false, slowMode)
+                :
+                driveAligned(
+                     () -> mmRobot.gamepadEx1.getLeftY(),
+                     () -> -mmRobot.gamepadEx1.getLeftX(), false, slowMode);
     }
-    public Command enableBlueAligned(BooleanSupplier slowMode) {
-        MMRobot mmRobot = MMRobot.getInstance();
-        return driveAligned(
-                () -> -mmRobot.gamepadEx1.getLeftY(),
-                () -> mmRobot.gamepadEx1.getLeftX(), false, slowMode);
-    }
+
 
     public void setPose(Pose pose) {
         follower.setPose(pose);

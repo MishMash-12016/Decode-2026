@@ -36,8 +36,8 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
 
     public static double RESOLUTION = 28.0 / (29.0 / 33.0);
     public static double VelTol = 1;
-    public static double closeSpeed = 42;
-    public static double midSpeed = 46;
+    public static double closeSpeed = 40;
+    public static double midSpeed = 45;
     public static double farSpeed = 52;
 
     public static ShooterSubsystem instance;
@@ -117,12 +117,12 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
     }
 
     public Command speedByLocation() {
-        return getToAndHoldSetPointCommand(
-                () -> RobotUtils.getDistanceToTarget() < 105 ? closeSpeed : midSpeed);
+        return (RobotUtils.getDistanceToTarget() < 115) ?
+                closeSpeed() : getToAndHoldSetPointCommand(farSpeed);
     }
     public Command closeSpeed() {
         return getToAndHoldSetPointCommand(
-                () -> RobotUtils.getDistanceToTarget() < 101 ? closeSpeed : midSpeed);
+                () -> RobotUtils.getDistanceToTarget() < 75 ? closeSpeed : midSpeed);
     }
 
 

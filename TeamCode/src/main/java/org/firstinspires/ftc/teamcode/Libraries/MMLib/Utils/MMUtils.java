@@ -5,6 +5,9 @@ import static java.util.Objects.requireNonNull;
 import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.geometry.Pose2d;
 import com.seattlesolvers.solverslib.geometry.Rotation2d;
+
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
+
 import java.util.function.Consumer;
 import java.util.function.DoubleSupplier;
 
@@ -30,11 +33,22 @@ public abstract class MMUtils {
         double m = (point2.y - point1.y) / (point2.x - point1.x);
         return m * (x - point1.x) + point1.y;
     }
+    public static double mapValuesLinear(double x, MMPoint2D bluePoint1, MMPoint2D bluePoint2, AllianceColor allianceColor) {
+    return (allianceColor == AllianceColor.BLUE) //
+        ? mapValuesLinear(x, bluePoint1, bluePoint2)
+        : mapValuesLinear(x,
+            new MMPoint2D(144 - bluePoint1.x, bluePoint1.y),
+            new MMPoint2D(144 - bluePoint2.x, bluePoint2.y)
+    );
+    }
 
     public static double mapValuesLinear(DoubleSupplier x, MMPoint2D point1, MMPoint2D point2) {
         return mapValuesLinear(x.getAsDouble(), point1, point2);
     }
 
+    public static MMPoint2D pose2DToMMPoint(Pose2d pose2d) {
+        return new MMPoint2D(pose2d.getX(),pose2d.getY());
+    }
     /**
      * this method should help u map linearly a range of values from one range to another.
      * @param x input values
@@ -170,5 +184,15 @@ public abstract class MMUtils {
         return new Pose(pose2d.getX(),
                 pose2d.getY(),
                 pose2d.getHeading());
+    }
+
+    public static Pose mirrorPedroPose(Pose pose){
+        return new Pose(
+                144-pose.getX(),
+                pose.getY(),
+                Math.PI - pose.getHeading());
+    }
+    public static boolean isInRange(double x, double min, double max){
+        return (x > min && x < max);
     }
 }

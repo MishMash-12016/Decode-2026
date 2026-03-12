@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 @AutoLog
 public class BallStopperSubsystem extends ServoSubsystem {
 
-  public static double open = 0.9;
-  public static double close = 0.6;
+  public static double open = 1;
+  public static double close = 0.68;
 
   public static BallStopperSubsystem instance;
 
@@ -36,8 +36,7 @@ public class BallStopperSubsystem extends ServoSubsystem {
     super(subsystemName);
     MMRobot mmRobot = MMRobot.getInstance();
 
-
-//    withServo(0, mmRobot.servoHub, Direction.FORWARD, 0);
+    ///port 0
     withServo("ballStopper",Direction.FORWARD,0);
 
   }
