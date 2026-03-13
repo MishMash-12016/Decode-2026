@@ -36,14 +36,17 @@ public class IntakeCommandGroup {
                     PrismSubsystem.getInstance().blue());
         }
 
-    public static Command autoSmartFeed() {
+    public static Command autoFeed() {
         return new SequentialCommandGroup(
-                dumbFeed().alongWith(
-                PrismSubsystem.getInstance().yellow()),
-                new TimedConditionCommand(()->IntakeSubsystem.getInstance().getFrstState(),300),
-                new WaitCommand(100),
+                dumbFeed().alongWith(PrismSubsystem.getInstance().yellow()),
+                new TimedConditionCommand(()->IntakeSubsystem.getInstance().getFrstState(),400),
+                new WaitCommand(200),
                 new WaitUntilCommand(()->IntakeSubsystem.getInstance().getFrstState()),
-                PrismSubsystem.getInstance().blue());
+                PrismSubsystem.getInstance().blue(),
+                new WaitCommand(500),
+                stopIntake()
+        );
+
     }
 
 

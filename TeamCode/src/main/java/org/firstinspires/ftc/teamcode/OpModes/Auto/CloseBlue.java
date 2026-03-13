@@ -25,17 +25,17 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 @AutoLog
 @Autonomous
 public class CloseBlue extends MMOpMode {
-    public PathChain FRST_SHOOT;
-    public PathChain INTAKE_05;
-    public PathChain INTAKE_1;
-    public PathChain INTAKE_1_TO_SHOOT;
-    public PathChain SHOOT_TO_OPEN_05;
-    public PathChain OPEN_05_TO_OPEN_1;
-    public PathChain OPEN_1_TO_OPEN_15;
-    public PathChain OPEN_15_TO_SHOOT;
-    public PathChain INTAKE_15;
-    public PathChain INTAKE_2;
-    public PathChain INTAKE_2_TO_SHOOT;
+    public PathChain FRST_SHOOT,
+    INTAKE_05,
+    INTAKE_1,
+    INTAKE_1_TO_SHOOT,
+    SHOOT_TO_OPEN_05,
+    OPEN_05_TO_OPEN_1,
+    OPEN_1_TO_OPEN_15,
+    OPEN_15_TO_SHOOT,
+    INTAKE_15,
+    INTAKE_2,
+    INTAKE_2_TO_SHOOT;
 
     private final Pose startPos = new Pose(20.50, 121.00, Math.toRadians(324));
     private final Pose shoot = new Pose(62.000, 76.000, Math.toRadians(310));
