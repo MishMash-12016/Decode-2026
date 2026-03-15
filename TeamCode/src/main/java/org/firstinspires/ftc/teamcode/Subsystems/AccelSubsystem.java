@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.Subsystems;
 
 import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;

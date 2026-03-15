@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes.Tele.Comp;
+package org.firstinspires.ftc.teamcode.OpModes.Tele.Main;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -7,10 +7,11 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
 
 
-//@TeleOp
-public class RedTeleOp extends MainTeleOp {
+@TeleOp(name = "blue TeleOp", group = "MainTeleOps")
 
-  public RedTeleOp() {
+public class BlueTeleOp extends MainTeleOp {
+
+  public BlueTeleOp() {
     super(OpModeType.Competition.TELEOP, AllianceColor.BLUE);
   }
 

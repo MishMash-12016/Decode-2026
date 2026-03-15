@@ -6,26 +6,21 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
-import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
-import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.TimedConditionCommand;
-import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.PrismSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.AccelSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.BallStopperSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterHoodSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
-@TeleOp
+@TeleOp(name = "TuneOpMode", group = "tunersOpModes")
 @AutoLog
 @Config
 public class TuneOpMode extends MMOpMode {

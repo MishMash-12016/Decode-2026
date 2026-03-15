@@ -5,11 +5,10 @@ import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
-import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.PrismSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.AccelSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.BallStopperSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 public class ShootCommandGroup {
 

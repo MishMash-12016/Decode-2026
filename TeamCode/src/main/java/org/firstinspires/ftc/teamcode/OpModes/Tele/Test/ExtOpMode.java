@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele.Test;
 
 import Ori.Coval.Logging.AutoLog;
-import Ori.Coval.Logging.Logger.KoalaLog;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -20,11 +19,11 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
-import org.firstinspires.ftc.teamcode.subsystems.AccelSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.BallStopperSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.AccelSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.BallStopperSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterHoodSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 
 @TeleOp

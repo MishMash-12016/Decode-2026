@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.Subsystems;
 
 
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -17,7 +17,7 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 @Config
 //@AutoLog
 
-public class Camera extends MMSubsystem {
+public class CameraSubsystem extends MMSubsystem {
     public final Limelight3A camera;
     public int currentPipeline = 0;
 
@@ -38,10 +38,10 @@ public class Camera extends MMSubsystem {
 
     public static double timesPipelineSwitchFail = 0; // for debugging
 
-    private static Camera instance;
+    private static CameraSubsystem instance;
 
 
-    public Camera() {
+    public CameraSubsystem() {
         super();
         MMRobot.getInstance().subsystems.add(this);
 
@@ -50,9 +50,9 @@ public class Camera extends MMSubsystem {
         camera.pipelineSwitch(currentPipeline);
     }
 
-    public static synchronized Camera getInstance() {
+    public static synchronized CameraSubsystem getInstance() {
         if (instance == null) {
-            instance = new Camera();
+            instance = new CameraSubsystem();
         }
         return instance;
     }

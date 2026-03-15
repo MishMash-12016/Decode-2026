@@ -3,20 +3,15 @@ package org.firstinspires.ftc.teamcode.OpModes.Tele.Test;
 import Ori.Coval.Logging.AutoLog;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.pedropathing.geometry.Pose;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
-import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
-import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterHoodSubsystem;
 
-//@TeleOp
+//@TeleOp(name = "TuneHoodOpMode", group = "tunersOpModes")
 @AutoLog
 @Config
 public class TuneHoodOpMode extends MMOpMode {

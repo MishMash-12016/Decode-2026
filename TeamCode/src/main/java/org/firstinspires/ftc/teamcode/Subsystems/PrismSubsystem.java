@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.Subsystems;
 
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.Libraries.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Libraries.Prism.PrismAnimations;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
-import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
 
 public class PrismSubsystem extends MMSubsystem {

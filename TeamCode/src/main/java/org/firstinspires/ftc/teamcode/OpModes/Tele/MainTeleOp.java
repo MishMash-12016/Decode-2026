@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -16,9 +15,9 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.subsystems.PrismSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.PrismSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterHoodSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 public class MainTeleOp extends MMOpMode {
     protected boolean slow = false;

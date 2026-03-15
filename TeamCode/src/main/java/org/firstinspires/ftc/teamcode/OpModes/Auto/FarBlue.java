@@ -6,22 +6,25 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
+import com.pedropathing.paths.Path;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
+import com.seattlesolvers.solverslib.command.ConditionalCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
+import org.firstinspires.ftc.teamcode.Commands.LamlamCommand;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterHoodSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterHoodSubsystem;
+import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 @AutoLog
 @Autonomous
@@ -178,7 +181,7 @@ public class FarBlue extends MMOpMode {
                                 .withTimeout(2000),
 
                         new FollowPathCommand(follower, INTAKE_1)
-                                .alongWith(IntakeCommandGroup.smartFeed())
+                                .alongWith(IntakeCommandGroup.autoFeed())
                                 .andThen(new WaitCommand(500))
                                 .withTimeout(2000),
 
@@ -190,7 +193,7 @@ public class FarBlue extends MMOpMode {
                                 .withTimeout(5000),
 
                         new FollowPathCommand(follower, INTAKE_15)
-                                .alongWith(IntakeCommandGroup.smartFeed())
+                                .alongWith(IntakeCommandGroup.autoFeed())
                                 .andThen(new WaitCommand(750))
                                 .withTimeout(2500),
 
@@ -206,14 +209,16 @@ public class FarBlue extends MMOpMode {
                                 .withTimeout(5000),
 
                         new FollowPathCommand(follower, INTAKE_25)
-                                .alongWith(IntakeCommandGroup.smartFeed())
-                                .andThen(new WaitCommand(500))
-                                .withTimeout(2000),
+                                .alongWith(IntakeCommandGroup.autoFeed())
+                                .interruptOn(LamlamCommand::isResult),
+                        new ConditionalCommand(
+                                new FollowPathCommand(follower, INTAKE_3)
+                                        .andThen(new WaitCommand(500))
+                                        .withTimeout(2000),
 
-                        new FollowPathCommand(follower, INTAKE_3)
-                                .andThen(new WaitCommand(500))
-                                .withTimeout(2000),
-
+                                LamlamCommand.AutoGoToArtifact(),
+                                () -> LamlamCommand.noResult
+                        ),
 
                         new FollowPathCommand(follower, INTAKE_3_TO_SHOOT)
                                 .andThen(new WaitCommand(500))

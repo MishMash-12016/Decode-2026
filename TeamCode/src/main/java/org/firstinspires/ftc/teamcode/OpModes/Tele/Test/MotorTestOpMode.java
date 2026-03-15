@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.Alli
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
-//@TeleOp
+//@TeleOp(name = "MotorTestOpMode", group = "TestOpModes")
 //@AutoLog
 //@Config
 public class MotorTestOpMode extends MMOpMode {
