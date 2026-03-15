@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes.Tele;
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -22,18 +23,19 @@ import org.firstinspires.ftc.teamcode.subsystems.ShooterSubsystem;
 public class MainTeleOp extends MMOpMode {
     protected boolean slow = false;
     protected boolean aligned = false;
-    protected boolean inShootMode = true;
+    protected boolean farSpeed = false;
     protected boolean a = false;
     protected Pose startPose;
     private Pose blueStartPose = new Pose(134, 7, Math.toRadians(180));
 
     public MainTeleOp(OpModeType opModeType, AllianceColor allianceColor) {
         super(opModeType, allianceColor);
-        if (opModeType != OpModeType.Competition.TELEOP)
-            if(allianceColor == AllianceColor.BLUE)
-                startPose = blueStartPose;
-            else
-                startPose = MMUtils.mirrorPedroPose(blueStartPose);
+        try{
+            MMDrivetrain.getInstance();
+        } catch (Exception e){
+            startPose = (allianceColor == AllianceColor.BLUE) ?
+                    blueStartPose : MMUtils.mirrorPedroPose(blueStartPose);
+        }
     }
 
     @Override
@@ -54,29 +56,33 @@ public class MainTeleOp extends MMOpMode {
         new Trigger(() -> aligned).whileActiveOnce(drivetrain.enableDriveAligned(() -> slow, allianceColor));
         if(opModeType != OpModeType.Competition.TELEOP){
             GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(()->drivetrain.resetYaw(allianceColor));
-            drivetrain.setPose(startPose);
+        if (startPose != null) drivetrain.setPose(startPose);
         }
         ///     ↑
 
-        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
-                        IntakeCommandGroup.smartFeed()
-                                .alongWith(new InstantCommand(() -> inShootMode = false)))
-                .whenInactive(IntakeCommandGroup.stopIntake()
-                        .alongWith(new InstantCommand(() -> inShootMode = true)));
+        GamepadEx1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER)
+                .whenPressed(IntakeCommandGroup.smartFeed())
+                .whenInactive(IntakeCommandGroup.stopIntake());
 
 
         /// Shooter
         GamepadEx1.getGamepadButton(GamepadKeys.Button.A)
                 .whenPressed(new InstantCommand(()->a = !a));
+
+        new Trigger(() -> a)
+                .whileActiveOnce(
+                    shooter.getToAndHoldSetPointCommand(ShooterSubsystem.farSpeed)
+                .alongWith(
+                        PrismSubsystem.getInstance().isReady()))
+                .whenInactive(shooter.rest());
+
         new Trigger(() -> gamepad1.right_trigger > 0.1)
                 .whenActive(
                         ShootCommandGroup.upShoot()
                                 .alongWith(new InstantCommand(() -> aligned = false))
-                                .alongWith(new WaitCommand(2500).andThen(new InstantCommand(()->a = false)))
+                                .alongWith(new WaitCommand(2500).andThen(
+                                        new InstantCommand(()-> a = false)))
                 );
-        new Trigger(() -> a).whileActiveOnce(
-                shooter.getToAndHoldSetPointCommand(ShooterSubsystem.farSpeed)
-        ).whenInactive(shooter.rest());
         ///     ↑
 
 
@@ -88,7 +94,7 @@ public class MainTeleOp extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN)
                 .whenPressed(IntakeCommandGroup.outIntake())
                 .whenInactive(IntakeCommandGroup.stopIntake());
-        ///     ↑
+    ///     ↑
 
     }
 
@@ -96,9 +102,6 @@ public class MainTeleOp extends MMOpMode {
     public void onPlayLoop() {
         telemetry.update();
         MMDrivetrain.update();
-
-        if (inShootMode)
-            PrismSubsystem.getInstance().inSpeed().schedule();
     }
 
     @Override

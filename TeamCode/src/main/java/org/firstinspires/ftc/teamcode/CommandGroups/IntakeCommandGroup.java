@@ -17,7 +17,7 @@ import java.util.TreeSet;
 
 public class IntakeCommandGroup {
 
-    public static Command dumbFeed() {
+     private static Command dumbFeed() {
         return new ParallelCommandGroup(
                 BallStopperSubsystem.getInstance().close(),
                 IntakeSubsystem.getInstance().setPowerInstantCommand(1),
@@ -27,20 +27,20 @@ public class IntakeCommandGroup {
 
         public static Command smartFeed() {
             return new SequentialCommandGroup(
-                    dumbFeed().alongWith(
-                    PrismSubsystem.getInstance().off()),
+                    dumbFeed().alongWith(PrismSubsystem.getInstance().off()),
                     new TimedConditionCommand(()->IntakeSubsystem.getInstance().getScndState(),500),
                     AccelSubsystem.getInstance().stopCommand(),
-                    new WaitCommand(100),
+                    new WaitCommand(200),
                     new WaitUntilCommand(()->IntakeSubsystem.getInstance().getFrstState()),
                     PrismSubsystem.getInstance().blue());
         }
 
     public static Command autoFeed() {
         return new SequentialCommandGroup(
-                dumbFeed().alongWith(PrismSubsystem.getInstance().yellow()),
-                new TimedConditionCommand(()->IntakeSubsystem.getInstance().getFrstState(),400),
-                new WaitCommand(200),
+                dumbFeed().alongWith(PrismSubsystem.getInstance().off()),
+                new TimedConditionCommand(()->IntakeSubsystem.getInstance().getFrstState(),750),
+                AccelSubsystem.getInstance().stopCommand(),
+                new WaitCommand(300),
                 new WaitUntilCommand(()->IntakeSubsystem.getInstance().getFrstState()),
                 PrismSubsystem.getInstance().blue(),
                 new WaitCommand(500),

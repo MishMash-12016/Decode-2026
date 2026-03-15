@@ -9,7 +9,7 @@ import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMWebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.FollowPathCommand;
@@ -50,7 +50,7 @@ public class MainBasicAuto extends MMOpMode {
                 new FollowPathCommand(follower, FROM_START_TO_SCORE),
                 ShootCommandGroup.upShoot(),
                 new FollowPathCommand(follower, FROM_SCORE_TO_PARKING),
-                new RunCommand(()-> RobotConstants.APRIL_TAG_ID = WebcamSubsystem.getInstance().getAprilTagID()).withTimeout(2000)
+                new RunCommand(()-> RobotConstants.APRIL_TAG_ID = MMWebcamSubsystem.getInstance().getAprilTagID()).withTimeout(2000)
         );
         autonomousSequence.schedule();
     }

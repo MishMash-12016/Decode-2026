@@ -5,10 +5,11 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
-import org.firstinspires.ftc.teamcode.RobotUtils;
 
 
 @TeleOp
@@ -28,8 +29,8 @@ public class TestOpMode extends MainTeleOp {
   @Override
   public void onPlayLoop() {
     super.onPlayLoop();
-    KoalaLog.log("tuneTarget/x:", RobotUtils.getTargetPose().getX(),true);
-    KoalaLog.log("tuneTarget/y:", RobotUtils.getTargetPose().getY(),true);
-    telemetry.addData("inShootMode:", inShootMode);
+//    KoalaLog.log("   : ", ,true);
+
+    telemetry.addData("farSpeed: ", farSpeed);
   }
 }

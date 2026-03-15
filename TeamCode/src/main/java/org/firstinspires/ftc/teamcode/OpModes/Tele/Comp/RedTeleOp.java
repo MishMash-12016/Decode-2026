@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
 
 
-@TeleOp
+//@TeleOp
 public class RedTeleOp extends MainTeleOp {
 
   public RedTeleOp() {

@@ -153,11 +153,11 @@ public class FarBlue extends MMOpMode {
 
     @Override
     public void onPlay() {
+        follower = MMDrivetrain.getInstance().getFollower();
         CommandScheduler.getInstance().reset();
         MMDrivetrain.getInstance().reset();
-        MMDrivetrain.getInstance().getFollower().setStartingPose(startPose);
-        MMDrivetrain.getInstance().getFollower().setPose(startPose);
-        follower = MMDrivetrain.getInstance().getFollower();
+        follower.setStartingPose(startPose);
+        follower.setPose(startPose);
         buildPaths();
 
         ///PATH

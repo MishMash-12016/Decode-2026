@@ -11,7 +11,7 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.WebcamSubsystem;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMWebcamSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceSide;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
@@ -85,7 +85,7 @@ public abstract class MMOpMode extends LinearOpMode {
         CommandScheduler.getInstance().run();                     //runs the scheduler
         MMDrivetrain.update();
 
-        WebcamSubsystem.update();
+        MMWebcamSubsystem.update();
         logCommandScheduler();
 
         KoalaLog.log("looptime", System.currentTimeMillis() - lastLoopTime, true);

@@ -22,13 +22,13 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @AutoLog
-public class WebcamSubsystem extends MMSubsystem {
+public class MMWebcamSubsystem extends MMSubsystem {
 
-    public static WebcamSubsystem instance;
+    public static MMWebcamSubsystem instance;
 
-    public static synchronized WebcamSubsystem getInstance() {
+    public static synchronized MMWebcamSubsystem getInstance() {
         if (instance == null) {
-            instance = new WebcamSubsystemAutoLogged();
+            instance = new MMWebcamSubsystemAutoLogged();
         }
         return instance;
     }
@@ -44,7 +44,7 @@ public class WebcamSubsystem extends MMSubsystem {
     private double distance = 0;
     private double angle = 0;
     private Pose3D robotPose = new Pose3D(new Position(), new YawPitchRollAngles(AngleUnit.DEGREES, 0,0,0,0));
-    public WebcamSubsystem(){
+    public MMWebcamSubsystem(){
         initAprilTag();
     }
 

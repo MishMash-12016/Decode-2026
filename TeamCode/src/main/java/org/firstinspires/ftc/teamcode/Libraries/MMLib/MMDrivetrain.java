@@ -39,7 +39,7 @@ public class MMDrivetrain extends MMSubsystem {
     public static double headingKD = 0.00003;
     public static double headingClockewiseKS = -0.09;
     public static double headingCounterClockwiseKS = 0.09;
-     public static double headingTolarence = 1;
+     public static double headingTolarence = 0.5;
     public PIDController headingPid;
 
     private static MMDrivetrain instance;
@@ -80,7 +80,6 @@ public class MMDrivetrain extends MMSubsystem {
         headingPid.setTolerance(headingTolarence);
 
         follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
-        follower.setStartingPose(new Pose(0, 0, 0));
         withDebugPidSuppliers(
                 () -> headingKP, () -> headingKI, () -> headingKD, () -> headingTolarence);
     }
@@ -106,10 +105,12 @@ public class MMDrivetrain extends MMSubsystem {
 
         return (CommandBase) new RunCommand(() -> {
             Rotation2d target_angle = RobotUtils.getAngleToTarget().plus(Rotation2d.fromDegrees(180));
-            // TODO check radians
-            double headingPower = KoalaLog.log("heading_pid/power:", headingPid.calculate(
-            KoalaLog.log("heading_pid/current_heading", Math.toDegrees(getPose().getHeading()), true),
-            KoalaLog.log("heading_pid/target_heading", target_angle.getDegrees(), true)), true);
+            double headingPower = headingPid.calculate(
+            Math.toDegrees(getPose().getHeading()),
+            target_angle.getDegrees());
+
+            KoalaLog.log("heading_pid/current_heading", Math.toDegrees(getPose().getHeading()), true);
+            KoalaLog.log("heading_pid/target_heading",  target_angle.getDegrees(),              true);
             KoalaLog.log("heading_pid/error", headingPid.getError(), true);
             KoalaLog.log("heading_pid/kp", headingPid.getP(), true);
             KoalaLog.log("heading_pid/supplier kp", debugKpSupplier.getAsDouble(), true);

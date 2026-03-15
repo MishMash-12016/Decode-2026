@@ -2,11 +2,17 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.RunCommand;
+
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.Prism.Color;
 import org.firstinspires.ftc.teamcode.Libraries.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Libraries.Prism.PrismAnimations;
 import org.firstinspires.ftc.teamcode.MMRobot;
+
+import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.Logger.KoalaLog;
 
 public class PrismSubsystem extends MMSubsystem {
   private static PrismSubsystem instance;
@@ -32,7 +38,7 @@ public class PrismSubsystem extends MMSubsystem {
     //SOLID RED ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.RED,8));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.RED,15));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0);
 
     //SOLID GREEN ARTBOARD
@@ -44,33 +50,24 @@ public class PrismSubsystem extends MMSubsystem {
     //SOLID BLUE ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.BLUE,8));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.BLUE,10));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_2);
 
-    //SOLID YELLOW ARTBOARD
+    //BLINK GREEN ARTBOARD
     prism.clearAllAnimations();
-    prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.YELLOW,8));
-    prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_3);
-
-
-    //BLINK ARTBOARD
-    prism.clearAllAnimations();
-    PrismAnimations.Blink blinkRed = new PrismAnimations.Blink(Color.BLUE, Color.ORANGE, 200,200);
-
-    prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0, blinkRed);
+    prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0,
+            new PrismAnimations.Blink(Color.GREEN, Color.TRANSPARENT, 400,800));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_4);
 
+    //BLANK ARTBOARD
     prism.clearAllAnimations();
+    prism.insertAndUpdateAnimation(
+            GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.TRANSPARENT,0));
+    prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_5);
 
+    prism.clearAllAnimations();
   }
 
-
-
-  public Command red() {
-    return new InstantCommand(
-            () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0));
-  }
 
   public Command green() {
     return new InstantCommand(
@@ -82,25 +79,29 @@ public class PrismSubsystem extends MMSubsystem {
         () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_2));
   }
 
-  public Command yellow() {
-    return new InstantCommand(
-        () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_3));
-  }
-  public Command blinkBlueOrange() {
-    return new InstantCommand(
-            () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_4)
-    );
-  }
   public Command off() {
-    return new InstantCommand(prism::clearAllAnimations,this);
-  }
-  public Command inSpeed(){
-    ShooterSubsystem shooter = ShooterSubsystem.getInstance();
-    if (Math.abs(shooter.getSetPoint() - shooter.getVelocity()) < 2)
-      return PrismSubsystem.getInstance().green();
-    return PrismSubsystem.getInstance().red();
+    return new InstantCommand(
+            () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_5));
   }
 
+  private void blinkGreen() {
+    prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_4);
+  }
+  private void red() {
+    prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0);
+  }
+
+  public Command isReady(){
+    return new RunCommand(() -> {
+      double shooterError = Math.abs(ShooterSubsystem.getInstance().getError());
+      double headingError = Math.abs(MMDrivetrain.getInstance().headingPid.getError());
+      double headingTol = MMDrivetrain.headingTolarence;
+
+      if (KoalaLog.log("yitzhak is gay: " , Math.abs(shooterError) < 2 && headingError < headingTol,true))
+        blinkGreen();
+      else red();
+    }, this);
+  }
 
   @Override
   public void resetHub() {}
