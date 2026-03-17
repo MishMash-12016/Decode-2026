@@ -60,10 +60,9 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        withMotor(mmRobot.controlHub, 1, Direction.REVERSE);
-        withMotor(mmRobot.controlHub, 0, Direction.REVERSE);
-
-        withEncoder(mmRobot.expansionHub, 0, RESOLUTION, Direction.REVERSE);
+        //!!! the first one is the motor that is connected to the encoder
+        withMotor(, Direction.REVERSE, RESOLUTION);
+        withMotor(, Direction.REVERSE);
 
         withPid(KP, KI, KD);
 

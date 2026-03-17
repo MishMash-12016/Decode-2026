@@ -14,7 +14,6 @@ public class MMMotorOrCrServo {
   private Motor motor;
   private CuttleCrServo crServo;
   private String crServoName;
-  private int direction = 1;
 
   public MMMotorOrCrServo(Motor motor) {
     this.motor = motor;
@@ -36,7 +35,7 @@ public class MMMotorOrCrServo {
    */
   public void setPower(double power) {
     if (motor != null) {
-      motor.set(power * direction);
+      motor.set(power);
     } else if (crServo != null) {
       crServo.setPower(power);
     }
@@ -45,9 +44,9 @@ public class MMMotorOrCrServo {
   public void setDirection(Direction direction) {
     if (motor != null) {
       if (direction == Direction.FORWARD){
-        this.direction = 1;
+        motor.setInverted(false);
       }else{
-        this.direction = -1;
+        motor.setInverted(true);
       }
     } else if (crServo != null) {
       crServo.setDirection(direction);
@@ -68,7 +67,7 @@ public class MMMotorOrCrServo {
 
   public double getPower() {
     if (motor != null) {
-      return motor.getRawPower() * direction;
+      return motor.getRawPower();
     } else {
       return crServo.getPower();
     }
