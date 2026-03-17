@@ -7,9 +7,11 @@ import static edu.wpi.first.units.Units.Volts;
 import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
 
 import edu.wpi.first.sysid.SysIdRoutine;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
@@ -22,6 +24,7 @@ import org.firstinspires.ftc.teamcode.RobotUtils;
 @Config
 @AutoLog
 public class ShooterSubsystem extends VelocityPidSubsystem {
+    static Motor encoder;
 
     ExterpolationMap exterpolationMap = new ExterpolationMap()
             .put(1, 6);
@@ -60,9 +63,8 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
 
-        //!!! the first one is the motor that is connected to the encoder
-        withMotor(, Direction.REVERSE, RESOLUTION);
-        withMotor(, Direction.REVERSE);
+        withMotor("CHPort0", Direction.FORWARD, RESOLUTION);
+        withMotor("CHPort1", Direction.FORWARD);
 
         withPid(KP, KI, KD);
 

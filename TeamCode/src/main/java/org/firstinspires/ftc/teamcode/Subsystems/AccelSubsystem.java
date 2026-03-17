@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
+import com.seattlesolvers.solverslib.command.Command;
+
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
@@ -30,8 +32,10 @@ public class AccelSubsystem extends MotorOrCrServoSubsystem {
     super(subsystemName);
     MMRobot mmRobot = MMRobot.getInstance();
 
-    withMotor(, Direction.FORWARD);
+    withMotor("CHPort3", Direction.REVERSE);
   }
+
+
   @Override
   public void resetHub() {
     instance = null;

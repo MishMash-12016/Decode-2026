@@ -7,6 +7,7 @@ import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -14,10 +15,13 @@ import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Di
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMMotorOrCrServo;
 import org.firstinspires.ftc.teamcode.MMRobot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
+  private static final Logger log = LoggerFactory.getLogger(PidBaseSubsystem.class);
   // Encoder that measures current position and velocity (ticks converted via ratio)
-  private Motor encoder;
+  private MotorEx encoder;
   public PIDController pidController = new PIDController(0, 0, 0);
 
   boolean shouldWrapAngle = false;
@@ -34,7 +38,7 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
    * @param direction
    */
   public MotorOrCrServoSubsystem withMotor(String motorName, Direction direction, double cpr){
-    encoder = new Motor(MMRobot.getInstance().currentOpMode.hardwareMap, motorName, cpr, 6000);
+    encoder = new MotorEx(MMRobot.getInstance().currentOpMode.hardwareMap, motorName, cpr, 6000);
     return withMotor(encoder, direction);
   }
 
@@ -120,7 +124,7 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
 
   @AutoLogOutput
   public double getVelocity() {
-    return encoder.getCorrectedVelocity();
+    return encoder.getVelocity()/(28.0 /(29.0/33.0));
   }
 
   @AutoLogOutput

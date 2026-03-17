@@ -71,7 +71,7 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
   public ShooterHoodSubsystem(String subsystemName) {
     super(subsystemName);
     ///port 1
-    withServo("shooterHood",Direction.FORWARD,0);
+    withServo("SHPort1",Direction.FORWARD,0);
   }
 
 

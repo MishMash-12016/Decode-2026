@@ -6,6 +6,7 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.seattlesolvers.solverslib.command.Command;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
@@ -43,21 +44,15 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
         MMRobot mmRobot = MMRobot.getInstance();
         HardwareMap hardwareMap = MMRobot.getInstance().currentOpMode.hardwareMap;
 
-        digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
-        frstSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
-        scndSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 6);
+        frstSensor = hardwareMap.get(DigitalChannel.class, "CHDPort4");
+        scndSensor = hardwareMap.get(DigitalChannel.class, "CHDPort6");
 
-        withMotor( ,Direction.FORWARD);
+        withMotor("CHPort2",Direction.REVERSE);
 
     }
 
 
-//    public boolean getFrstState() {
-//        return frstSensor.getState();
-//    }
-//    public boolean getScndState() {
-//        return scndSensor.getState();
-//    }
+
     public boolean getFrstState() {
         return KoalaLog.log("frstState", frstSensor.getState(),true);
     }

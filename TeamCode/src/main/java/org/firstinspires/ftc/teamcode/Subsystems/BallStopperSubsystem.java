@@ -37,7 +37,7 @@ public class BallStopperSubsystem extends ServoSubsystem {
     MMRobot mmRobot = MMRobot.getInstance();
 
     ///port 0
-    withServo("ballStopper",Direction.FORWARD,0);
+    withServo("SHPort0",Direction.FORWARD,0);
 
   }
 
