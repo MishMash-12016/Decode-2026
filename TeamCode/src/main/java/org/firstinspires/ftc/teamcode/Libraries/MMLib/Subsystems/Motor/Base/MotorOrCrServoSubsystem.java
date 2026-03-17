@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base;
 
 import Ori.Coval.Logging.AutoLogOutput;
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
+
 import edu.wpi.first.units.measure.Voltage;
 import java.util.ArrayList;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleCrServo;
@@ -13,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMMotorOrCrServo;
+import org.firstinspires.ftc.teamcode.MMRobot;
 
 public class MotorOrCrServoSubsystem extends MMSubsystem {
     // List of motors or crServos driven by this subsystem
@@ -94,17 +98,20 @@ public class MotorOrCrServoSubsystem extends MMSubsystem {
 
     /**
      * adds a motor to this subsystem
-     * @param revHub
-     * @param port
+     * @param motorName
      * @param direction
      */
-    public MotorOrCrServoSubsystem withMotor(CuttleRevHub revHub, int port, Direction direction){
-        MMMotorOrCrServo motor = new MMMotorOrCrServo(new CuttleMotor(revHub, port, direction));
+    public MotorOrCrServoSubsystem withMotor(String motorName, Direction direction){
+        return withMotor(new Motor(MMRobot.getInstance().currentOpMode.hardwareMap, motorName));
+    }
+
+    public MotorOrCrServoSubsystem withMotor(Motor motor){
+        MMMotorOrCrServo internalMotor = new MMMotorOrCrServo(motor);
         if(zeroPowerBehavior != null){
-            motor.setZeroPowerBehavior(zeroPowerBehavior);
+            internalMotor.setZeroPowerBehavior(zeroPowerBehavior);
         }
 
-        motorOrCrServoList.add(motor);
+        motorOrCrServoList.add(internalMotor);
         return this;
     }
 

@@ -6,6 +6,8 @@ import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.button.Trigger;
+import com.seattlesolvers.solverslib.hardware.motors.Motor;
+
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
@@ -13,11 +15,12 @@ import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMMotorOrCrServo;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
   // Encoder that measures current position and velocity (ticks converted via ratio)
-  private CuttleEncoder encoder;
+  private Motor encoder;
   public PIDController pidController = new PIDController(0, 0, 0);
 
   boolean shouldWrapAngle = false;
@@ -26,6 +29,16 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
   // base
   public PidBaseSubsystem(String subsystemName) {
     super(subsystemName);
+  }
+
+  /**
+   * adds a motor to this subsystem
+   * @param motorName
+   * @param direction
+   */
+  public MotorOrCrServoSubsystem withMotor(String motorName, Direction direction, boolean isEncoder){
+    encoder = new Motor(MMRobot.getInstance().currentOpMode.hardwareMap, motorName);
+    return withMotor(encoder);
   }
 
   /**
@@ -100,21 +113,17 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
   @AutoLogOutput
   public double getPose() {
     if (shouldWrapAngle) {
-      double angle = encoder.getPose();
+      double angle = encoder.getCurrentPosition();
       angle = angle % angleRange;
       if (angle < 0) angle += angleRange;
       return angle;
     }
-    return encoder.getPose();
-  }
-
-  public double getRawPose() {
-    return encoder.getPose();
+    return encoder.getCurrentPosition();
   }
 
   @AutoLogOutput
   public double getVelocity() {
-    return encoder.getVelocity();
+    return encoder.getCorrectedVelocity();
   }
 
   @AutoLogOutput
@@ -132,18 +141,8 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
     return pidController.getSetpoint();
   }
 
-  public void setPose(double pose) {
-    encoder.setPose(pose);
-  }
-
   public void setSetpoint(double setpoint) {
     pidController.setSetpoint(setpoint);
-  }
-
-  public PidBaseSubsystem withEncoder(
-      CuttleRevHub revHub, int encoderPort, double cpr, Direction direction) {
-    encoder = new CuttleEncoder(revHub, encoderPort, cpr, direction);
-    return this;
   }
 
   /**
@@ -154,7 +153,7 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
    * @return this subsystem for chaining
    */
   public PidBaseSubsystem withZeroSwitch(CuttleDigital zeroSwitch, double zeroPose) {
-    new Trigger(zeroSwitch::getState).whenActive(() -> encoder.setPose(zeroPose));
+    new Trigger(zeroSwitch::getState).whenActive(() -> encoder.resetEncoder());
     return this;
   }
 
@@ -171,7 +170,7 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
    * @return this subsystem for chaining
    */
   public PidBaseSubsystem withZeroSupplier(BooleanSupplier zeroSupplier, double zeroPose) {
-    new Trigger(zeroSupplier).whenActive(() -> encoder.setPose(zeroPose));
+    new Trigger(zeroSupplier).whenActive(() -> encoder.resetEncoder());
     return this;
   }
 
