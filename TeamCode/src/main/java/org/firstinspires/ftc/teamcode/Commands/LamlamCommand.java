@@ -16,6 +16,7 @@ import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 
 
 import Ori.Coval.Logging.AutoLog;
+import Ori.Coval.Logging.AutoLogOutput;
 import Ori.Coval.Logging.Logger.KoalaLog;
 
 @Config
@@ -54,7 +55,7 @@ public class LamlamCommand {
                 new WaitUntilCommand(() -> CameraSubsystem.getInstance().getPipelineIndex() == CameraSubsystem.getInstance().currentPipeline)
         );
     }
-
+    @AutoLogOutput
     public static boolean isResult(){
         LLResult last = CameraSubsystem.getInstance().getLatestResult();
         if (last == null || last.getDetectorResults().isEmpty())
@@ -63,10 +64,11 @@ public class LamlamCommand {
         noResult = false;
         return true;
     }
+
     public static Command GoToArtifact() {
                 LLResult last = CameraSubsystem.getInstance().getLatestResult();
         if (last == null || last.getDetectorResults().isEmpty()) {
-            KoalaLog.log("last result is null", "", true);;
+            KoalaLog.log("last result is null", "", true);
             return new InstantCommand();
         }
 

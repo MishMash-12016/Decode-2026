@@ -80,6 +80,7 @@ public class MMDrivetrain extends MMSubsystem {
         headingPid.setTolerance(headingTolarence);
 
         follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
+
         withDebugPidSuppliers(
                 () -> headingKP, () -> headingKI, () -> headingKD, () -> headingTolarence);
     }

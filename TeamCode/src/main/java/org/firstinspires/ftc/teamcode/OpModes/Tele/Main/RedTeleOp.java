@@ -7,12 +7,12 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
 
 
-@TeleOp(name = "red TeleOp", group = "MainTeleOps")
+@TeleOp(name = "RED TELEOP")
 
 public class RedTeleOp extends MainTeleOp {
 
   public RedTeleOp() {
-    super(OpModeType.Competition.TELEOP, AllianceColor.BLUE);
+    super(OpModeType.Competition.TELEOP, AllianceColor.RED);
   }
 
   @Override

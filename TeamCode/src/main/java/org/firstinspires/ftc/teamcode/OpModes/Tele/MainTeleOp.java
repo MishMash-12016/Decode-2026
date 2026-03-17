@@ -55,7 +55,10 @@ public class MainTeleOp extends MMOpMode {
         new Trigger(() -> aligned).whileActiveOnce(drivetrain.enableDriveAligned(() -> slow, allianceColor));
         if(opModeType != OpModeType.Competition.TELEOP){
             GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(()->drivetrain.resetYaw(allianceColor));
-        if (startPose != null) drivetrain.setPose(startPose);
+            if (startPose != null) {
+                drivetrain.getFollower().setStartingPose(startPose);
+                drivetrain.setPose(startPose);
+            }
         }
         ///     ↑
 
@@ -77,7 +80,7 @@ public class MainTeleOp extends MMOpMode {
 
         new Trigger(() -> gamepad1.right_trigger > 0.1)
                 .whenActive(
-                        ShootCommandGroup.upShoot()
+                        ShootCommandGroup.smartUpShoot()
                                 .alongWith(new InstantCommand(() -> aligned = false))
                                 .alongWith(new WaitCommand(2500).andThen(
                                         new InstantCommand(()-> a = false)))

@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
 
 
-@TeleOp(name = "blue TeleOp", group = "MainTeleOps")
+@TeleOp(name = "BLUE TELEOP")
 
 public class BlueTeleOp extends MainTeleOp {
 

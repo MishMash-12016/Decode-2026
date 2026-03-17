@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpMo
 import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
 
 
-@TeleOp(name = "Test OpMode", group = "TestOpModes")
+@TeleOp
 @Config
 @AutoLog
 public class TestOpMode extends MainTeleOp {

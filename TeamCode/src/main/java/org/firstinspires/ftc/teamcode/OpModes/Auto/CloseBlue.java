@@ -162,7 +162,7 @@ public class CloseBlue extends MMOpMode {
                                 new FollowPathCommand(follower, FRST_SHOOT)
                                         .andThen(new WaitCommand(1000))
                                         .withTimeout(2500)
-                                        .andThen(ShootCommandGroup.upShoot())
+                                        .andThen(ShootCommandGroup.smartUpShoot())
                                         .andThen(new WaitCommand(1000)),
 
                                 new FollowPathCommand(follower, INTAKE_05)
@@ -178,7 +178,7 @@ public class CloseBlue extends MMOpMode {
                                 new FollowPathCommand(follower, INTAKE_1_TO_SHOOT)
                                         .andThen(new WaitCommand(1000))
                                         .withTimeout(4000)
-                                        .andThen(ShootCommandGroup.upShoot())
+                                        .andThen(ShootCommandGroup.smartUpShoot())
                                         .andThen(new WaitCommand(2000))
                                         .withTimeout(8000),
 
@@ -199,7 +199,7 @@ public class CloseBlue extends MMOpMode {
                                 new FollowPathCommand(follower, OPEN_15_TO_SHOOT)
                                         .andThen(new WaitCommand(1000))
                                         .withTimeout(4000)
-                                        .andThen(ShootCommandGroup.upShoot())
+                                        .andThen(ShootCommandGroup.smartUpShoot())
                                         .andThen(new WaitCommand(2000))
                                         .withTimeout(8000),
 
@@ -215,7 +215,7 @@ public class CloseBlue extends MMOpMode {
                                 new FollowPathCommand(follower, INTAKE_2_TO_SHOOT)
                                         .andThen(new WaitCommand(1000))
                                         .withTimeout(4000)
-                                        .andThen(ShootCommandGroup.upShoot())
+                                        .andThen(ShootCommandGroup.smartUpShoot())
                                         .andThen(new WaitCommand(2000))
                                         .withTimeout(8000)
                         )

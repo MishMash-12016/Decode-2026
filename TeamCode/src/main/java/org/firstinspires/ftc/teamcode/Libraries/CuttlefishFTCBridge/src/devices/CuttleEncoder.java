@@ -45,6 +45,8 @@ public class CuttleEncoder {
 
   /** Get the number of counts that the encoder has turned */
   public double getCounts() {
+    if(hub == null || hub.bulkData == null)
+      return 0;
     return (hub.bulkData.getEncoderPosition(mPort) - offsetTicks) * direction;
   }
 
