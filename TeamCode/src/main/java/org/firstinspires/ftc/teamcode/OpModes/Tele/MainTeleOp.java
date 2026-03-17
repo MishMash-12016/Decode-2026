@@ -25,13 +25,11 @@ public class MainTeleOp extends MMOpMode {
     protected boolean farSpeed = false;
     protected boolean a = false;
     protected Pose startPose;
-    private Pose blueStartPose = new Pose(134, 7, Math.toRadians(180));
+    private Pose blueStartPose = new Pose(135, 8, Math.toRadians(180));
 
     public MainTeleOp(OpModeType opModeType, AllianceColor allianceColor) {
         super(opModeType, allianceColor);
-        try{
-            MMDrivetrain.getInstance();
-        } catch (Exception e){
+        if (MMDrivetrain.isInstanceNull()) {
             startPose = (allianceColor == AllianceColor.BLUE) ?
                     blueStartPose : MMUtils.mirrorPedroPose(blueStartPose);
         }
@@ -53,12 +51,11 @@ public class MainTeleOp extends MMOpMode {
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
         GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()-> aligned = !aligned);
         new Trigger(() -> aligned).whileActiveOnce(drivetrain.enableDriveAligned(() -> slow, allianceColor));
-        if(opModeType != OpModeType.Competition.TELEOP){
+        if(opModeType != OpModeType.Competition.TELEOP)
             GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(()->drivetrain.resetYaw(allianceColor));
-            if (startPose != null) {
-                drivetrain.getFollower().setStartingPose(startPose);
-                drivetrain.setPose(startPose);
-            }
+        if (startPose != null) {
+            drivetrain.getFollower().setStartingPose(startPose);
+            drivetrain.setPose(startPose);
         }
         ///     ↑
 

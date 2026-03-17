@@ -343,6 +343,9 @@ public class MMDrivetrain extends MMSubsystem {
         ((PinpointVisionLocalizer) follower.getPoseTracker().getLocalizer())
                 .addVisionMeasurement(pose, timestampSeconds);
     }
+    public static boolean isInstanceNull(){
+        return instance == null;
+    }
 
     public void reset() {
         instance = null;
