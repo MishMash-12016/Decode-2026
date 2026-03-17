@@ -4,8 +4,9 @@ import Ori.Coval.Logging.AutoLog;
 import Ori.Coval.Logging.Logger.KoalaLog;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
@@ -14,8 +15,8 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 @Config
 @AutoLog
 public class IntakeSubsystem extends MotorOrCrServoSubsystem {
-    static CuttleDigital frstSensor;
-    static CuttleDigital scndSensor;
+    static DigitalChannel frstSensor;
+    static DigitalChannel scndSensor;
 
     // Singleton instance
     public static IntakeSubsystem instance;
@@ -40,7 +41,9 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
     public IntakeSubsystem(String subsystemName) {
         super(subsystemName);
         MMRobot mmRobot = MMRobot.getInstance();
+        HardwareMap hardwareMap = MMRobot.getInstance().currentOpMode.hardwareMap;
 
+        digitalTouch = hardwareMap.get(DigitalChannel.class, "digitalTouch");
         frstSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
         scndSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 6);
 

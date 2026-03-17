@@ -6,9 +6,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMRobotInner;
 public class MMRobot extends MMRobotInner {
 
     public MMRobot(){
-        setControlHubName("Control Hub");
-        setExpansionHubName("Expansion Hub 2");
-        setServoHubName("Servo Hub 8");
     }
 
     @Override

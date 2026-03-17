@@ -10,9 +10,6 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleEncoder;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMMotorOrCrServo;
@@ -152,15 +149,15 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
    * @param zeroPose encoder value to set when switch is pressed
    * @return this subsystem for chaining
    */
-  public PidBaseSubsystem withZeroSwitch(CuttleDigital zeroSwitch, double zeroPose) {
-    new Trigger(zeroSwitch::getState).whenActive(() -> encoder.resetEncoder());
-    return this;
-  }
-
-  public PidBaseSubsystem withZeroSwitch(CuttleDigital zeroSwitch) {
-    withZeroSwitch(zeroSwitch, 0);
-    return this;
-  }
+//  public PidBaseSubsystem withZeroSwitch(CuttleDigital zeroSwitch, double zeroPose) {
+//    new Trigger(zeroSwitch::getState).whenActive(() -> encoder.resetEncoder());
+//    return this;
+//  }
+//
+//  public PidBaseSubsystem withZeroSwitch(CuttleDigital zeroSwitch) {
+//    withZeroSwitch(zeroSwitch, 0);
+//    return this;
+//  }
 
   /**
    * Configures a zero-position limit switch that resets encoder when activated.

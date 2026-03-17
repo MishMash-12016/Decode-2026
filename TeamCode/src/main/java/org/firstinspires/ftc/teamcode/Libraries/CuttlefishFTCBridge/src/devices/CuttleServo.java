@@ -17,21 +17,8 @@ public class CuttleServo{
     double offset = 0.0;
 
     Direction direction = Direction.FORWARD;
-    public CuttleRevHub hub;
     com.qualcomm.robotcore.hardware.Servo ftcServoDevice;
 
-    /**
-     * Initialize servo using cuttlefish direct access system
-     * @param revHub
-     * @param servoPort
-     * */
-    public CuttleServo(CuttleRevHub revHub, int servoPort)
-    {
-        port = servoPort;
-        hub = revHub;
-        FTCServo = false;
-        servoName = null;
-    }
     /**
      * Initialize servo using hardwareMap
      * @param hardwareMap hardwareMap object
@@ -52,32 +39,7 @@ public class CuttleServo{
     public void setPosition(double position) {
         double offsetPose = position + offset;
         pos = direction == Direction.REVERSE ? 1 - offsetPose : offsetPose;
-
-        if(!FTCServo)
-        {
-            hub.setServoPosition(port,pos);
-            if(!enabled)
-            {
-                enablePWM(true);
-            }
-        }
-        else
-        {
-            ftcServoDevice.setPosition(pos);
-        }
-    }
-
-    /**
-     * Enable or disable PWM on the servo port. This will not work if the servo was obtained using hardwareMap.
-     * @param  enable If set to true PWM will be enabled, and if set to false PWM will be disabled
-     * */
-    public void enablePWM(boolean enable)
-    {
-        if(!FTCServo)
-        {
-            hub.enableServoPWM(port,enable);
-            enabled = enable;
-        }
+        ftcServoDevice.setPosition(pos);
     }
 
     /**

@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Libraries.MMLib;
 import Ori.Coval.Logging.AutoLogManager;
 import Ori.Coval.Logging.Logger.KoalaLog;
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
@@ -29,7 +30,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
  * {@link OpModeType.NonCompetition#EXPERIMENTING_NO_EXPANSION Experimenting Without Expansion}.
  */
 public abstract class MMOpMode extends LinearOpMode {
-
+    List<LynxModule> hubs;
     public OpModeType opModeType;
 
     public AllianceColor allianceColor;
@@ -58,6 +59,12 @@ public abstract class MMOpMode extends LinearOpMode {
         }
         MMRobot.getInstance().currentOpMode = this;
         MMRobot.getInstance().initializeSystems(opModeType);
+
+        hubs = hardwareMap.getAll(LynxModule.class);
+
+        for (LynxModule hub : hubs) {
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
     }
 
     public abstract void onInit();
@@ -76,12 +83,9 @@ public abstract class MMOpMode extends LinearOpMode {
      * and {@link org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub Control & Expansion Hub} on Play Loop.
      */
     public void onPlayLoopUpdates() {
-        MMRobot.getInstance().controlHub.pullBulkData();        //updates the controlHub sensors
-        if (MMRobot.getInstance().expansionHub != null) {
-            MMRobot.getInstance().expansionHub.pullBulkData();  //updates the expansionHub sensors
+        for (LynxModule module : hubs) {
+            module.clearBulkCache();
         }
-
-        MMRobot.getInstance().battery.update();
         CommandScheduler.getInstance().run();                     //runs the scheduler
         MMDrivetrain.update();
 

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleServo;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
@@ -178,21 +177,6 @@ public class ServoSubsystem extends MMSubsystem {
      */
     public ServoSubsystem withServo(String servoName, Direction servoDirection, double offset) {
         CuttleServo servo = new CuttleServo(MMRobot.getInstance().currentOpMode.hardwareMap, servoName).setOffset(offset).setDirection(servoDirection);
-        servoList.add(servo);
-        return this;
-    }
-
-    /**
-     * Adds a servo to the subsystem using a {@link CuttleRevHub}.
-     *
-     * @param revHub         the rev hub to use
-     * @param servoPort      the port number
-     * @param servoDirection the logical direction
-     * @param offset         the offset to apply
-     * @return this subsystem instance, for chaining
-     */
-    public ServoSubsystem withServo(int servoPort, CuttleRevHub revHub, Direction servoDirection, double offset) {
-        CuttleServo servo = new CuttleServo(revHub, servoPort).setOffset(offset).setDirection(servoDirection);
         servoList.add(servo);
         return this;
     }

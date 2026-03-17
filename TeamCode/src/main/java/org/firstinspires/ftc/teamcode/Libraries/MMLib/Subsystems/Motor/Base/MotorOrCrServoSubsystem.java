@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base;
 
 import Ori.Coval.Logging.AutoLogOutput;
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
@@ -10,9 +9,6 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 
 import edu.wpi.first.units.measure.Voltage;
 import java.util.ArrayList;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleCrServo;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMMotorOrCrServo;
@@ -115,13 +111,13 @@ public class MotorOrCrServoSubsystem extends MMSubsystem {
         return this;
     }
 
-    public MotorOrCrServoSubsystem withCrServo(CuttleRevHub revHub, int port, Direction direction){
-        MMMotorOrCrServo crServo = new MMMotorOrCrServo(new CuttleCrServo(revHub, port, direction));
-
-        motorOrCrServoList.add(crServo);
-
-        return this;
-    }
+//    public MotorOrCrServoSubsystem withCrServo(CuttleRevHub revHub, int port, Direction direction){
+//        MMMotorOrCrServo crServo = new MMMotorOrCrServo(new CuttleCrServo(revHub, port, direction));
+//
+//        motorOrCrServoList.add(crServo);
+//
+//        return this;
+//    }
 
     @AutoLogOutput
     public double getPower(){

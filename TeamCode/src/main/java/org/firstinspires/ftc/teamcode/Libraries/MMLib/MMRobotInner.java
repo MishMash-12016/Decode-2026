@@ -5,28 +5,16 @@ import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import java.util.ArrayList;
-import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMBattery;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMBatteryAutoLogged;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 public class MMRobotInner extends Robot {
   public MMOpMode currentOpMode;
-
-  // basic robot things(control hub, expansion hub...)
-  public CuttleRevHub controlHub;
-  public CuttleRevHub expansionHub;
-  public MMBattery battery;
   public GamepadEx gamepadEx1;
   public GamepadEx gamepadEx2;
 
   public ArrayList<MMSubsystem> subsystems = new ArrayList<>();
-
-  public String controlHubName = "Control Hub";
-  public String expansionHubName = "Expansion Hub";
-  public String servoHubName = "Servo Hub";
 
   private static MMRobot instance;
 
@@ -72,37 +60,9 @@ public class MMRobotInner extends Robot {
       subsystem.resetHub();
     }
   }
-
-  public void setControlHubName(String controlHubName) {
-    this.controlHubName = controlHubName;
-  }
-
-  public void setExpansionHubName(String expansionHubName) {
-    this.expansionHubName = expansionHubName;
-  }
-
-  public void setServoHubName(String servoHubName) {
-    this.servoHubName = servoHubName;
-  }
-
   private void initBasics() {
     HardwareMap hardwareMap = MMRobot.getInstance().currentOpMode.hardwareMap;
     gamepadEx1 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad1);
     gamepadEx2 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad2);
-
-    controlHub = new CuttleRevHub(hardwareMap, controlHubName);
-    for(int i = 0; i < 10 ; i++){
-      controlHub.pullBulkData();
-    }
-
-    if (MMRobot.getInstance().currentOpMode.opModeType
-        != OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-      expansionHub = new CuttleRevHub(hardwareMap, expansionHubName);
-      for(int i = 0; i < 10 ; i++){
-        expansionHub.pullBulkData();
-      }
-    }
-
-    battery = new MMBatteryAutoLogged(hardwareMap);
   }
 }
