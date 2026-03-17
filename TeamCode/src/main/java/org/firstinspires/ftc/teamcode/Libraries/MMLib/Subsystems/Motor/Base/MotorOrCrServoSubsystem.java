@@ -98,11 +98,12 @@ public class MotorOrCrServoSubsystem extends MMSubsystem {
      * @param direction
      */
     public MotorOrCrServoSubsystem withMotor(String motorName, Direction direction){
-        return withMotor(new Motor(MMRobot.getInstance().currentOpMode.hardwareMap, motorName));
+        return withMotor(new Motor(MMRobot.getInstance().currentOpMode.hardwareMap, motorName), direction);
     }
 
-    public MotorOrCrServoSubsystem withMotor(Motor motor){
+    public MotorOrCrServoSubsystem withMotor(Motor motor, Direction direction){
         MMMotorOrCrServo internalMotor = new MMMotorOrCrServo(motor);
+        internalMotor.setDirection(direction);
         if(zeroPowerBehavior != null){
             internalMotor.setZeroPowerBehavior(zeroPowerBehavior);
         }
