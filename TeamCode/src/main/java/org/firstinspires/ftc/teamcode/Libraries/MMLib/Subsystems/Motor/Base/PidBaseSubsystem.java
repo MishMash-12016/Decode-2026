@@ -37,8 +37,8 @@ public class PidBaseSubsystem extends MotorOrCrServoSubsystem {
    * @param motorName
    * @param direction
    */
-  public MotorOrCrServoSubsystem withMotor(String motorName, Direction direction, double cpr){
-    encoder = new MotorEx(MMRobot.getInstance().currentOpMode.hardwareMap, motorName, cpr, 6000);
+  public MotorOrCrServoSubsystem withMotor(String motorName, Direction direction, double cpr, double rpm){
+    encoder = new MotorEx(MMRobot.getInstance().currentOpMode.hardwareMap, motorName, cpr, rpm);
     return withMotor(encoder, direction);
   }
 

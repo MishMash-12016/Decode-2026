@@ -17,7 +17,7 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 @Config
 //@AutoLog
 
-public class CameraSubsystem extends MMSubsystem {
+public class LamLamSubsystem extends MMSubsystem {
     public final Limelight3A camera;
     public int currentPipeline = 0;
 
@@ -38,10 +38,10 @@ public class CameraSubsystem extends MMSubsystem {
 
     public static double timesPipelineSwitchFail = 0; // for debugging
 
-    private static CameraSubsystem instance;
+    private static LamLamSubsystem instance;
 
 
-    public CameraSubsystem() {
+    public LamLamSubsystem() {
         super();
         MMRobot.getInstance().subsystems.add(this);
 
@@ -50,9 +50,9 @@ public class CameraSubsystem extends MMSubsystem {
         camera.pipelineSwitch(currentPipeline);
     }
 
-    public static synchronized CameraSubsystem getInstance() {
+    public static synchronized LamLamSubsystem getInstance() {
         if (instance == null) {
-            instance = new CameraSubsystem();
+            instance = new LamLamSubsystem();
         }
         return instance;
     }
@@ -200,8 +200,8 @@ public class CameraSubsystem extends MMSubsystem {
 //        if (!initiated) return;
         getLatestResult();
 
-        KoalaLog.log("distanceX periodic", distanceX,true);
-        KoalaLog.log("distanceY periodic", distanceY,true);
+        KoalaLog.log("LamLamSubsystem/distanceX periodic", distanceX,true);
+        KoalaLog.log("LamLamSubsystem/distanceY periodic", distanceY,true);
         FtcDashboard.getInstance().getTelemetry().addData("distanceX periodic dash", distanceX);
         FtcDashboard.getInstance().getTelemetry().addData("distanceY periodic dash", distanceY);
     }

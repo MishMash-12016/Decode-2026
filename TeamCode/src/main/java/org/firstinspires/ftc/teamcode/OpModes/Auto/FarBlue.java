@@ -17,7 +17,7 @@ import com.seattlesolvers.solverslib.command.WaitCommand;
 
 import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
-import org.firstinspires.ftc.teamcode.Commands.LamlamCommand;
+import org.firstinspires.ftc.teamcode.Commands.LamlamCommands;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
@@ -246,7 +246,7 @@ public class FarBlue extends MMOpMode {
                             new SequentialCommandGroup(
                                 new FollowPathCommand(follower, DETECT_05),
                                 new FollowPathCommand(follower, DETECT_1, 0.7)
-                            ).interruptOn(LamlamCommand::isResult)
+                            ).interruptOn(LamlamCommands::isResult)
                              .andThen(
                                  new ConditionalCommand(
 
@@ -255,10 +255,10 @@ public class FarBlue extends MMOpMode {
                                                  .withTimeout(3000)
                                                  .andThen(new FollowPathCommand(follower, INTAKE_3_TO_SHOOT)),
 
-                                         LamlamCommand.AutoGoToArtifact()
+                                         LamlamCommands.AutoGoToArtifact()
                                              .andThen(new FollowPathCommand(follower, DETECT_TO_SHOOT)),
 
-                                         () -> LamlamCommand.noResult
+                                         () -> LamlamCommands.noResult
                                  )
                              ),
                              IntakeCommandGroup.autoFeed()

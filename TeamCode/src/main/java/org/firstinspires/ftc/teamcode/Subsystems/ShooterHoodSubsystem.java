@@ -21,35 +21,34 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
   public double hoodMax = 0.9;
   public double hoodMin = 0.15;
 
-  ExterpolationMap closeExter = new ExterpolationMap()
-              .put(62.39,0.29)
-              .put(68.06,0.26)
-              .put(74.99,0.55);
-
-  ExterpolationMap midExter = new ExterpolationMap()
-              .put(75.469,0.395)
-              .put(83.5,0.4    )
-              .put(92.87,0.398 )
-              .put(99.84,0.38  )
-              .put(112.19,0.34 )
-              .put(117.7,0.26  );
-
-  ExterpolationMap farExter = new ExterpolationMap()
-              .put(129.08,0.5  )
-              .put(144.21,0.425)
-              .put(148.71,0.4  );
-
+  InterpLUT closeInter = new InterpLUT()
+          .add(68.425 ,0.1 )
+          .add(70.305 ,0.15)
+          .add(76.125 ,0.18)
+          .add(83.873 ,0.2 )
+          .add(90.074 ,0.25)
+          .add(98.247 ,0.18)
+          .add(106.226,0.22)
+          .add(114.831,0.16)
+          .add(120   ,0.157)
+          .add(125   ,0.151)
+          .add(131   ,0.144)
+          .createLUT();
   InterpLUT farInter = new InterpLUT()
-          .add(129.08,0.5  )
-          .add(144.21,0.425)
-          .add(148.71,0.4  )
+          .add(125    ,0.49 )
+          .add(129.466,0.472)
+          .add(136.025,0.472)
+          .add(139.237,0.41 )
+          .add(143.153,0.36 )
+          .add(150.36 ,0.36 )
+          .add(153.131,0.35 )
+          .add(156.668,0.3  )
           .createLUT();
 
   public double getInterpulaton(double dis){
-    if(dis < 75) return closeExter.exterpolate(dis);
-    if (dis < 120) return midExter.exterpolate(dis);
-    return MMUtils.isInRange(dis,130, 148)?
-            farInter.get(dis) : farExter.exterpolate(dis);
+    return (dis < 128) ?
+            closeInter.get(MMUtils.clamp(dis, 69,130)) :
+            farInter.get(MMUtils.clamp(dis, 130,156));
   }
 
   public static ShooterHoodSubsystem instance;

@@ -19,7 +19,7 @@ public class RobotUtils {
     private enum TargetPose {
         CLOSE_BLUE(new Translation2d(1,138)),
         MID_BLUE(new Translation2d(2,142)),
-        FAR_BLUE(new Translation2d(5,143)),
+        FAR_BLUE(new Translation2d(3.5,143.5)),
         CLOSE_RED(new Translation2d(144 - 1,138)),
         MID_RED(new Translation2d(144 - 2,142)),
         FAR_RED(new Translation2d(144 - 5,143));

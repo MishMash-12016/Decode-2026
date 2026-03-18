@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.pedropathing.geometry.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitCommand;
@@ -39,7 +40,8 @@ public class ExtOpMode extends MMOpMode {
     }
     public static double hoodPose = 0.4;
     public static double shootSpeed = 0;
-    private Pose startPose = new Pose(134, 7, Math.toRadians(180));
+    public static double shootTimes = 0;
+    private Pose startPose = new Pose(135, 8, Math.toRadians(180));
 
     @Override
     public void onInit() {
@@ -68,7 +70,7 @@ public class ExtOpMode extends MMOpMode {
                             IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                             AccelSubsystem.getInstance().setPowerInstantCommand(1)
                     )
-            )).whenInactive(ShootCommandGroup.stopShoot());
+            ).alongWith(new InstantCommand(()->shootTimes++))).whenInactive(ShootCommandGroup.stopShoot());
         ///     ↑
 
         /// Intake
@@ -92,6 +94,7 @@ public class ExtOpMode extends MMOpMode {
         else
             ShooterSubsystem.getInstance().getToAndHoldSetPointCommand(shootSpeed).schedule();
         ShooterHoodSubsystem.getInstance().setPositionCommand(hoodPose).schedule();
+        telemetry.addData("shootTimes: ", shootTimes);
 
         if(gamepad2.a) throw new NullPointerException("yoyo youre gay its on gampad 2");
     }
