@@ -132,35 +132,41 @@ public class LamlamCommands {
     }
 
     public static Command goToArtifact() {
-    return new InstantCommand(
-        () -> {
-          double distanceX = -(LamLamSubsystem.distanceX + offsetX) / 25.4; // mm to inch
-          double distanceY = (LamLamSubsystem.distanceY + offsetY) / 25.4; // mm to inch
+        return new CommandBase() {
+            @Override
+            public void initialize() {
+                    double distanceX = -(LamLamSubsystem.distanceX + offsetX) / 25.4; // mm to inch
+                    double distanceY = (LamLamSubsystem.distanceY + offsetY) / 25.4; // mm to inch
 
-          distanceY += 6;
+                    distanceY += 6;
 
-          Pose currentPose = MMDrivetrain.getInstance().getFollower().getPose();
-          double currentHeading = currentPose.getHeading();
+                    Pose currentPose = MMDrivetrain.getInstance().getFollower().getPose();
+                    double currentHeading = currentPose.getHeading();
 
-          double dxField =
-              distanceY * Math.cos(currentHeading) - distanceX * Math.sin(currentHeading);
-          double dyField =
-              distanceY * Math.sin(currentHeading) + distanceX * Math.cos(currentHeading);
+                    double dxField =
+                            distanceY * Math.cos(currentHeading) - distanceX * Math.sin(currentHeading);
+                    double dyField =
+                            distanceY * Math.sin(currentHeading) + distanceX * Math.cos(currentHeading);
 
-          double endX = currentPose.getX() + dxField;
-          double endY = currentPose.getY() + dyField;
+                    double endX = currentPose.getX() + dxField;
+                    double endY = currentPose.getY() + dyField;
 
-          Path path =
-              new Path(
-                  new BezierLine(
-                      new Pose(currentPose.getX(), currentPose.getY()), new Pose(endX, endY)));
+                    Path path =
+                            new Path(
+                                    new BezierLine(
+                                            new Pose(currentPose.getX(), currentPose.getY()), new Pose(endX, endY)));
 
-          double targetHeading = Math.atan2(dyField, dxField);
-          path.setLinearHeadingInterpolation(currentHeading, targetHeading);
+                    double targetHeading = Math.atan2(dyField, dxField);
+                    path.setLinearHeadingInterpolation(currentHeading, targetHeading);
 
-          new FollowPathCommand(MMDrivetrain.getInstance().getFollower(), path).schedule();
-        }, MMDrivetrain.getInstance()
-        );
+                    MMDrivetrain.getInstance().getFollower().followPath(path);
+            }
+
+
+            @Override
+            public boolean isFinished() {
+                return !MMDrivetrain.getInstance().getFollower().isBusy();
+            }
+        };
     }
-
 }
