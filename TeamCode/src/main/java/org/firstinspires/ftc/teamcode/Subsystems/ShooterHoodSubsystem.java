@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Di
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Servo.ServoSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.exterpolation.ExterpolationMap;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 
@@ -45,7 +44,7 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
           .add(156.668,0.3  )
           .createLUT();
 
-  public double getInterpulaton(double dis){
+  public double getInterpolation(double dis){
     return (dis < 128) ?
             closeInter.get(MMUtils.clamp(dis, 69,130)) :
             farInter.get(MMUtils.clamp(dis, 130,156));
@@ -76,7 +75,7 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
   public Command aimHood() {
     return setPositionCommand(
-        () -> getInterpulaton(RobotUtils.getDistanceToTarget())
+        () -> getInterpolation(RobotUtils.getDistanceToTarget())
     );
   }
 

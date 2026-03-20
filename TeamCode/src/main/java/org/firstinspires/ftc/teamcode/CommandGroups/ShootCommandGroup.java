@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.CommandGroups;
 
+import com.pedropathing.follower.Follower;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -23,7 +24,6 @@ public class ShootCommandGroup {
 
   public static Command upShoot() {
         return new ParallelCommandGroup(
-            BallStopperSubsystem.getInstance().open(),
             IntakeSubsystem.getInstance().setPowerInstantCommand(1),
             AccelSubsystem.getInstance().setPowerInstantCommand(1)
         );
@@ -34,15 +34,30 @@ public class ShootCommandGroup {
         BallStopperSubsystem.getInstance().open(),
         new WaitCommand(200),
         upShoot(),
-        new WaitUntilCommand(() -> !IntakeSubsystem.getInstance().getScndState()),
+        new WaitUntilCommand(
+            () ->
+                !IntakeSubsystem.getInstance().getFrstState() &&
+                        !IntakeSubsystem.getInstance().getScndState()),
         new WaitCommand(150),
         stopShoot());
   }
 
   public static Command twoOneShoot() {
-    return BallStopperSubsystem.getInstance().open()
-        .andThen(
-            new SequentialCommandGroup(AccelSubsystem.getInstance().setPowerInstantCommand(1), smartUpShoot()));
+    return new SequentialCommandGroup(
+            BallStopperSubsystem.getInstance().open(),
+            new WaitCommand(200),
+            new ParallelCommandGroup(
+                    AccelSubsystem.getInstance().setPowerInstantCommand(1),
+                    new WaitCommand(0).andThen(
+                                    IntakeSubsystem.getInstance().setPowerInstantCommand(1)
+                    )
+            ),
+            new WaitUntilCommand(
+                    () ->
+                            !IntakeSubsystem.getInstance().getFrstState() &&
+                                    !IntakeSubsystem.getInstance().getScndState()),
+            new WaitCommand(150),
+            stopShoot());
   }
 
   public static Command stopShoot() {

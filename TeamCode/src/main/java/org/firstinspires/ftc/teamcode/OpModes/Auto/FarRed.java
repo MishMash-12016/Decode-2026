@@ -255,7 +255,7 @@ public class FarRed extends MMOpMode {
                                                                 .withTimeout(3000)
                                                                 .andThen(new FollowPathCommand(follower, INTAKE_3_TO_SHOOT)),
 
-                                                        LamlamCommands.AutoGoToArtifact()
+                                                        LamlamCommands.goToArtifact()
                                                                 .andThen(new FollowPathCommand(follower, DETECT_TO_SHOOT)),
 
                                                         () -> LamlamCommands.noResult

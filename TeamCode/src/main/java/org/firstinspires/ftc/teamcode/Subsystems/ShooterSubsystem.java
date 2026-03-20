@@ -8,6 +8,7 @@ import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.seattlesolvers.solverslib.command.Command;
+import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
@@ -27,15 +28,12 @@ import org.firstinspires.ftc.teamcode.RobotUtils;
 public class ShooterSubsystem extends VelocityPidSubsystem {
     static Motor encoder;
 
-    ExterpolationMap exterpolationMap = new ExterpolationMap()
-            .put(1, 6);
-
     public static double KP = 0.045;
     public static double KI = 0;
     public static double KD = 0;
 
     public static double KS = 0.097;
-    public static double KV = 0.01186;
+    public static double KV = 0.0128;
     public static double KA = 0;
 
     public static double RESOLUTION = 28.0 / (29.0 / 33.0);
@@ -62,7 +60,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
             if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
                 MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
                 instance = new ShooterSubsystemAutoLogged("ShooterSubsystem");
-
+                CommandScheduler.getInstance().registerSubsystem(instance);
             } else {
                 instance = new ShooterSubsystem("ShooterSubsystem");
             }
@@ -98,7 +96,6 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
                 () -> KS,
                 () -> KV,
                 () -> KA);
-
     }
 
     SysIdRoutine sysIdRoutine = new SysIdRoutine(
