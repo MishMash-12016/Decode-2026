@@ -34,13 +34,22 @@ public class MMDrivetrain extends MMSubsystem {
     public double slowModeRatioLateral = 0.3;
     public double slowModeRatioRotation = 0.2;
 
-    public static double headingKP = 0.0035;
+    public PIDController headingPID;
+    public static double headingKP = 0.004;
     public static double headingKI = 0.0;
-    public static double headingKD = 0.00003;
-    public static double headingClockewiseKS = -0.09;
-    public static double headingCounterClockwiseKS = 0.09;
-     public static double headingTolarence = 0.5;
-    public PIDController headingPid;
+    public static double headingKD = 0.00013;
+    public static double headingKS = 0.09;
+
+
+    public PIDController secondaryHeadingPID;
+    public static double secondaryHeadingKP = 0.017;
+    public static double secondaryHeadingKI = 0.00005;
+    public static double secondaryHeadingKD = 0.000007;
+    public static double secondaryHeadingKS = 0.03;
+
+    public static double headingTolerance = 0.50;
+    public static double switchToSecondaryHeading = 10;
+
 
     private static MMDrivetrain instance;
     private static Follower follower;
@@ -75,14 +84,19 @@ public class MMDrivetrain extends MMSubsystem {
     }
 
     public MMDrivetrain() {
-        headingPid = new PIDController(headingKP, headingKI, headingKD);
-        headingPid.enableContinuousInput(0, 360);
-        headingPid.setTolerance(headingTolarence);
+        headingPID = new PIDController(headingKP, headingKI, headingKD);
+        headingPID.enableContinuousInput(0, 360);
+        secondaryHeadingPID = new PIDController(secondaryHeadingKP, secondaryHeadingKI, secondaryHeadingKD);
+        secondaryHeadingPID.enableContinuousInput(0, 360);
+        secondaryHeadingPID.setTolerance(headingTolerance);
 
         follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
 
         withDebugPidSuppliers(
-                () -> headingKP, () -> headingKI, () -> headingKD, () -> headingTolarence);
+                () -> headingKP, () -> headingKI, () -> headingKD,
+                () -> secondaryHeadingKP, () -> secondaryHeadingKI,
+                () -> secondaryHeadingKD,()->headingKS,()->secondaryHeadingKS,
+                () -> headingTolerance, ()-> switchToSecondaryHeading);
     }
 
     @Override
@@ -106,22 +120,21 @@ public class MMDrivetrain extends MMSubsystem {
 
         return (CommandBase) new RunCommand(() -> {
             Rotation2d target_angle = RobotUtils.getAngleToTarget().plus(Rotation2d.fromDegrees(180));
-            double headingPower = headingPid.calculate(
+            double error = target_angle.getDegrees() - Math.toDegrees(getPose().getHeading());
+            double headingPower = ((Math.abs(error) > switchToSecondaryHeading) ?
+            (headingPID.calculate(
             Math.toDegrees(getPose().getHeading()),
-            target_angle.getDegrees());
+            target_angle.getDegrees()) + Math.copySign(headingKS,error)
+            ) :
+            (secondaryHeadingPID.calculate(
+            Math.toDegrees(getPose().getHeading()),
+            target_angle.getDegrees()) + Math.copySign(secondaryHeadingKS,error)
+            ));
 
             KoalaLog.log("heading_pid/current_heading", Math.toDegrees(getPose().getHeading()), true);
-            KoalaLog.log("heading_pid/target_heading",  target_angle.getDegrees(),              true);
-            KoalaLog.log("heading_pid/error", headingPid.getError(), true);
-            KoalaLog.log("heading_pid/kp", headingPid.getP(), true);
-            KoalaLog.log("heading_pid/supplier kp", debugKpSupplier.getAsDouble(), true);
-            KoalaLog.log("heading_pid/target_pose", new double[]{getAScopePose()[0], getAScopePose()[1], target_angle.getDegrees()}, true);
-
-            if (headingPower < 0){
-                headingPower += headingClockewiseKS;
-            }else if(headingPower > 0){
-                headingPower += headingCounterClockwiseKS;
-            }
+            KoalaLog.log("heading_pid/isSecondaryHeading", (Math.abs(error) < switchToSecondaryHeading), true);
+            KoalaLog.log("heading_pid/target_heading",  target_angle.getDegrees(), true);
+            KoalaLog.log("heading_pid/error", error, true);
             if (headingPower > 0.5) {
                 headingPower = 0.5;
             }
@@ -131,13 +144,8 @@ public class MMDrivetrain extends MMSubsystem {
             double lateralDrivePower = 0;
             double translationPowerSum = 0;
 
-            if (slowMode.getAsBoolean()) {
-                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
-                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
-            } else {
-                forwardDrivePower = Math.pow(forwardDrive.getAsDouble(), 1);
-                lateralDrivePower = Math.pow(lateralDrive.getAsDouble(), 1);
-            }
+            forwardDrivePower = forwardDrive.getAsDouble();
+            lateralDrivePower = lateralDrive.getAsDouble();
 
             translationPowerSum = Math.abs(forwardDrivePower) + Math.abs(lateralDrivePower);
             if (translationPowerSum > maxPower) {
@@ -153,12 +161,8 @@ public class MMDrivetrain extends MMSubsystem {
                     headingPower,
                     robotCentric);
             follower.update();
-        },
-                this)
-                .beforeStarting(
-                        () -> {
-                            follower.startTeleopDrive();
-                        });
+        }, this)
+                .beforeStarting(() -> follower.startTeleopDrive());
     }
 
     public CommandBase driveCommand(
@@ -174,15 +178,9 @@ public class MMDrivetrain extends MMSubsystem {
                             double lateralDrivePower = 0;
                             double headingPower = 0;
 
-                            if (slowMode.getAsBoolean()) {
-                                forwardDrivePower = forwardDrive.getAsDouble();
-                                lateralDrivePower = lateralDrive.getAsDouble();
-                                headingPower = heading.getAsDouble();
-                            } else {
-                                forwardDrivePower = forwardDrive.getAsDouble();
-                                lateralDrivePower = lateralDrive.getAsDouble();
-                                headingPower = Math.pow(heading.getAsDouble(), 3);
-                            }
+                            forwardDrivePower = forwardDrive.getAsDouble();
+                            lateralDrivePower = lateralDrive.getAsDouble();
+                            headingPower = heading.getAsDouble();
 
                             double powerSum =
                                     Math.max(
@@ -204,12 +202,9 @@ public class MMDrivetrain extends MMSubsystem {
                                     headingPower * (slowMode.getAsBoolean() ? slowModeRatioRotation : 0.5),
                                     robotCentric);
                             follower.update();
-                        },
-                        this)
+                        }, this)
                         .beforeStarting(
-                                () -> {
-                                    follower.startTeleopDrive();
-                                });
+                                () -> follower.startTeleopDrive());
     }
 
     public CommandBase turnCommand(double radians, boolean isLeft) {
@@ -351,10 +346,16 @@ public class MMDrivetrain extends MMSubsystem {
         instance = null;
     }
 
-    private DoubleSupplier debugKpSupplier;
-    private DoubleSupplier debugKiSupplier;
-    private DoubleSupplier debugKdSupplier;
-    private DoubleSupplier debugPositionToleranceSupplier;
+    private DoubleSupplier debugKpSupplier,
+    debugKiSupplier,
+    debugKdSupplier,
+    secKpSupplier,
+    secKiSupplier,
+    secKdSupplier,
+    headingKsSupplier,
+    secKsSupplier,
+    debugPositionToleranceSupplier,
+    switchToSecondarySupplier;
 
     /**
      * add suppliers that when changed will auto update the pid values. any value you don't need just
@@ -370,14 +371,35 @@ public class MMDrivetrain extends MMSubsystem {
             DoubleSupplier debugKpSupplier,
             DoubleSupplier debugKiSupplier,
             DoubleSupplier debugKdSupplier,
-            DoubleSupplier debugPositionToleranceSupplier) {
+            DoubleSupplier secKpSupplier,
+            DoubleSupplier secKiSupplier,
+            DoubleSupplier secKdSupplier,
+            DoubleSupplier headingKsSupplier,
+            DoubleSupplier secKsSupplier,
+            DoubleSupplier debugPositionToleranceSupplier,
+            DoubleSupplier switchToSecondarySupplier) {
 
         this.debugKpSupplier = debugKpSupplier;
         this.debugKiSupplier = debugKiSupplier;
         this.debugKdSupplier = debugKdSupplier;
+        this.secKpSupplier = secKpSupplier;
+        this.secKiSupplier = secKiSupplier;
+        this.secKdSupplier = secKdSupplier;
+        this.headingKsSupplier = headingKsSupplier;
+        this.secKsSupplier = secKsSupplier;
         this.debugPositionToleranceSupplier = debugPositionToleranceSupplier;
-
+        this.switchToSecondarySupplier = switchToSecondarySupplier;
         return this;
+    }
+
+    public static void setSwitchToSecondaryHeading(double switchToSecondaryHeading) {
+        MMDrivetrain.switchToSecondaryHeading = switchToSecondaryHeading;
+    }
+    public static void setHeadingKS(double headingKS) {
+        MMDrivetrain.headingKS = headingKS;
+    }
+    public static void setSecHeadingKS(double secHeadingKS) {
+        MMDrivetrain.secondaryHeadingKS = secondaryHeadingKS;
     }
 
     int a = 0;
@@ -390,11 +412,18 @@ public class MMDrivetrain extends MMSubsystem {
             a++;
             KoalaLog.log("heading_pid/per work", a, true);
 
-            MMUtils.updateIfChanged(debugKpSupplier, headingPid::getP, headingPid::setP);
-            MMUtils.updateIfChanged(debugKiSupplier, headingPid::getI, headingPid::setI);
-            MMUtils.updateIfChanged(debugKdSupplier, headingPid::getD, headingPid::setD);
-            MMUtils.updateIfChanged(
-                    debugPositionToleranceSupplier, headingPid::getErrorTolerance, headingPid::setTolerance);
+            MMUtils.updateIfChanged(debugKpSupplier, headingPID::getP, headingPID::setP);
+            MMUtils.updateIfChanged(debugKiSupplier, headingPID::getI, headingPID::setI);
+            MMUtils.updateIfChanged(debugKdSupplier, headingPID::getD, headingPID::setD);
+
+            MMUtils.updateIfChanged(secKpSupplier, secondaryHeadingPID::getP, secondaryHeadingPID::setP);
+            MMUtils.updateIfChanged(secKiSupplier, secondaryHeadingPID::getI, secondaryHeadingPID::setI);
+            MMUtils.updateIfChanged(secKdSupplier, secondaryHeadingPID::getD, secondaryHeadingPID::setD);
+
+            MMUtils.updateIfChanged(headingKsSupplier, ()-> headingKS, MMDrivetrain::setHeadingKS);
+            MMUtils.updateIfChanged(secKsSupplier, ()-> secondaryHeadingKS, MMDrivetrain::setSecHeadingKS);
+            MMUtils.updateIfChanged(debugPositionToleranceSupplier, secondaryHeadingPID::getErrorTolerance, secondaryHeadingPID::setTolerance);
+            MMUtils.updateIfChanged(switchToSecondarySupplier, ()-> switchToSecondaryHeading,MMDrivetrain::setSwitchToSecondaryHeading );
         }
     }
 }

@@ -93,8 +93,8 @@ public class PrismSubsystem extends MMSubsystem {
   public Command isReady(){
     return new RunCommand(() -> {
       double shooterError = Math.abs(ShooterSubsystem.getInstance().getError());
-      double headingError = Math.abs(MMDrivetrain.getInstance().headingPid.getError());
-      double headingTol = MMDrivetrain.headingTolarence;
+      double headingError = Math.abs(MMDrivetrain.getInstance().headingPID.getError());
+      double headingTol = MMDrivetrain.headingTolerance;
 
       if (KoalaLog.log("yitzhak is gay: " , Math.abs(shooterError) < 2 && headingError < headingTol,true))
         blinkGreen();
