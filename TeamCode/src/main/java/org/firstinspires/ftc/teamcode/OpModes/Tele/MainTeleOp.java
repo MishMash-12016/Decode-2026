@@ -99,8 +99,6 @@ public class MainTeleOp extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        telemetry.update();
-        MMDrivetrain.update();
     }
 
     @Override

@@ -82,7 +82,8 @@ public class MMDrivetrain extends MMSubsystem {
     public static void update() {
         if (instance != null) {
             follower.update(); // updates the follower
-            Drawing.drawDebug(follower);
+            //TODO: add to see robot on dashboard
+//            Drawing.drawDebug(follower);
         }
     }
 
@@ -168,7 +169,6 @@ public class MMDrivetrain extends MMSubsystem {
                     lateralDrivePower * (slowMode.getAsBoolean() ? slowModeRatioLateral : 1),
                     headingPower,
                     robotCentric);
-            follower.update();
         }, this)
                 .beforeStarting(() -> follower.startTeleopDrive());
     }
@@ -209,7 +209,6 @@ public class MMDrivetrain extends MMSubsystem {
                                     lateralDrivePower * (slowMode.getAsBoolean() ? slowModeRatioLateral : 1),
                                     headingPower * (slowMode.getAsBoolean() ? slowModeRatioRotation : 0.5),
                                     robotCentric);
-                            follower.update();
                         }, this)
                         .beforeStarting(
                                 () -> follower.startTeleopDrive());

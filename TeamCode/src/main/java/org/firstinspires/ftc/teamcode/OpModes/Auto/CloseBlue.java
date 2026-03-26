@@ -229,8 +229,6 @@ public class CloseBlue extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.update();
-        telemetry.update();
     }
 
     @Override

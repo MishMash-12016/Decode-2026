@@ -272,8 +272,6 @@ public class FarBlue extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.update();
-        telemetry.update();
     }
 
     @Override

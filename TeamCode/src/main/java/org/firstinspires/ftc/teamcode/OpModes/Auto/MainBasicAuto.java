@@ -57,9 +57,7 @@ public class MainBasicAuto extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-        MMDrivetrain.update();
         telemetry.addData("appriltagID",RobotConstants.APRIL_TAG_ID);
-        telemetry.update();
     }
 
 }

@@ -248,8 +248,6 @@ public class CloseRed extends MMOpMode {
 
   @Override
   public void onPlayLoop() {
-    MMDrivetrain.update();
-    telemetry.update();
   }
 
   @Override
