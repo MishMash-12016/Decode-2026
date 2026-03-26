@@ -54,7 +54,7 @@ public class NT4Server {
     private HotReloadCallback pathHotReloadCallback = null;
     private HotReloadCallback autoHotReloadCallback = null;
 
-    // Topic ID → topic name for topics the CLIENT publishes to us
+    // Topic ID -> topic name for topics the CLIENT publishes to us
     private final Map<Integer, String> clientTopicIdToName = new ConcurrentHashMap<>();
 
     public interface HotReloadCallback {
@@ -159,6 +159,26 @@ public class NT4Server {
         }
     }
 
+    /**
+     * Build a timestamp response frame.
+     * NT4 spec: server replies to topic ID -1 with [-1, clientTs, 1, serverNowMicros]
+     * This is what the PathPlanner app uses to confirm the server is alive.
+     */
+    private byte[] buildTimestampFrame(long clientTimestamp) {
+        try {
+            MessageBufferPacker packer = MessagePack.newDefaultBufferPacker();
+            packer.packArrayHeader(4);
+            packer.packInt(-1);               // topic ID -1 = timestamp message
+            packer.packLong(clientTimestamp); // echo client's timestamp back
+            packer.packInt(1);                // type code 1 = timestamp
+            packer.packLong(nowMicros());     // our current server time
+            packer.close();
+            return wrapWebSocketFrame(packer.toByteArray(), true);
+        } catch (IOException e) {
+            return new byte[0];
+        }
+    }
+
     /** Announce our 4 published topics + subscribe to the 2 hot reload topics */
     private String buildAnnounceAndSubscribeJson() {
         String announces = "[" +
@@ -193,7 +213,7 @@ public class NT4Server {
 
     // ── WebSocket helpers ────────────────────────────────────────────────────
 
-    /** Wrap payload into a WebSocket frame (server → client, no masking) */
+    /** Wrap payload into a WebSocket frame (server -> client, no masking) */
     static byte[] wrapWebSocketFrame(byte[] payload, boolean binary) {
         int opcode = binary ? 0x02 : 0x01;
         int len = payload.length;
@@ -214,7 +234,7 @@ public class NT4Server {
         return frame;
     }
 
-    /** Unmask a client → server WebSocket payload */
+    /** Unmask a client -> server WebSocket payload */
     static byte[] unmask(byte[] data, int offset, int length, byte[] mask) {
         byte[] result = new byte[length];
         for (int i = 0; i < length; i++) {
@@ -223,7 +243,7 @@ public class NT4Server {
         return result;
     }
 
-    /** HTTP → WebSocket upgrade handshake */
+    /** HTTP -> WebSocket upgrade handshake */
     static void doHandshake(InputStream in, OutputStream out) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         String line;
@@ -332,7 +352,7 @@ public class NT4Server {
                 send(buildBinaryFrame(ID_TARGET_POSE,  TYPECODE_RAW,          encodePose(targetPose)));
                 send(buildBinaryFrame(ID_ACTIVE_PATH,  TYPECODE_RAW,          encodePoseArray(activePath)));
 
-                // 5. Read loop — parse incoming frames for hot reload
+                // 5. Read loop — handle timestamp pings, WebSocket pings, and hot reload
                 while (open) {
                     int b0 = in.read();
                     int b1 = in.read();
@@ -366,17 +386,29 @@ public class NT4Server {
 
                     if (masked) payload = unmask(payload, 0, payloadLen, maskBytes);
 
-                    if (opcode == 1) {
-                        // Text frame — JSON control messages (publish announcements)
-                        handleTextFrame(new String(payload, "UTF-8"));
-                    } else if (opcode == 2) {
-                        // Binary frame — MessagePack data (hot reload payloads)
-                        handleBinaryFrame(payload);
-                    } else if (opcode == 8) {
-                        // Close frame
-                        break;
+                    switch (opcode) {
+                        case 0x1: // Text frame — JSON control messages
+                            handleTextFrame(new String(payload, "UTF-8"));
+                            break;
+
+                        case 0x2: // Binary frame — msgpack data or timestamp ping
+                            handleBinaryFrame(payload);
+                            break;
+
+                        case 0x8: // Close frame
+                            open = false;
+                            break;
+
+                        case 0x9: // WebSocket PING — must reply with PONG (opcode 0xA)
+                            byte[] pongFrame = new byte[2 + payload.length];
+                            pongFrame[0] = (byte) 0x8A; // FIN + opcode 0xA
+                            pongFrame[1] = (byte) payload.length;
+                            System.arraycopy(payload, 0, pongFrame, 2, payload.length);
+                            send(pongFrame);
+                            break;
+
+                        // 0xA = pong, ignore
                     }
-                    // opcode 9 = ping, ignore
                 }
 
             } catch (Exception e) {
@@ -394,12 +426,11 @@ public class NT4Server {
          */
         private void handleTextFrame(String json) {
             try {
-                // Find all publish method blocks and extract name → id
                 String[] parts = json.split("\\{\"method\":\"publish\"");
                 for (int i = 1; i < parts.length; i++) {
                     String chunk = parts[i];
-                    String name = extractJsonString(chunk, "name");
-                    int id      = extractJsonInt(chunk, "id");
+                    String name  = extractJsonString(chunk, "name");
+                    int id       = extractJsonInt(chunk, "id");
                     if (name != null && id >= 0) {
                         clientTopicIdToName.put(id, name);
                     }
@@ -410,15 +441,27 @@ public class NT4Server {
         /**
          * Parse binary (MessagePack) frames from the client.
          * NT4 format: [topicId, timestampMicros, typeCode, value]
-         * Hot reload values are JSON strings.
+         *
+         * Topic ID -1 = timestamp ping — must echo back immediately so the
+         * PathPlanner app knows the server is alive and shows as connected.
          */
         private void handleBinaryFrame(byte[] data) {
             try {
                 MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(data);
                 unpacker.unpackArrayHeader(); // 4 elements
-                int topicId    = unpacker.unpackInt();
-                long timestamp = unpacker.unpackLong(); // unused but must consume
-                int typeCode   = unpacker.unpackInt();  // unused but must consume
+
+                int topicId = unpacker.unpackInt();
+
+                // Topic ID -1 = NT4 timestamp sync ping — echo it back immediately
+                if (topicId == -1) {
+                    long clientTimestamp = unpacker.unpackLong();
+                    unpacker.close();
+                    send(buildTimestampFrame(clientTimestamp));
+                    return;
+                }
+
+                long timestamp = unpacker.unpackLong(); // consume, unused
+                int typeCode   = unpacker.unpackInt();  // consume, unused
                 String value   = unpacker.unpackString();
                 unpacker.close();
 
@@ -429,13 +472,13 @@ public class NT4Server {
 
                 if (topicName.equals("/PathPlanner/HotReload/hotReloadPath")
                     && pathHotReloadCallback != null) {
-                    String name       = (String) json.get("name");
+                    String name         = (String) json.get("name");
                     JSONObject pathJson = (JSONObject) json.get("path");
                     pathHotReloadCallback.onHotReload(name, pathJson);
 
                 } else if (topicName.equals("/PathPlanner/HotReload/hotReloadAuto")
                     && autoHotReloadCallback != null) {
-                    String name       = (String) json.get("name");
+                    String name         = (String) json.get("name");
                     JSONObject autoJson = (JSONObject) json.get("auto");
                     autoHotReloadCallback.onHotReload(name, autoJson);
                 }
@@ -443,7 +486,7 @@ public class NT4Server {
             } catch (Exception ignored) {}
         }
 
-        // ── Minimal JSON field extractors ────────────────────────────────────
+        // ── Minimal JSON field extractors ─────────────────────────────────────
 
         private String extractJsonString(String json, String key) {
             String search = "\"" + key + "\":\"";

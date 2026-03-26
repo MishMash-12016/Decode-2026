@@ -17,6 +17,7 @@ import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.Commands;
 import com.seattlesolvers.solverslib.command.Subsystem;
 
+import Ori.Coval.Logging.Logger.KoalaLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
@@ -105,25 +106,22 @@ public class PathPlannerAuto extends CommandBase {
       initFromJson(json, mirror);
     } catch (FileNotFoundException e) {
 //      TODO: add report
-//      DriverStation.reportError(e.getMessage(), e.getStackTrace());
+      KoalaLog.log("pp error", e.getMessage(), true);
       autoCommand = Commands.none();
     } catch (IOException e) {
-//      DriverStation.reportError(
-//          "Failed to read file required by auto: " + autoName, e.getStackTrace());
+      KoalaLog.log("pp error", "Failed to read file required by auto: " + autoName, true);
       autoCommand = Commands.none();
     } catch (ParseException e) {
-//      DriverStation.reportError(
-//          "Failed to parse JSON in file required by auto: " + autoName, e.getStackTrace());
+      KoalaLog.log("pp error", "Failed to parse JSON in file required by auto: " + autoName, true);
       autoCommand = Commands.none();
     } catch (FileVersionException e) {
-//      DriverStation.reportError(
-//          "Failed to load auto: " + autoName + ". " + e.getMessage(), e.getStackTrace());
+      KoalaLog.log("pp error", "Failed to load auto: " + autoName + ". " + e.getMessage(), true);
       autoCommand = Commands.none();
     }
 
     addRequirements(autoCommand.getRequirements().toArray(new Subsystem[0]));
     setName(autoName);
-    PPLibTelemetry.registerHotReloadAuto(autoName, this);
+//    PPLibTelemetry.registerHotReloadAuto(autoName, this);
 
     this.autoLoop = new EventLoop();
     this.autoTimer = new Timer();
@@ -639,7 +637,7 @@ public class PathPlannerAuto extends CommandBase {
       initFromJson(autoJson, false);
     } catch (Exception e) {
 //      TODO: add report
-//      DriverStation.reportError("Failed to load path during hot reload", e.getStackTrace());
+//      KoalaLog.log("pp error", "Failed to load path during hot reload", true);
     }
   }
 
