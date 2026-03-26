@@ -50,6 +50,9 @@ public class MMDrivetrain extends MMSubsystem {
     public static double headingTolerance = 0.50;
     public static double switchToSecondaryHeading = 10;
 
+    private double headingPIDPower;
+    private double secondaryHeadingPIDPower;
+
 
     private static MMDrivetrain instance;
     private static Follower follower;
@@ -121,17 +124,22 @@ public class MMDrivetrain extends MMSubsystem {
         return (CommandBase) new RunCommand(() -> {
             Rotation2d target_angle = RobotUtils.getAngleToTarget().plus(Rotation2d.fromDegrees(180));
             double error = target_angle.getDegrees() - Math.toDegrees(getPose().getHeading());
+
+            headingPIDPower = headingPID.calculate(
+                    Math.toDegrees(getPose().getHeading()),
+                    target_angle.getDegrees());
+            secondaryHeadingPIDPower = secondaryHeadingPID.calculate(
+                    Math.toDegrees(getPose().getHeading()),
+                    target_angle.getDegrees());
+
             double headingPower = ((Math.abs(error) > switchToSecondaryHeading) ?
-            (headingPID.calculate(
-            Math.toDegrees(getPose().getHeading()),
-            target_angle.getDegrees()) + Math.copySign(headingKS,error)
-            ) :
-            (secondaryHeadingPID.calculate(
-            Math.toDegrees(getPose().getHeading()),
-            target_angle.getDegrees()) + Math.copySign(secondaryHeadingKS,error)
-            ));
+            (headingPIDPower + Math.copySign(headingKS, headingPIDPower)) :
+            (secondaryHeadingPIDPower + Math.copySign(secondaryHeadingKS, secondaryHeadingPIDPower)));
 
             KoalaLog.log("heading_pid/current_heading", Math.toDegrees(getPose().getHeading()), true);
+            KoalaLog.log("heading_pid/headingPow", headingPower, true);
+            KoalaLog.log("heading_pid/headingPID", headingPID.calculate(Math.toDegrees(getPose().getHeading()), target_angle.getDegrees()), true);
+            KoalaLog.log("heading_pid/headingPKS", Math.copySign(headingKS,error), true);
             KoalaLog.log("heading_pid/isSecondaryHeading", (Math.abs(error) < switchToSecondaryHeading), true);
             KoalaLog.log("heading_pid/target_heading",  target_angle.getDegrees(), true);
             KoalaLog.log("heading_pid/error", error, true);

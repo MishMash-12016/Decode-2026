@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 public class TestOpMode extends MainTeleOp {
 
   public TestOpMode() {
-    super(OpModeType.NonCompetition.DEBUG, AllianceColor.BLUE);
+    super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
   }
 
   @Override
