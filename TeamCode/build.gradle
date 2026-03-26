@@ -28,6 +28,18 @@ android {
     }
 }
 
+tasks.register('copyDeployFiles', Copy) {
+    onlyIf { file('src/main/deploy').exists() }
+    from 'src/main/deploy'
+    into 'src/main/assets/deploy'
+    inputs.dir 'src/main/deploy'
+    outputs.dir 'src/main/assets/deploy'
+}
+preBuild.dependsOn 'copyDeployFiles'
+clean.doFirst {
+    delete 'src/main/assets/deploy'
+}
+
 repositories {
     maven {
         url 'https://jitpack.io'
@@ -76,4 +88,5 @@ dependencies {
     implementation "com.bylazar:limelightproxy:1.0.2"
     implementation "org.ejml:ejml-simple:0.44.0"
     implementation 'gov.nist.math:jama:1.0.3'
+    implementation 'org.msgpack:msgpack-core:0.9.6'
 }
