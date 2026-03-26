@@ -51,12 +51,16 @@ public abstract class MMOpMode extends LinearOpMode {
     }
 
     private void robotInit() {
-        if(opModeType == OpModeType.NonCompetition.DEBUG || opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION){
-            KoalaLog.setup(hardwareMap);
-        }
-        else {
-            KoalaLog.setup(hardwareMap, true);
-        }
+//        if(opModeType == OpModeType.NonCompetition.DEBUG || opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION){
+//            KoalaLog.setup(hardwareMap);
+//            KoalaLog.start();
+//        }
+//        else {
+//            KoalaLog.setup(hardwareMap, true);
+//        }
+        KoalaLog.setup(hardwareMap);
+        KoalaLog.start();
+
         MMRobot.getInstance().currentOpMode = this;
         MMRobot.getInstance().initializeSystems(opModeType);
 
@@ -123,7 +127,7 @@ public abstract class MMOpMode extends LinearOpMode {
     public void reset() {
         //TODO reset also reset the default command
         CommandScheduler.getInstance().reset();
-        KoalaLog.close();
+        KoalaLog.stop();
         ShooterSubsystem.instance = null;
     }
 
