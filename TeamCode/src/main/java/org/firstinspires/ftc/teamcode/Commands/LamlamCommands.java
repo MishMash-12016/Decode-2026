@@ -21,7 +21,7 @@ import Ori.Coval.Logging.AutoLogOutput;
 import Ori.Coval.Logging.Logger.KoalaLog;
 
 @Config
-@AutoLog
+//@AutoLog
 public class LamlamCommands {
 
     public static double offsetX = 0; //mm
@@ -56,7 +56,7 @@ public class LamlamCommands {
                 new WaitUntilCommand(() -> LamLamSubsystem.getInstance().getPipelineIndex() == LamLamSubsystem.getInstance().currentPipeline)
         );
     }
-    @AutoLogOutput
+//    @AutoLogOutput
     public static boolean isResult(){
         LLResult last = LamLamSubsystem.getInstance().getLatestResult();
         if (last == null || last.getDetectorResults().isEmpty())

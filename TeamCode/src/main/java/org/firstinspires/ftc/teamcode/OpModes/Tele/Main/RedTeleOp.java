@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
 public class RedTeleOp extends MainTeleOp {
 
   public RedTeleOp() {
-    super(OpModeType.Competition.TELEOP, AllianceColor.RED);
+    super(OpModeType.NonCompetition.DEBUG, AllianceColor.RED);
   }
 
   @Override
