@@ -103,8 +103,8 @@ public abstract class MMOpMode extends LinearOpMode {
         lastLoopTime = System.currentTimeMillis();
         telemetry.update();                                       //updates the telemetry
         if(opModeType == OpModeType.NonCompetition.DEBUG || opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION){
-            FtcDashboard.getInstance().getTelemetry().update();       //updates the dashboard
             AutoLogManager.periodic();
+            FtcDashboard.getInstance().getTelemetry().update();       //updates the dashboard
         }
     }
 
