@@ -11,7 +11,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.util.FileVersionException;
 import com.pathplanner.lib.util.FlippingUtil;
-import com.pathplanner.lib.util.PPLibTelemetry;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.Commands;
@@ -23,7 +23,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.io.*;
@@ -44,7 +43,7 @@ public class PathPlannerAuto extends CommandBase {
   private static PathPlannerTrajectory currentTrajectory = null;
   private static Map<String, List<Translation2d>> eventStartPositions = new HashMap<>();
   private static Map<String, List<Translation2d>> eventEndPositions = new HashMap<>();
-  private static Timer trajTimer = new Timer();
+  private static ElapsedTime trajTimer = new ElapsedTime();
 
   private static int instances = 0;
 
@@ -52,7 +51,7 @@ public class PathPlannerAuto extends CommandBase {
   private Pose2d startingPose;
 
   private final EventLoop autoLoop;
-  private final Timer autoTimer;
+  private final ElapsedTime autoTimer;
   private boolean isRunning = false;
 
   /**
@@ -124,7 +123,7 @@ public class PathPlannerAuto extends CommandBase {
 //    PPLibTelemetry.registerHotReloadAuto(autoName, this);
 
     this.autoLoop = new EventLoop();
-    this.autoTimer = new Timer();
+    this.autoTimer = new ElapsedTime();
 
     instances++;
   }
@@ -142,7 +141,7 @@ public class PathPlannerAuto extends CommandBase {
     addRequirements(autoCommand.getRequirements().toArray(new Subsystem[0]));
 
     this.autoLoop = new EventLoop();
-    this.autoTimer = new Timer();
+    this.autoTimer = new ElapsedTime();
 
     instances++;
   }
@@ -184,7 +183,7 @@ public class PathPlannerAuto extends CommandBase {
     currentTrajectory = trajectory;
     eventStartPositions.clear();
     eventEndPositions.clear();
-    trajTimer.restart();
+    trajTimer.reset();
 
     if (trajectory == null) {
       currentPathName = "";
@@ -230,7 +229,7 @@ public class PathPlannerAuto extends CommandBase {
    * @return timeElapsed trigger
    */
   public Trigger timeElapsed(double time) {
-    return condition(() -> autoTimer.hasElapsed(time));
+    return condition(() -> autoTimer.seconds() > time);
   }
 
   /**
@@ -251,7 +250,7 @@ public class PathPlannerAuto extends CommandBase {
    * @return timeRange trigger
    */
   public Trigger timeRange(double startTime, double endTime) {
-    return condition(() -> autoTimer.get() >= startTime && autoTimer.get() <= endTime);
+    return condition(() -> autoTimer.seconds() >= startTime && autoTimer.seconds() <= endTime);
   }
 
   /**
@@ -294,14 +293,14 @@ public class PathPlannerAuto extends CommandBase {
           Event upcoming = null;
           for (Event e : currentTrajectory.getEvents()) {
             if (e instanceof OneShotTriggerEvent event) {
-              if (event.getTimestampSeconds() > trajTimer.get()
+              if (event.getTimestampSeconds() > trajTimer.seconds()
                   && eventName.equals(event.getEventName())) {
                 upcoming = e;
                 break;
               }
             } else if (e instanceof TriggerEvent event) {
               if (event.getValue()
-                  && event.getTimestampSeconds() > trajTimer.get()
+                  && event.getTimestampSeconds() > trajTimer.seconds()
                   && eventName.equals(event.getEventName())) {
                 upcoming = e;
                 break;
@@ -313,7 +312,7 @@ public class PathPlannerAuto extends CommandBase {
             return false;
           }
 
-          return (upcoming.getTimestampSeconds() - trajTimer.get()) < timeSeconds;
+          return (upcoming.getTimestampSeconds() - trajTimer.seconds()) < timeSeconds;
         });
   }
 
@@ -571,7 +570,7 @@ public class PathPlannerAuto extends CommandBase {
   @Override
   public void initialize() {
     autoCommand.initialize();
-    autoTimer.restart();
+    autoTimer.reset();
 
     isRunning = true;
     autoLoop.poll();
@@ -592,7 +591,6 @@ public class PathPlannerAuto extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     autoCommand.end(interrupted);
-    autoTimer.stop();
 
     isRunning = false;
     autoLoop.poll();

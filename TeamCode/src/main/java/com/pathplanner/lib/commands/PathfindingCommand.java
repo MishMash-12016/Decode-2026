@@ -11,6 +11,7 @@ import com.pathplanner.lib.path.*;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.util.*;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.Commands;
@@ -22,7 +23,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.LinearVelocity;
-import edu.wpi.first.wpilibj.Timer;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 public class PathfindingCommand extends CommandBase {
   private static int instances = 0;
 
-  private final Timer timer = new Timer();
+  private final ElapsedTime timer = new ElapsedTime();
   private final PathPlannerPath targetPath;
   private Pose2d targetPose;
   private Pose2d originalTargetPose;
@@ -352,11 +352,10 @@ public class PathfindingCommand extends CommandBase {
       }
 
       timer.reset();
-      timer.start();
     }
 
     if (currentTrajectory != null) {
-      var targetState = currentTrajectory.sample(timer.get() + timeOffset);
+      var targetState = currentTrajectory.sample(timer.seconds() + timeOffset);
 
       ChassisSpeeds targetSpeeds =
           controller.calculateRobotRelativeSpeeds(currentPose, targetState);
@@ -399,7 +398,7 @@ public class PathfindingCommand extends CommandBase {
     }
 
     if (currentTrajectory != null) {
-      return timer.hasElapsed(currentTrajectory.getTotalTimeSeconds() - timeOffset);
+      return timer.seconds() > (currentTrajectory.getTotalTimeSeconds() - timeOffset);
     }
 
     return false;
@@ -407,7 +406,6 @@ public class PathfindingCommand extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    timer.stop();
 
     // Only output 0 speeds when ending a path that is supposed to stop, this allows interrupting
     // the command to smoothly transition into some auto-alignment routine

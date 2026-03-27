@@ -47,6 +47,15 @@ public class FakeDrive extends SubsystemBase {
     ElapsedTime elapsedTime = new ElapsedTime();
     private void driveRobotRelative(ChassisSpeeds speeds) {
         chassisSpeeds = speeds;
+
+        double elapsed = elapsedTime.seconds();
+        KoalaLog.log("fake/elapsed", elapsed, true);
+        KoalaLog.log("fake/speed", chassisSpeeds.vyMetersPerSecond + chassisSpeeds.vxMetersPerSecond, true);
+        pose = pose.plus(new Transform2d(
+            new Translation2d(chassisSpeeds.vxMetersPerSecond * elapsed,
+                chassisSpeeds.vyMetersPerSecond * elapsed),
+            new Rotation2d(chassisSpeeds.omegaRadiansPerSecond * elapsed)));
+        elapsedTime.reset();
     }
 
     public Pose2d getPose(){
@@ -63,13 +72,5 @@ public class FakeDrive extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
-
-        double elapsed = elapsedTime.seconds();
-        KoalaLog.log("fake/elapsed", elapsed, true);
-        pose = pose.plus(new Transform2d(
-            new Translation2d(chassisSpeeds.vxMetersPerSecond * elapsed,
-                chassisSpeeds.vyMetersPerSecond * elapsed),
-            new Rotation2d(chassisSpeeds.omegaRadiansPerSecond * elapsed)));
-        elapsedTime.reset();
     }
 }
