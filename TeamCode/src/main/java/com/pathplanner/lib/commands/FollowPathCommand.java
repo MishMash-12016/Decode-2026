@@ -11,16 +11,17 @@ import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.PPLibTelemetry;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandBase;
 import com.seattlesolvers.solverslib.command.Commands;
 import com.seattlesolvers.solverslib.command.Subsystem;
 
+import Ori.Coval.Logging.Logger.KoalaLog;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.Timer;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BooleanSupplier;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
 
 /** Base command for following a path */
 public class FollowPathCommand extends CommandBase {
-  private final Timer timer = new Timer();
+  private final ElapsedTime timer = new ElapsedTime();
   private final PathPlannerPath originalPath;
   private final Supplier<Pose2d> poseSupplier;
   private final Supplier<ChassisSpeeds> speedsSupplier;
@@ -142,12 +143,12 @@ public class FollowPathCommand extends CommandBase {
     eventScheduler.initialize(trajectory);
 
     timer.reset();
-    timer.start();
   }
 
   @Override
   public void execute() {
-    double currentTime = timer.get();
+    double currentTime = timer.seconds();
+    KoalaLog.log("fake/current time", currentTime, true);
     var targetState = trajectory.sample(currentTime);
     if (!controller.isHolonomic() && path.isReversed()) {
       targetState = targetState.reverse();
@@ -181,12 +182,11 @@ public class FollowPathCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     double totalTime = trajectory.getTotalTimeSeconds();
-    return timer.hasElapsed(totalTime) || !Double.isFinite(totalTime);
+    return timer.seconds() > totalTime || !Double.isFinite(totalTime);
   }
 
   @Override
   public void end(boolean interrupted) {
-    timer.stop();
     PathPlannerAuto.currentPathName = "";
     PathPlannerAuto.setCurrentTrajectory(null);
 

@@ -44,7 +44,6 @@ public class testop extends MMOpMode {
 
     @Override
     public void onPlayLoop() {
-
     }
 
     @Override
