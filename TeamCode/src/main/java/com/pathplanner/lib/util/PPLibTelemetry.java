@@ -2,85 +2,86 @@ package com.pathplanner.lib.util;
 
 import com.pathplanner.ftc.nt4.NT4Server;
 import com.pathplanner.ftc.nt4.NT4Topics;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * FTC-compatible drop-in replacement for PathPlanner's {@code PPLibTelemetry}.
+ * FTC-compatible drop-in replacement for PathPlanner's PPLibTelemetry.
  *
- * Method signatures are identical to the WPILib version — {@link Pose2d} and
- * {@link PathPlannerPath} are accepted directly. Internally the poses are
- * unpacked and serialised into the NT4 struct binary format, then broadcast
- * over a lightweight WebSocket server that PathPlanner's desktop app can
- * connect to.
+ * Identical public API to the WPILib version. Internally spins up a lightweight
+ * NT4 WebSocket server so PathPlanner's desktop app can connect over WiFi.
  *
- * Setup:
- * <pre>{@code
- * @Override
- * public void runOpMode() {
- *     PPLibTelemetry.startServer();
- *     // ... your code, identical to FRC usage
- * }
- * }</pre>
+ * Setup — one line in your OpMode:
+ *   PPLibTelemetry.startServer();
  *
- * In PathPlanner → Settings → Telemetry set the server address to
- * {@code ws://192.168.43.1:5810} (Control Hub AP address).
+ * Connect PathPlanner to: ws://192.168.43.1:5810
  */
 public class PPLibTelemetry {
 
   private static final Logger LOG = Logger.getLogger(PPLibTelemetry.class.getName());
 
-  /** Default NT4 port – matches what PathPlanner's app expects. */
   public static final int DEFAULT_PORT = 5810;
 
   private static NT4Server server;
-  private static boolean   compMode = false;
+  private static boolean compMode = false;
 
-  // ── Server lifecycle (FTC-only additions) ─────────────────────────────
+  // Hot reload registries — mirrors the WPILib version's Maps
+  private static final Map<String, List<PathPlannerPath>> hotReloadPaths = new HashMap<>();
+  private static final Map<String, List<PathPlannerAuto>> hotReloadAutos = new HashMap<>();
 
-  /** Start the NT4 mock server on the default port (5810). */
+  // ── Server lifecycle ──────────────────────────────────────────────────
+
   public static synchronized void startServer() {
     startServer(DEFAULT_PORT);
   }
 
-  /**
-   * Start the NT4 mock server on a custom port.
-   *
-   * @param port TCP port to listen on (PathPlanner app expects 5810)
-   */
   public static synchronized void startServer(int port) {
     if (server != null) {
-      LOG.warning("NT4 server already running, ignoring startServer() call");
+      LOG.warning("NT4 server already running");
       return;
     }
     server = new NT4Server(port);
-    server.start();
-    LOG.info("PathPlanner NT4 telemetry server started on port " + port);
-  }
 
-  /** Stop the NT4 mock server. Call this in your OpMode's stop() method. */
-  public static synchronized void stopServer() {
-    if (server == null) return;
+    // Wire inbound hot-reload messages from the app → our handlers
+    server.setHotReloadPathCallback((topicName, jsonStr) -> handlePathHotReload(jsonStr));
+    server.setHotReloadAutoCallback((topicName, jsonStr) -> handleAutoHotReload(jsonStr));
+
     try {
-      server.stop(1000);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    } finally {
+      server.start(-1, false); // -1 = no read timeout; connections stay open indefinitely
+      LOG.info("PathPlanner NT4 telemetry server started on port " + port);
+    } catch (java.io.IOException e) {
+      LOG.warning("Failed to start NT4 server: " + e.getMessage());
       server = null;
     }
   }
 
-  /** @return true if the NT4 server is currently running */
+  public static synchronized void stopServer() {
+    if (server == null) return;
+    try {
+      server.stop();
+    } finally {
+      server = null;
+    }
+    hotReloadPaths.clear();
+    hotReloadAutos.clear();
+  }
+
   public static boolean isRunning() {
     return server != null;
   }
 
-  // ── Competition mode (identical to WPILib version) ────────────────────
+  // ── Competition mode ──────────────────────────────────────────────────
 
-  /** Enable competition mode – disables all telemetry publishing. */
   public static void enableCompetitionMode() {
     compMode = true;
   }
@@ -90,10 +91,10 @@ public class PPLibTelemetry {
   /**
    * Set the path following actual/target velocities.
    *
-   * @param actualVel        Actual robot velocity in m/s
-   * @param commandedVel     Target robot velocity in m/s
-   * @param actualAngVel     Actual angular velocity in rad/s
-   * @param commandedAngVel  Target angular velocity in rad/s
+   * @param actualVel       Actual robot velocity in m/s
+   * @param commandedVel    Target robot velocity in m/s
+   * @param actualAngVel    Actual angular velocity in rad/s
+   * @param commandedAngVel Target angular velocity in rad/s
    */
   public static void setVelocities(
       double actualVel, double commandedVel,
@@ -150,24 +151,74 @@ public class PPLibTelemetry {
         targetPose.getRotation().getRadians());
   }
 
-  // ── Hot-reload support (identical to WPILib version minus file I/O) ───
+  // ── Hot reload registration (called by PathPlannerPath / PathPlannerAuto) ─
 
   /**
-   * Register a callback for path hot-reload events from the PathPlanner app.
+   * Register a path for hot reload. Called internally by PathPlannerPath.fromPathFile().
    *
-   * @param callback (pathName, jsonString) → void
+   * @param pathName Name of the path
+   * @param path     Reference to the path object
    */
-  public static void setHotReloadPathCallback(java.util.function.BiConsumer<String, String> callback) {
-    if (server != null) server.setHotReloadPathCallback(callback);
+  public static void registerHotReloadPath(String pathName, PathPlannerPath path) {
+    if (compMode) return;
+    if (!hotReloadPaths.containsKey(pathName)) {
+      hotReloadPaths.put(pathName, new ArrayList<>());
+    }
+    hotReloadPaths.get(pathName).add(path);
   }
 
   /**
-   * Register a callback for auto hot-reload events from the PathPlanner app.
+   * Register an auto for hot reload. Called internally by PathPlannerAuto.
    *
-   * @param callback (autoName, jsonString) → void
+   * @param autoName Name of the auto
+   * @param auto     Reference to the auto object
    */
-  public static void setHotReloadAutoCallback(java.util.function.BiConsumer<String, String> callback) {
-    if (server != null) server.setHotReloadAutoCallback(callback);
+  public static void registerHotReloadAuto(String autoName, PathPlannerAuto auto) {
+    if (compMode) return;
+    if (!hotReloadAutos.containsKey(autoName)) {
+      hotReloadAutos.put(autoName, new ArrayList<>());
+    }
+    hotReloadAutos.get(autoName).add(auto);
+  }
+
+  // ── Hot reload handlers (called when app pushes an update) ────────────
+
+  private static void handlePathHotReload(String jsonStr) {
+    if (compMode) return;
+    try {
+      JSONObject json     = (JSONObject) new JSONParser().parse(jsonStr);
+      String     name     = (String) json.get("name");
+      JSONObject pathJson = (JSONObject) json.get("path");
+
+      List<PathPlannerPath> paths = hotReloadPaths.get(name);
+      if (paths != null) {
+        for (PathPlannerPath p : paths) {
+          p.hotReload(pathJson);
+        }
+      }
+      // FTC has no Filesystem.getDeployDirectory() file write — hot reload
+      // applies in-memory only. Re-deploy to persist changes.
+    } catch (Exception e) {
+      LOG.warning("Hot reload path parse failed: " + e.getMessage());
+    }
+  }
+
+  private static void handleAutoHotReload(String jsonStr) {
+    if (compMode) return;
+    try {
+      JSONObject json     = (JSONObject) new JSONParser().parse(jsonStr);
+      String     name     = (String) json.get("name");
+      JSONObject autoJson = (JSONObject) json.get("auto");
+
+      List<PathPlannerAuto> autos = hotReloadAutos.get(name);
+      if (autos != null) {
+        for (PathPlannerAuto a : autos) {
+          a.hotReload(autoJson);
+        }
+      }
+    } catch (Exception e) {
+      LOG.warning("Hot reload auto parse failed: " + e.getMessage());
+    }
   }
 
   private PPLibTelemetry() {}
