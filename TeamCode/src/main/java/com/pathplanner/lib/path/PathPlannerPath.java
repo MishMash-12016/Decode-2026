@@ -303,10 +303,10 @@ public class PathPlannerPath {
     }
 
     try (BufferedReader br =
-        new BufferedReader(
-            new FileReader(
-                new File(
-                    Filesystem.getDeployDirectory(MMRobot.getInstance().currentOpMode.hardwareMap.appContext), "pathplanner/paths/" + pathName + ".path")))) {
+             new BufferedReader(
+                 new FileReader(
+                     new File(
+                         Filesystem.getDeployDirectory(MMRobot.getInstance().currentOpMode.hardwareMap.appContext), "pathplanner/paths/" + pathName + ".path")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {
@@ -325,7 +325,7 @@ public class PathPlannerPath {
 
       PathPlannerPath path = PathPlannerPath.fromJson(json);
       path.name = pathName;
-//      PPLibTelemetry.registerHotReloadPath(pathName, path);
+      PPLibTelemetry.registerHotReloadPath(pathName, path);
       pathCache.put(pathName, path);
       return path;
     }
@@ -334,9 +334,9 @@ public class PathPlannerPath {
   private static void loadChoreoTrajectoryIntoCache(String trajectoryName)
       throws IOException, ParseException, FileVersionException {
     try (BufferedReader br =
-        new BufferedReader(
-            new FileReader(
-                new File(Filesystem.getDeployDirectory(MMRobot.getInstance().currentOpMode.hardwareMap.appContext), "choreo/" + trajectoryName + ".traj")))) {
+             new BufferedReader(
+                 new FileReader(
+                     new File(Filesystem.getDeployDirectory(MMRobot.getInstance().currentOpMode.hardwareMap.appContext), "choreo/" + trajectoryName + ".traj")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {
@@ -1239,54 +1239,54 @@ public class PathPlannerPath {
                               state.feedforwards =
                                   new DriveFeedforwards(
                                       new double[] {
-                                        ff.accelerationsMPSSq()[1],
-                                        ff.accelerationsMPSSq()[0],
-                                        ff.accelerationsMPSSq()[3],
-                                        ff.accelerationsMPSSq()[2]
+                                          ff.accelerationsMPSSq()[1],
+                                          ff.accelerationsMPSSq()[0],
+                                          ff.accelerationsMPSSq()[3],
+                                          ff.accelerationsMPSSq()[2]
                                       },
                                       new double[] {
-                                        ff.linearForcesNewtons()[1],
-                                        ff.linearForcesNewtons()[0],
-                                        ff.linearForcesNewtons()[3],
-                                        ff.linearForcesNewtons()[2]
+                                          ff.linearForcesNewtons()[1],
+                                          ff.linearForcesNewtons()[0],
+                                          ff.linearForcesNewtons()[3],
+                                          ff.linearForcesNewtons()[2]
                                       },
                                       new double[] {
-                                        ff.torqueCurrentsAmps()[1],
-                                        ff.torqueCurrentsAmps()[0],
-                                        ff.torqueCurrentsAmps()[3],
-                                        ff.torqueCurrentsAmps()[2]
+                                          ff.torqueCurrentsAmps()[1],
+                                          ff.torqueCurrentsAmps()[0],
+                                          ff.torqueCurrentsAmps()[3],
+                                          ff.torqueCurrentsAmps()[2]
                                       },
                                       new double[] {
-                                        ff.robotRelativeForcesXNewtons()[1],
-                                        ff.robotRelativeForcesXNewtons()[0],
-                                        ff.robotRelativeForcesXNewtons()[3],
-                                        ff.robotRelativeForcesXNewtons()[2]
+                                          ff.robotRelativeForcesXNewtons()[1],
+                                          ff.robotRelativeForcesXNewtons()[0],
+                                          ff.robotRelativeForcesXNewtons()[3],
+                                          ff.robotRelativeForcesXNewtons()[2]
                                       },
                                       new double[] {
-                                        ff.robotRelativeForcesYNewtons()[1],
-                                        ff.robotRelativeForcesYNewtons()[0],
-                                        ff.robotRelativeForcesYNewtons()[3],
-                                        ff.robotRelativeForcesYNewtons()[2]
+                                          ff.robotRelativeForcesYNewtons()[1],
+                                          ff.robotRelativeForcesYNewtons()[0],
+                                          ff.robotRelativeForcesYNewtons()[3],
+                                          ff.robotRelativeForcesYNewtons()[2]
                                       });
                             } else if (ff.accelerationsMPSSq().length == 2) {
                               state.feedforwards =
                                   new DriveFeedforwards(
                                       new double[] {
-                                        ff.accelerationsMPSSq()[1], ff.accelerationsMPSSq()[0]
+                                          ff.accelerationsMPSSq()[1], ff.accelerationsMPSSq()[0]
                                       },
                                       new double[] {
-                                        ff.linearForcesNewtons()[1], ff.linearForcesNewtons()[0]
+                                          ff.linearForcesNewtons()[1], ff.linearForcesNewtons()[0]
                                       },
                                       new double[] {
-                                        ff.torqueCurrentsAmps()[1], ff.torqueCurrentsAmps()[0]
+                                          ff.torqueCurrentsAmps()[1], ff.torqueCurrentsAmps()[0]
                                       },
                                       new double[] {
-                                        ff.robotRelativeForcesXNewtons()[1],
-                                        ff.robotRelativeForcesXNewtons()[0]
+                                          ff.robotRelativeForcesXNewtons()[1],
+                                          ff.robotRelativeForcesXNewtons()[0]
                                       },
                                       new double[] {
-                                        ff.robotRelativeForcesYNewtons()[1],
-                                        ff.robotRelativeForcesYNewtons()[0]
+                                          ff.robotRelativeForcesYNewtons()[1],
+                                          ff.robotRelativeForcesYNewtons()[0]
                                       });
                             } else {
                               state.feedforwards = ff;

@@ -11,6 +11,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import com.pathplanner.lib.util.FileVersionException;
 import com.pathplanner.lib.util.FlippingUtil;
+import com.pathplanner.lib.util.PPLibTelemetry;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.CommandBase;
@@ -82,10 +83,10 @@ public class PathPlannerAuto extends CommandBase {
     }
 
     try (BufferedReader br =
-        new BufferedReader(
-            new FileReader(
-                new File(
-                    Filesystem.getDeployDirectory(MMRobot.getInstance().currentOpMode.hardwareMap.appContext), "pathplanner/autos/" + autoName + ".auto")))) {
+             new BufferedReader(
+                 new FileReader(
+                     new File(
+                         Filesystem.getDeployDirectory(MMRobot.getInstance().currentOpMode.hardwareMap.appContext), "pathplanner/autos/" + autoName + ".auto")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {
@@ -120,7 +121,7 @@ public class PathPlannerAuto extends CommandBase {
 
     addRequirements(autoCommand.getRequirements().toArray(new Subsystem[0]));
     setName(autoName);
-//    PPLibTelemetry.registerHotReloadAuto(autoName, this);
+    PPLibTelemetry.registerHotReloadAuto(autoName, this);
 
     this.autoLoop = new EventLoop();
     this.autoTimer = new ElapsedTime();
@@ -607,10 +608,10 @@ public class PathPlannerAuto extends CommandBase {
   public static List<PathPlannerPath> getPathGroupFromAutoFile(String autoName)
       throws IOException, ParseException {
     try (BufferedReader br =
-        new BufferedReader(
-            new FileReader(
-                new File(
-                    Filesystem.getDeployDirectory(MMRobot.getInstance().currentOpMode.hardwareMap.appContext), "pathplanner/autos/" + autoName + ".auto")))) {
+             new BufferedReader(
+                 new FileReader(
+                     new File(
+                         Filesystem.getDeployDirectory(MMRobot.getInstance().currentOpMode.hardwareMap.appContext), "pathplanner/autos/" + autoName + ".auto")))) {
       StringBuilder fileContentBuilder = new StringBuilder();
       String line;
       while ((line = br.readLine()) != null) {

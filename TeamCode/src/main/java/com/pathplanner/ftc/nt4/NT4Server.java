@@ -1,313 +1,301 @@
 package com.pathplanner.ftc.nt4;
 
-import org.java_websocket.WebSocket;
-import org.java_websocket.handshake.ClientHandshake;
-import org.java_websocket.server.WebSocketServer;
+import android.util.Log;
+
+import fi.iki.elonen.NanoHTTPD;
+import fi.iki.elonen.NanoWSD;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.net.InetSocketAddress;
+import org.msgpack.core.MessageBufferPacker;
+import org.msgpack.core.MessagePack;
+
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.logging.Logger;
 
 /**
- * Minimal NT4 server that speaks enough of the NetworkTables 4 WebSocket
- * protocol for PathPlanner's desktop app to connect, subscribe, and receive
- * live telemetry from an FTC robot.
+ * NT4 WebSocket server built on NanoWSD (already available as a transitive
+ * dependency via FTC Dashboard — no extra dependency needed).
  *
- * <h2>Protocol summary</h2>
- * NT4 uses a JSON-text frame for control messages and MessagePack binary
- * frames for high-frequency value updates.  PathPlanner's client speaks the
- * <em>text-only</em> subset, so this implementation does the same: every
- * value update is sent as a JSON text frame rather than MessagePack.
+ * Wire protocol:
+ *   Text  frames → JSON array of {"method":..., "params":...} objects
+ *                  Used for: announce (server→client), subscribe (client→server)
+ *   Binary frames → MessagePack array: [topicId, timestampµs, typeCode, value]
+ *                  Used for all value updates (both directions)
  *
- * <h2>Topic lifecycle</h2>
- * <ol>
- *   <li>Server sends {@code announce} for every known topic as soon as a
- *       client connects.</li>
- *   <li>Client sends {@code subscribe} to express interest.</li>
- *   <li>Server sends {@code value} frames whenever the robot updates a
- *       topic.</li>
- * </ol>
- *
- * <h2>Usage</h2>
- * <pre>{@code
- * NT4Server server = new NT4Server(5810);
- * server.start();
- * // ...
- * server.publishDoubleArray("/PathPlanner/vel", new double[]{1.0, 1.2, 0.0, 0.0});
- * }</pre>
+ * Subprotocol "v4.1.networktables.first.wpi.edu" is echoed back in the HTTP
+ * upgrade response — PathPlanner's client closes immediately without it.
  */
 @SuppressWarnings("unchecked")
-public class NT4Server extends WebSocketServer {
+public class NT4Server extends NanoWSD {
 
-    private static final Logger LOG = Logger.getLogger(NT4Server.class.getName());
-
-    // ── NT4 WebSocket sub-protocol required by the spec ───────────────────
+    private static final String TAG = "NT4Server";
     private static final String NT4_SUBPROTOCOL = "v4.1.networktables.first.wpi.edu";
 
-    // ── Internal state ─────────────────────────────────────────────────────
-    /** topic name → topic metadata */
-    private final Map<String, TopicInfo> topics = new ConcurrentHashMap<>();
+    // MessagePack NT4 type codes
+    private static final int MTYPE_FLOAT64_ARRAY = 17;
+    private static final int MTYPE_RAW           = 4;   // raw bytes (struct)
+    private static final int MTYPE_STRING        = 6;
 
-    /** topic name → last known value (raw JSON value object) */
-    private final Map<String, Object>    lastValues = new ConcurrentHashMap<>();
+    private final Map<String, TopicInfo>  topics     = new ConcurrentHashMap<>();
+    private final Map<String, byte[]>     lastFrames = new ConcurrentHashMap<>();
+    private final List<NT4WebSocket>      clients    = new CopyOnWriteArrayList<>();
+    private final long                    startNanos = System.nanoTime();
+    private final AtomicInteger           nextId     = new AtomicInteger(1);
 
-    /** All currently connected clients */
-    private final List<WebSocket> clients = new CopyOnWriteArrayList<>();
-
-    /** Monotonically-increasing timestamp (µs since server start) */
-    private final long startNanos = System.nanoTime();
-
-    /** UID generator for topic IDs */
-    private final AtomicInteger nextTopicId = new AtomicInteger(1);
-
-    // ── Hot-reload callbacks ───────────────────────────────────────────────
-    /** Called when the PathPlanner app pushes a path hot-reload message. */
     private BiConsumer<String, String> hotReloadPathCallback;
-
-    /** Called when the PathPlanner app pushes an auto hot-reload message. */
     private BiConsumer<String, String> hotReloadAutoCallback;
 
-    // ──────────────────────────────────────────────────────────────────────
-    //  Constructor
-    // ──────────────────────────────────────────────────────────────────────
+    // ── Constructor ───────────────────────────────────────────────────────
 
     public NT4Server(int port) {
-        super(new InetSocketAddress(port));
-        setReuseAddr(true);
+        super(port);
 
-        // Pre-register all PathPlanner topics
-        registerTopic(NT4Topics.VEL,          NT4Topics.TYPE_DOUBLE_ARRAY);
-        registerTopic(NT4Topics.CURRENT_POSE,  NT4Topics.TYPE_STRUCT_POSE2D);
-        registerTopic(NT4Topics.ACTIVE_PATH,   NT4Topics.TYPE_STRUCT_POSE2D_ARRAY);
-        registerTopic(NT4Topics.TARGET_POSE,   NT4Topics.TYPE_STRUCT_POSE2D);
-
-        // Inbound topics (app → robot) – registered so we can receive them
-        registerTopic(NT4Topics.HOT_RELOAD_PATH, "string");
-        registerTopic(NT4Topics.HOT_RELOAD_AUTO, "string");
+        registerTopic(NT4Topics.VEL,            NT4Topics.TYPE_DOUBLE_ARRAY,       MTYPE_FLOAT64_ARRAY);
+        registerTopic(NT4Topics.CURRENT_POSE,   NT4Topics.TYPE_STRUCT_POSE2D,      MTYPE_RAW);
+        registerTopic(NT4Topics.ACTIVE_PATH,    NT4Topics.TYPE_STRUCT_POSE2D_ARRAY, MTYPE_RAW);
+        registerTopic(NT4Topics.TARGET_POSE,    NT4Topics.TYPE_STRUCT_POSE2D,      MTYPE_RAW);
+        registerTopic(NT4Topics.HOT_RELOAD_PATH, "string",                         MTYPE_STRING);
+        registerTopic(NT4Topics.HOT_RELOAD_AUTO, "string",                         MTYPE_STRING);
     }
 
-    // ──────────────────────────────────────────────────────────────────────
-    //  WebSocketServer callbacks
-    // ──────────────────────────────────────────────────────────────────────
+    // ── NanoWSD override — subprotocol negotiation ────────────────────────
 
     @Override
-    public void onOpen(WebSocket conn, ClientHandshake handshake) {
-        LOG.info("PathPlanner client connected: " + conn.getRemoteSocketAddress());
-        clients.add(conn);
-
-        // Announce every known topic to the new client
-        for (TopicInfo topic : topics.values()) {
-            sendAnnounce(conn, topic);
+    public Response serve(IHTTPSession session) {
+        // Echo back the NT4 subprotocol header if the client requests it.
+        // NanoWSD's serve() builds the 101 Switching Protocols response;
+        // we intercept to add the Sec-WebSocket-Protocol header.
+        String requested = session.getHeaders().get("sec-websocket-protocol");
+        Response r = super.serve(session);
+        if (requested != null && requested.contains(NT4_SUBPROTOCOL)) {
+            r.addHeader("Sec-WebSocket-Protocol", NT4_SUBPROTOCOL);
         }
-
-        // Send the last known value for each topic so the client has
-        // something to display immediately
-        for (Map.Entry<String, Object> entry : lastValues.entrySet()) {
-            TopicInfo topic = topics.get(entry.getKey());
-            if (topic != null) {
-                sendValue(conn, topic, entry.getValue());
-            }
-        }
+        return r;
     }
 
     @Override
-    public void onClose(WebSocket conn, int code, String reason, boolean remote) {
-        LOG.info("PathPlanner client disconnected: " + conn.getRemoteSocketAddress());
-        clients.remove(conn);
+    protected NanoWSD.WebSocket openWebSocket(IHTTPSession handshake) {
+        return new NT4WebSocket(handshake);
     }
 
-    @Override
-    public void onMessage(WebSocket conn, String message) {
-        // PathPlanner may send subscribe or hot-reload messages as JSON arrays
-        try {
-            Object parsed = new JSONParser().parse(message);
-            if (!(parsed instanceof JSONArray)) return;
-            JSONArray frames = (JSONArray) parsed;
-            for (Object frameObj : frames) {
-                if (!(frameObj instanceof JSONArray)) continue;
-                JSONArray frame = (JSONArray) frameObj;
-                if (frame.size() < 2) continue;
+    // ── Public publish API ────────────────────────────────────────────────
 
-                String type = String.valueOf(frame.get(0));
-                if (!("publish".equals(type))) continue;
-
-                // Client publishing a value (hot reload case)
-                // frame: ["publish", topicName, timestamp, value]
-                if (frame.size() >= 4) {
-                    String topicName = String.valueOf(frame.get(1));
-                    Object value     = frame.get(3);
-                    handleInboundValue(topicName, value);
-                }
-            }
-        } catch (ParseException e) {
-            // Ignore malformed frames
-        }
-    }
-
-    @Override
-    public void onMessage(WebSocket conn, ByteBuffer message) {
-        // PathPlanner uses text-mode NT4; binary MessagePack frames are not
-        // expected from the client side.  Ignore silently.
-    }
-
-    @Override
-    public void onError(WebSocket conn, Exception ex) {
-        LOG.warning("NT4 server error: " + ex.getMessage());
-    }
-
-    @Override
-    public void onStart() {
-        LOG.info("NT4 mock server listening on port " + getPort());
-    }
-
-    // ──────────────────────────────────────────────────────────────────────
-    //  Public publish API
-    // ──────────────────────────────────────────────────────────────────────
-
-    /**
-     * Publish a double array value (e.g. velocities).
-     *
-     * @param topicName NT4 topic path
-     * @param values    the array values
-     */
     public void publishDoubleArray(String topicName, double[] values) {
-        JSONArray arr = new JSONArray();
-        for (double v : values) arr.add(v);
-        publish(topicName, arr);
+        TopicInfo t = topics.get(topicName);
+        if (t == null) return;
+        try (MessageBufferPacker p = MessagePack.newDefaultBufferPacker()) {
+            p.packArrayHeader(4);
+            p.packInt(t.id);
+            p.packLong(nowMicros());
+            p.packInt(MTYPE_FLOAT64_ARRAY);
+            p.packArrayHeader(values.length);
+            for (double v : values) p.packDouble(v);
+            p.flush();
+            broadcast(topicName, p.toByteArray());
+        } catch (IOException e) {
+            Log.w(TAG, "publishDoubleArray failed: " + e.getMessage());
+        }
     }
 
-    /**
-     * Publish a single Pose2d encoded as a base64 struct string.
-     *
-     * @param topicName NT4 topic path
-     * @param x         metres
-     * @param y         metres
-     * @param radians   heading
-     */
     public void publishPose2d(String topicName, double x, double y, double radians) {
-        publish(topicName, Pose2dSerializer.encodeOne(x, y, radians));
+        TopicInfo t = topics.get(topicName);
+        if (t == null) return;
+        broadcast(topicName, buildStructFrame(t.id, encodePose2d(x, y, radians)));
     }
 
-    /**
-     * Publish an array of Pose2d values encoded as a base64 struct string.
-     *
-     * @param topicName NT4 topic path
-     * @param poses     flat array [x0,y0,r0, x1,y1,r1, ...]
-     */
     public void publishPose2dArray(String topicName, double[] poses) {
-        publish(topicName, Pose2dSerializer.encodeArray(poses));
+        TopicInfo t = topics.get(topicName);
+        if (t == null) return;
+        broadcast(topicName, buildStructFrame(t.id, encodePose2dArray(poses)));
     }
 
-    // ──────────────────────────────────────────────────────────────────────
-    //  Hot-reload callbacks
-    // ──────────────────────────────────────────────────────────────────────
+    public void setHotReloadPathCallback(BiConsumer<String, String> cb) { hotReloadPathCallback = cb; }
+    public void setHotReloadAutoCallback(BiConsumer<String, String> cb) { hotReloadAutoCallback = cb; }
 
-    public void setHotReloadPathCallback(BiConsumer<String, String> cb) {
-        this.hotReloadPathCallback = cb;
-    }
+    // ── Internal helpers ──────────────────────────────────────────────────
 
-    public void setHotReloadAutoCallback(BiConsumer<String, String> cb) {
-        this.hotReloadAutoCallback = cb;
-    }
-
-    // ──────────────────────────────────────────────────────────────────────
-    //  Internal helpers
-    // ──────────────────────────────────────────────────────────────────────
-
-    private void registerTopic(String name, String type) {
-        topics.put(name, new TopicInfo(nextTopicId.getAndIncrement(), name, type));
+    private void registerTopic(String name, String type, int msgpackType) {
+        topics.put(name, new TopicInfo(nextId.getAndIncrement(), name, type, msgpackType));
     }
 
     private long nowMicros() {
         return (System.nanoTime() - startNanos) / 1_000L;
     }
 
-    /**
-     * Core publish – stores the value and broadcasts to all connected clients.
-     */
-    private void publish(String topicName, Object jsonValue) {
-        TopicInfo topic = topics.get(topicName);
-        if (topic == null) return;
-
-        lastValues.put(topicName, jsonValue);
-
-        for (WebSocket client : clients) {
-            if (client.isOpen()) {
-                sendValue(client, topic, jsonValue);
+    private void broadcast(String topicName, byte[] frame) {
+        lastFrames.put(topicName, frame);
+        for (NT4WebSocket ws : clients) {
+            if (ws.isOpen()) {
+                try { ws.send(frame); } catch (IOException ignored) {}
             }
         }
     }
 
-    /**
-     * Send an NT4 {@code announce} control frame to one client.
-     *
-     * NT4 announce frame (JSON array):
-     * {@code [3, topicId, topicName, typeString, {}]}
-     */
-    private void sendAnnounce(WebSocket conn, TopicInfo topic) {
-        JSONArray frame = new JSONArray();
-        frame.add(NT4Topics.MSG_ANNOUNCE);   // message type = 3
-        frame.add(topic.id);
-        frame.add(topic.name);
-        frame.add(topic.type);
-        frame.add(new JSONObject());         // empty properties
+    /** NT4 announce text frame: [{"method":"announce","params":{...}}] */
+    private static String buildAnnounce(TopicInfo t) {
+        JSONObject params = new JSONObject();
+        params.put("name",       t.name);
+        params.put("id",         t.id);
+        params.put("type",       t.type);
+        params.put("pubuid",     0);
+        params.put("properties", new JSONObject());
 
-        // NT4 control messages are sent as a JSON array-of-frames
-        JSONArray wrapper = new JSONArray();
-        wrapper.add(frame);
-        conn.send(wrapper.toJSONString());
+        JSONObject msg = new JSONObject();
+        msg.put("method", "announce");
+        msg.put("params", params);
+
+        JSONArray arr = new JSONArray();
+        arr.add(msg);
+        return arr.toJSONString();
     }
 
-    /**
-     * Send an NT4 value frame to one client.
-     *
-     * NT4 value frame (JSON array):
-     * {@code [topicId, timestamp_µs, value]}
-     *
-     * Multiple value frames are batched inside an outer JSON array.
-     */
-    private void sendValue(WebSocket conn, TopicInfo topic, Object jsonValue) {
-        JSONArray frame = new JSONArray();
-        frame.add(topic.id);
-        frame.add(nowMicros());
-        frame.add(jsonValue);
-
-        JSONArray wrapper = new JSONArray();
-        wrapper.add(frame);
-        conn.send(wrapper.toJSONString());
-    }
-
-    private void handleInboundValue(String topicName, Object value) {
-        if (NT4Topics.HOT_RELOAD_PATH.equals(topicName) && hotReloadPathCallback != null) {
-            hotReloadPathCallback.accept(topicName, String.valueOf(value));
-        } else if (NT4Topics.HOT_RELOAD_AUTO.equals(topicName) && hotReloadAutoCallback != null) {
-            hotReloadAutoCallback.accept(topicName, String.valueOf(value));
+    private byte[] buildStructFrame(int topicId, byte[] structBytes) {
+        try (MessageBufferPacker p = MessagePack.newDefaultBufferPacker()) {
+            p.packArrayHeader(4);
+            p.packInt(topicId);
+            p.packLong(nowMicros());
+            p.packInt(MTYPE_RAW);
+            p.packBinaryHeader(structBytes.length);
+            p.writePayload(structBytes);
+            p.flush();
+            return p.toByteArray();
+        } catch (IOException e) {
+            return new byte[0];
         }
     }
 
-    // ──────────────────────────────────────────────────────────────────────
-    //  Internal data class
-    // ──────────────────────────────────────────────────────────────────────
+    private static byte[] encodePose2d(double x, double y, double radians) {
+        ByteBuffer buf = ByteBuffer.allocate(24);
+        buf.order(ByteOrder.LITTLE_ENDIAN);
+        buf.putDouble(x); buf.putDouble(y); buf.putDouble(radians);
+        return buf.array();
+    }
+
+    private static byte[] encodePose2dArray(double[] poses) {
+        if (poses.length % 3 != 0) throw new IllegalArgumentException("poses.length % 3 != 0");
+        ByteBuffer buf = ByteBuffer.allocate(24 * (poses.length / 3));
+        buf.order(ByteOrder.LITTLE_ENDIAN);
+        for (int i = 0; i < poses.length; i += 3) {
+            buf.putDouble(poses[i]); buf.putDouble(poses[i+1]); buf.putDouble(poses[i+2]);
+        }
+        return buf.array();
+    }
+
+    private void handleInbound(String topicName, String value) {
+        if (NT4Topics.HOT_RELOAD_PATH.equals(topicName) && hotReloadPathCallback != null) {
+            hotReloadPathCallback.accept(topicName, value);
+        } else if (NT4Topics.HOT_RELOAD_AUTO.equals(topicName) && hotReloadAutoCallback != null) {
+            hotReloadAutoCallback.accept(topicName, value);
+        }
+    }
+
+    // ── Inner WebSocket class ─────────────────────────────────────────────
+
+    private class NT4WebSocket extends NanoWSD.WebSocket {
+
+        NT4WebSocket(IHTTPSession handshake) {
+            super(handshake);
+        }
+
+        @Override
+        protected void onOpen() {
+            clients.add(this);
+            Log.i(TAG, "PathPlanner connected: " + getHandshakeRequest().getRemoteIpAddress());
+
+            // Announce all topics
+            for (TopicInfo t : topics.values()) {
+                try { send(buildAnnounce(t)); } catch (IOException ignored) {}
+            }
+
+            // Replay last known values
+            for (Map.Entry<String, byte[]> e : lastFrames.entrySet()) {
+                try { send(e.getValue()); } catch (IOException ignored) {}
+            }
+        }
+
+        @Override
+        protected void onClose(WebSocketFrame.CloseCode code, String reason, boolean byRemote) {
+            clients.remove(this);
+            Log.i(TAG, "PathPlanner disconnected");
+        }
+
+        @Override
+        protected void onMessage(WebSocketFrame msg) {
+            if (msg.getOpCode() == WebSocketFrame.OpCode.Binary) {
+                // Binary msgpack frame from client — hot reload path
+                try {
+                    org.msgpack.core.MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(msg.getBinaryPayload());
+                    int len = unpacker.unpackArrayHeader(); // should be 4
+                    if (len < 4) return;
+                    unpacker.unpackInt();   // topicId (client-assigned, ignore)
+                    unpacker.unpackLong();  // timestamp
+                    unpacker.unpackInt();   // type code
+                    String value = unpacker.unpackString();
+                    // Determine which hot-reload topic by checking registered client publish topics
+                    // (we'll match by checking if value looks like a hot-reload JSON payload)
+                    handleInboundBinary(value);
+                } catch (Exception ignored) {}
+                return;
+            }
+
+            // Text frame: JSON array of {method, params}
+            try {
+                Object parsed = new JSONParser().parse(msg.getTextPayload());
+                if (!(parsed instanceof JSONArray)) return;
+                for (Object obj : (JSONArray) parsed) {
+                    if (!(obj instanceof JSONObject)) continue;
+                    JSONObject m      = (JSONObject) obj;
+                    String     method = String.valueOf(m.get("method"));
+                    JSONObject params = (JSONObject) m.get("params");
+                    if (params == null) continue;
+
+                    if ("publish".equals(method)) {
+                        String name  = String.valueOf(params.get("name"));
+                        Object value = params.get("value");
+                        handleInbound(name, value == null ? "" : String.valueOf(value));
+                    }
+                }
+            } catch (ParseException ignored) {}
+        }
+
+        @Override
+        protected void onPong(WebSocketFrame pong) {}
+
+        @Override
+        protected void onException(IOException e) {
+            Log.w(TAG, "WebSocket exception: " + e.getMessage());
+        }
+
+        private void handleInboundBinary(String value) {
+            // Try to detect which hot-reload topic this belongs to by JSON structure
+            if (value.contains("\"path\"")) {
+                handleInbound(NT4Topics.HOT_RELOAD_PATH, value);
+            } else if (value.contains("\"auto\"")) {
+                handleInbound(NT4Topics.HOT_RELOAD_AUTO, value);
+            }
+        }
+    }
+
+    // ── Topic metadata ────────────────────────────────────────────────────
 
     private static final class TopicInfo {
         final int    id;
         final String name;
         final String type;
+        final int    msgpackType;
 
-        TopicInfo(int id, String name, String type) {
-            this.id   = id;
-            this.name = name;
-            this.type = type;
+        TopicInfo(int id, String name, String type, int msgpackType) {
+            this.id = id; this.name = name; this.type = type; this.msgpackType = msgpackType;
         }
     }
 }
