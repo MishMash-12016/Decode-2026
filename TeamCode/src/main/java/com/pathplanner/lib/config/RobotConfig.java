@@ -273,6 +273,7 @@ public class RobotConfig {
           case "NEO" -> DCMotor.getNEO(numMotors);
           case "CIM" -> DCMotor.getCIM(numMotors);
           case "miniCIM" -> DCMotor.getMiniCIM(numMotors);
+          case "GoBilda312" -> DCMotor.getGoBilda312(numMotors);
           default -> throw new IllegalArgumentException("Invalid motor type: " + driveMotor);
         };
     gearbox = gearbox.withReduction(gearing);

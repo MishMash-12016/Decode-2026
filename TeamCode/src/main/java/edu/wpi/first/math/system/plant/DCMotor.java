@@ -347,4 +347,16 @@ public class DCMotor {
     return new DCMotor(
         12, 3.60, 211, 3.6, Units.rotationsPerMinuteToRadiansPerSecond(6784), numMotors);
   }
+
+  /**
+   * Return a gearbox of goBilda 312 motors.
+   *
+   * @param numMotors Number of motors in the gearbox.
+   * @return a gearbox of goBilda 312 motors.
+   */
+  public static DCMotor getGoBilda312(int numMotors) {
+    // From https://www.revrobotics.com/next-generation-spark-neo/
+    return new DCMotor(
+        12, 2.38, 9, 0.3, Units.rotationsPerMinuteToRadiansPerSecond(312), numMotors);
+  }
 }
