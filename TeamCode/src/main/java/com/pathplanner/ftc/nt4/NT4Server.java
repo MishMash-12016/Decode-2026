@@ -23,34 +23,49 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
 /**
- * NT4 WebSocket server built on NanoWSD (already available as a transitive
- * dependency via FTC Dashboard — no extra dependency needed).
+ * NT4 WebSocket server built on NanoWSD.
  *
  * Wire protocol:
  *   Text  frames → JSON array of {"method":..., "params":...} objects
- *                  Used for: announce (server→client), subscribe (client→server)
- *   Binary frames → MessagePack array: [topicId, timestampµs, typeCode, value]
- *                  Used for all value updates (both directions)
+ *   Binary frames → MessagePack: [topicId, timestampµs, typeCode, value]
  *
- * Subprotocol "v4.1.networktables.first.wpi.edu" is echoed back in the HTTP
- * upgrade response — PathPlanner's client closes immediately without it.
+ * ─── IMPORTANT: no serve() override ─────────────────────────────────────────
+ * NanoWSD's serve() already writes Sec-WebSocket-Protocol in the 101 response
+ * by echoing the client's requested value.  Adding it again in a serve()
+ * override produces DUPLICATE headers.  Dart's dart:io HTTP parser calls
+ * headers.value('sec-websocket-protocol'), which throws StateError when it finds
+ * more than one value for the same header name.  That exception propagates out of
+ * _mainWebsocket!.ready, the NT4Client catch-block schedules a 1-second retry,
+ * and PathPlanner never shows as connected.
+ *
+ * The NT4 client requests two subprotocols:
+ *   "networktables.first.wpi.edu, v4.1.networktables.first.wpi.edu"
+ * NanoWSD echoes the full comma-separated string back.  Dart compares that against
+ * the exact string 'v4.1.networktables.first.wpi.edu' → not equal → v4.0 fallback.
+ * v4.0 mode is fully functional for PathPlanner (telemetry + hot reload both work).
+ * ─────────────────────────────────────────────────────────────────────────────
  */
 @SuppressWarnings("unchecked")
 public class NT4Server extends NanoWSD {
 
     private static final String TAG = "NT4Server";
-    private static final String NT4_SUBPROTOCOL = "v4.1.networktables.first.wpi.edu";
 
-    // MessagePack NT4 type codes
-    private static final int MTYPE_FLOAT64_ARRAY = 17;
-    private static final int MTYPE_RAW           = 4;   // raw bytes (struct)
-    private static final int MTYPE_STRING        = 6;
+    // NT4 msgpack type codes — must match NT4TypeStr.typeMap in the Dart client:
+    //   boolean → 0 | double → 1 | int → 2 | float → 3
+    //   string  → 4 | raw    → 5 | … | double[] → 17
+    private static final int MTYPE_DOUBLE_ARRAY = 17;  // double[]   – velocities
+    private static final int MTYPE_RAW          = 5;   // raw bytes  – struct:Pose2d
+    private static final int MTYPE_STRING       = 4;   // string     – hot-reload JSON
 
     private final Map<String, TopicInfo>  topics     = new ConcurrentHashMap<>();
     private final Map<String, byte[]>     lastFrames = new ConcurrentHashMap<>();
     private final List<NT4WebSocket>      clients    = new CopyOnWriteArrayList<>();
     private final long                    startNanos = System.nanoTime();
     private final AtomicInteger           nextId     = new AtomicInteger(1);
+
+    // pubuid → topic name: populated when client sends a "publish" text frame so
+    // that inbound hot-reload binary frames can be routed by ID, not by guessing.
+    private final Map<Integer, String> clientPubUidToTopicName = new ConcurrentHashMap<>();
 
     private BiConsumer<String, String> hotReloadPathCallback;
     private BiConsumer<String, String> hotReloadAutoCallback;
@@ -60,31 +75,29 @@ public class NT4Server extends NanoWSD {
     public NT4Server(int port) {
         super(port);
 
-        registerTopic(NT4Topics.VEL,            NT4Topics.TYPE_DOUBLE_ARRAY,       MTYPE_FLOAT64_ARRAY);
-        registerTopic(NT4Topics.CURRENT_POSE,   NT4Topics.TYPE_STRUCT_POSE2D,      MTYPE_RAW);
-        registerTopic(NT4Topics.ACTIVE_PATH,    NT4Topics.TYPE_STRUCT_POSE2D_ARRAY, MTYPE_RAW);
-        registerTopic(NT4Topics.TARGET_POSE,    NT4Topics.TYPE_STRUCT_POSE2D,      MTYPE_RAW);
-        registerTopic(NT4Topics.HOT_RELOAD_PATH, "string",                         MTYPE_STRING);
-        registerTopic(NT4Topics.HOT_RELOAD_AUTO, "string",                         MTYPE_STRING);
+        // Type strings that PathPlanner's Dart client understands:
+        //   "double[]" → velocities decoded as List<double>
+        //   "raw"      → struct bytes decoded via Pose2d.fromBytes(Uint8List)
+        //   "string"   → hot-reload JSON payload
+        registerTopic(NT4Topics.VEL,             "double[]", MTYPE_DOUBLE_ARRAY);
+        registerTopic(NT4Topics.CURRENT_POSE,    "raw",      MTYPE_RAW);
+        registerTopic(NT4Topics.ACTIVE_PATH,     "raw",      MTYPE_RAW);
+        registerTopic(NT4Topics.TARGET_POSE,     "raw",      MTYPE_RAW);
+        registerTopic(NT4Topics.HOT_RELOAD_PATH, "string",   MTYPE_STRING);
+        registerTopic(NT4Topics.HOT_RELOAD_AUTO, "string",   MTYPE_STRING);
     }
 
-    // ── NanoWSD override — subprotocol negotiation ────────────────────────
-
-    @Override
-    public Response serve(IHTTPSession session) {
-        // Echo back the NT4 subprotocol header if the client requests it.
-        // NanoWSD's serve() builds the 101 Switching Protocols response;
-        // we intercept to add the Sec-WebSocket-Protocol header.
-        String requested = session.getHeaders().get("sec-websocket-protocol");
-        Response r = super.serve(session);
-        if (requested != null && requested.contains(NT4_SUBPROTOCOL)) {
-            r.addHeader("Sec-WebSocket-Protocol", NT4_SUBPROTOCOL);
-        }
-        return r;
-    }
+    // ── openWebSocket ─────────────────────────────────────────────────────
 
     @Override
     protected NanoWSD.WebSocket openWebSocket(IHTTPSession handshake) {
+        String path = handshake.getUri();
+        // /nt/elastic is the NT4 v4.1 RTT latency socket.  In v4.0 fallback mode
+        // (which is what NanoWSD's subprotocol echo causes) the Dart client never
+        // opens this socket.  The RTTWebSocket handler is kept for correctness.
+        if (path != null && path.startsWith("/nt/elastic")) {
+            return new RTTWebSocket(handshake);
+        }
         return new NT4WebSocket(handshake);
     }
 
@@ -97,7 +110,7 @@ public class NT4Server extends NanoWSD {
             p.packArrayHeader(4);
             p.packInt(t.id);
             p.packLong(nowMicros());
-            p.packInt(MTYPE_FLOAT64_ARRAY);
+            p.packInt(MTYPE_DOUBLE_ARRAY);
             p.packArrayHeader(values.length);
             for (double v : values) p.packDouble(v);
             p.flush();
@@ -141,7 +154,6 @@ public class NT4Server extends NanoWSD {
         }
     }
 
-    /** NT4 announce text frame: [{"method":"announce","params":{...}}] */
     private static String buildAnnounce(TopicInfo t) {
         JSONObject params = new JSONObject();
         params.put("name",       t.name);
@@ -186,38 +198,56 @@ public class NT4Server extends NanoWSD {
         ByteBuffer buf = ByteBuffer.allocate(24 * (poses.length / 3));
         buf.order(ByteOrder.LITTLE_ENDIAN);
         for (int i = 0; i < poses.length; i += 3) {
-            buf.putDouble(poses[i]); buf.putDouble(poses[i+1]); buf.putDouble(poses[i+2]);
+            buf.putDouble(poses[i]); buf.putDouble(poses[i + 1]); buf.putDouble(poses[i + 2]);
         }
         return buf.array();
     }
 
-    private void handleInbound(String topicName, String value) {
+    private void dispatchHotReload(String topicName, String jsonValue) {
         if (NT4Topics.HOT_RELOAD_PATH.equals(topicName) && hotReloadPathCallback != null) {
-            hotReloadPathCallback.accept(topicName, value);
+            hotReloadPathCallback.accept(topicName, jsonValue);
         } else if (NT4Topics.HOT_RELOAD_AUTO.equals(topicName) && hotReloadAutoCallback != null) {
-            hotReloadAutoCallback.accept(topicName, value);
+            hotReloadAutoCallback.accept(topicName, jsonValue);
         }
     }
 
-    // ── Inner WebSocket class ─────────────────────────────────────────────
+    // ── RTT WebSocket (/nt/elastic) ───────────────────────────────────────
+
+    private static class RTTWebSocket extends NanoWSD.WebSocket {
+        RTTWebSocket(IHTTPSession handshake) { super(handshake); }
+
+        @Override protected void onOpen() { Log.d("NT4Server", "RTT socket connected"); }
+
+        @Override
+        protected void onMessage(WebSocketFrame msg) {
+            // Echo timestamp frames back so the client can compute round-trip latency.
+            if (msg.getOpCode() == WebSocketFrame.OpCode.Binary) {
+                try { send(msg.getBinaryPayload()); } catch (IOException ignored) {}
+            }
+        }
+
+        @Override protected void onClose(WebSocketFrame.CloseCode c, String r, boolean b) {}
+        @Override protected void onPong(WebSocketFrame f) {}
+        @Override protected void onException(IOException e) {}
+    }
+
+    // ── Main NT4 WebSocket (/nt/<clientName>) ─────────────────────────────
 
     private class NT4WebSocket extends NanoWSD.WebSocket {
 
-        NT4WebSocket(IHTTPSession handshake) {
-            super(handshake);
-        }
+        NT4WebSocket(IHTTPSession handshake) { super(handshake); }
 
         @Override
         protected void onOpen() {
             clients.add(this);
             Log.i(TAG, "PathPlanner connected: " + getHandshakeRequest().getRemoteIpAddress());
 
-            // Announce all topics
+            // 1. Announce all topics (client needs IDs + types before binary frames).
             for (TopicInfo t : topics.values()) {
                 try { send(buildAnnounce(t)); } catch (IOException ignored) {}
             }
 
-            // Replay last known values
+            // 2. Replay last cached values so PathPlanner shows current state immediately.
             for (Map.Entry<String, byte[]> e : lastFrames.entrySet()) {
                 try { send(e.getValue()); } catch (IOException ignored) {}
             }
@@ -232,25 +262,22 @@ public class NT4Server extends NanoWSD {
         @Override
         protected void onMessage(WebSocketFrame msg) {
             if (msg.getOpCode() == WebSocketFrame.OpCode.Binary) {
-                // Binary msgpack frame from client — hot reload path
-                try {
-                    org.msgpack.core.MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(msg.getBinaryPayload());
-                    int len = unpacker.unpackArrayHeader(); // should be 4
-                    if (len < 4) return;
-                    unpacker.unpackInt();   // topicId (client-assigned, ignore)
-                    unpacker.unpackLong();  // timestamp
-                    unpacker.unpackInt();   // type code
-                    String value = unpacker.unpackString();
-                    // Determine which hot-reload topic by checking registered client publish topics
-                    // (we'll match by checking if value looks like a hot-reload JSON payload)
-                    handleInboundBinary(value);
-                } catch (Exception ignored) {}
+                handleBinaryFrame(msg.getBinaryPayload());
                 return;
             }
+            handleTextFrame(msg.getTextPayload());
+        }
 
-            // Text frame: JSON array of {method, params}
+        @Override protected void onPong(WebSocketFrame pong) {}
+
+        @Override
+        protected void onException(IOException e) {
+            Log.w(TAG, "WebSocket exception: " + e.getMessage());
+        }
+
+        private void handleTextFrame(String text) {
             try {
-                Object parsed = new JSONParser().parse(msg.getTextPayload());
+                Object parsed = new JSONParser().parse(text);
                 if (!(parsed instanceof JSONArray)) return;
                 for (Object obj : (JSONArray) parsed) {
                     if (!(obj instanceof JSONObject)) continue;
@@ -260,28 +287,47 @@ public class NT4Server extends NanoWSD {
                     if (params == null) continue;
 
                     if ("publish".equals(method)) {
-                        String name  = String.valueOf(params.get("name"));
-                        Object value = params.get("value");
-                        handleInbound(name, value == null ? "" : String.valueOf(value));
+                        // Record the client's chosen pubuid so inbound binary frames
+                        // can be routed to the correct hot-reload callback by ID.
+                        String name      = String.valueOf(params.get("name"));
+                        Object pubuidObj = params.get("pubuid");
+                        if (pubuidObj instanceof Number) {
+                            int pubuid = ((Number) pubuidObj).intValue();
+                            clientPubUidToTopicName.put(pubuid, name);
+                            Log.d(TAG, "Client publishing: " + name + " (pubuid=" + pubuid + ")");
+                        }
                     }
+                    // "subscribe" frames are noted but require no action — we broadcast all topics.
                 }
             } catch (ParseException ignored) {}
         }
 
-        @Override
-        protected void onPong(WebSocketFrame pong) {}
+        private void handleBinaryFrame(byte[] payload) {
+            try {
+                org.msgpack.core.MessageUnpacker u = MessagePack.newDefaultUnpacker(payload);
+                if (u.unpackArrayHeader() < 4) return;
 
-        @Override
-        protected void onException(IOException e) {
-            Log.w(TAG, "WebSocket exception: " + e.getMessage());
-        }
+                int pubuid    = u.unpackInt();
+                u.unpackLong();              // timestamp (unused server-side)
+                int typeCode  = u.unpackInt();
 
-        private void handleInboundBinary(String value) {
-            // Try to detect which hot-reload topic this belongs to by JSON structure
-            if (value.contains("\"path\"")) {
-                handleInbound(NT4Topics.HOT_RELOAD_PATH, value);
-            } else if (value.contains("\"auto\"")) {
-                handleInbound(NT4Topics.HOT_RELOAD_AUTO, value);
+                if (typeCode == MTYPE_STRING) {
+                    String value     = u.unpackString();
+                    String topicName = clientPubUidToTopicName.get(pubuid);
+
+                    if (topicName != null) {
+                        dispatchHotReload(topicName, value);
+                    } else {
+                        // pubuid not yet mapped — fall back to content detection.
+                        if (value.contains("\"path\"")) {
+                            dispatchHotReload(NT4Topics.HOT_RELOAD_PATH, value);
+                        } else if (value.contains("\"auto\"")) {
+                            dispatchHotReload(NT4Topics.HOT_RELOAD_AUTO, value);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Inbound binary frame error: " + e.getMessage());
             }
         }
     }

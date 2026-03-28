@@ -4,11 +4,18 @@ import com.pathplanner.ftc.nt4.NT4Server;
 import com.pathplanner.ftc.nt4.NT4Topics;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
-import edu.wpi.first.math.geometry.Pose2d;
 
+import Ori.Coval.Logging.Logger.KoalaLog;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Filesystem;
+
+import org.firstinspires.ftc.teamcode.MMRobot;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -184,6 +191,7 @@ public class PPLibTelemetry {
   // ── Hot reload handlers (called when app pushes an update) ────────────
 
   private static void handlePathHotReload(String jsonStr) {
+    KoalaLog.log("fake/pathreload", "wrok", true);
     if (compMode) return;
     try {
       JSONObject json     = (JSONObject) new JSONParser().parse(jsonStr);
@@ -196,14 +204,25 @@ public class PPLibTelemetry {
           p.hotReload(pathJson);
         }
       }
-      // FTC has no Filesystem.getDeployDirectory() file write — hot reload
-      // applies in-memory only. Re-deploy to persist changes.
+      File pathFile =
+          new File(
+              Filesystem.getDeployDirectory(
+                  MMRobot.getInstance().currentOpMode.hardwareMap.appContext),
+              "pathplanner/paths/" + name + ".path");
+
+      try (FileWriter writer = new FileWriter(pathFile)) {
+        writer.write(pathJson.toJSONString());
+        writer.flush();
+      } catch (IOException e) {
+          throw new RuntimeException(e);
+      }
     } catch (Exception e) {
       LOG.warning("Hot reload path parse failed: " + e.getMessage());
     }
   }
 
   private static void handleAutoHotReload(String jsonStr) {
+    KoalaLog.log("fake/autohreload", "wrok", true);
     if (compMode) return;
     try {
       JSONObject json     = (JSONObject) new JSONParser().parse(jsonStr);
@@ -215,6 +234,19 @@ public class PPLibTelemetry {
         for (PathPlannerAuto a : autos) {
           a.hotReload(autoJson);
         }
+      }
+
+      File pathFile =
+          new File(
+              Filesystem.getDeployDirectory(
+                  MMRobot.getInstance().currentOpMode.hardwareMap.appContext),
+              "pathplanner/autos/" + name + ".auto");
+
+      try (FileWriter writer = new FileWriter(pathFile)) {
+        writer.write(autoJson.toJSONString());
+        writer.flush();
+      } catch (IOException e) {
+          throw new RuntimeException(e);
       }
     } catch (Exception e) {
       LOG.warning("Hot reload auto parse failed: " + e.getMessage());

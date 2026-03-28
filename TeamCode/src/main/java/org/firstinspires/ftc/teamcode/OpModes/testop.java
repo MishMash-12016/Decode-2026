@@ -26,7 +26,6 @@ public class testop extends MMOpMode {
 
     @Override
     public void onInit() {
-        PPLibTelemetry.startServer();
         fakeDrive = new FakeDrive();
         PathPlannerPath path;
         try {
@@ -35,6 +34,7 @@ public class testop extends MMOpMode {
             throw new RuntimeException(e);
         }
         auto = AutoBuilder.followPath(path);
+        auto = new PathPlannerAuto("auto");
     }
 
     @Override
@@ -50,6 +50,5 @@ public class testop extends MMOpMode {
     @Override
     public void onEnd() {
         super.onEnd();
-        PPLibTelemetry.stopServer();
     }
 }

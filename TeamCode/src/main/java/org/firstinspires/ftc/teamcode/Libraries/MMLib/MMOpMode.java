@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Libraries.MMLib;
 import Ori.Coval.Logging.AutoLogManager;
 import Ori.Coval.Logging.Logger.KoalaLog;
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.pathplanner.lib.util.PPLibTelemetry;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.seattlesolvers.solverslib.command.Command;
@@ -58,6 +59,7 @@ public abstract class MMOpMode extends LinearOpMode {
 //        else {
 //            KoalaLog.setup(hardwareMap, true);
 //        }
+        PPLibTelemetry.startServer();
         KoalaLog.setup(hardwareMap);
         KoalaLog.start();
 
