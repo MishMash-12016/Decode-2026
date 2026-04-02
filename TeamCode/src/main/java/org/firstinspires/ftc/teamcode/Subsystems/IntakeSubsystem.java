@@ -46,7 +46,7 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
         frstSensor = hardwareMap.get(DigitalChannel.class, "CHDPort4");
         scndSensor = hardwareMap.get(DigitalChannel.class, "CHDPort6");
 
-        withMotor("CHPort2",Direction.REVERSE);
+        withMotor(MMRobot.getInstance().controlHub, 2, Direction.REVERSE);
 
     }
 

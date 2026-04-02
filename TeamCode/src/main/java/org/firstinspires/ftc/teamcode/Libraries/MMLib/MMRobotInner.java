@@ -1,15 +1,22 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import java.util.ArrayList;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 public class MMRobotInner extends Robot {
   public MMOpMode currentOpMode;
+  public CuttleRevHub controlHub;
+  public CuttleRevHub expansionHub;
+  public String controlHubName = "Control Hub";
+  public String expansionHubName = "Expansion Hub";
+
   public GamepadEx gamepadEx1;
   public GamepadEx gamepadEx2;
 
@@ -34,7 +41,7 @@ public class MMRobotInner extends Robot {
    * @param type the {@link OpModeType} chosen
    */
   public void initializeSystems(OpModeType type) {
-    CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().reset();
     initBasics();
     initSubsystems();
 
@@ -45,6 +52,14 @@ public class MMRobotInner extends Robot {
     } else if (type == OpModeType.NonCompetition.DEBUG) {
       initDebug();
     }
+  }
+
+  public void setControlHubName(String controlHubName) {
+    this.controlHubName = controlHubName;
+  }
+
+  public void setExpansionHubName(String expansionHubName) {
+    this.expansionHubName = expansionHubName;
   }
 
   public void initAuto() {}
@@ -58,8 +73,16 @@ public class MMRobotInner extends Robot {
       subsystem.reset();
     }
   }
+
   private void initBasics() {
+    HardwareMap hardwareMap = MMRobot.getInstance().currentOpMode.hardwareMap;
     gamepadEx1 = new GamepadEx(currentOpMode.gamepad1);
     gamepadEx2 = new GamepadEx(currentOpMode.gamepad2);
+
+    controlHub = new CuttleRevHub(hardwareMap, controlHubName);
+    if (MMRobot.getInstance().currentOpMode.opModeType
+        != OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+      expansionHub = new CuttleRevHub(hardwareMap, expansionHubName);
+    }
   }
 }

@@ -8,6 +8,7 @@ import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleEncoder;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
 
 public abstract class PidBaseSubsystem extends MotorOrCrServoSubsystem {
@@ -117,7 +118,11 @@ public abstract class PidBaseSubsystem extends MotorOrCrServoSubsystem {
     pidController.setSetpoint(setpoint);
   }
 
-  public void withEncoder(CuttleRevHub revHub, int port, double cpr) {
+  public void setPose(double pose){
+      encoder.setPose(pose);
+  }
+
+  public void withEncoder(CuttleRevHub revHub, int port, double cpr, Direction direction) {
     encoder = new CuttleEncoder(revHub, port, cpr);
   }
 
@@ -128,7 +133,7 @@ public abstract class PidBaseSubsystem extends MotorOrCrServoSubsystem {
    * @param zeroPose encoder value to set when switch is pressed
    */
   public void withZeroSwitch(CuttleDigital zeroSwitch, double zeroPose) {
-    new Trigger(zeroSwitch::getState).whenActive(() -> encoder.setPose(zeroPose));
+    new Trigger(zeroSwitch::getState).whenActive(() -> setPose(zeroPose));
   }
 
   /**
@@ -138,7 +143,7 @@ public abstract class PidBaseSubsystem extends MotorOrCrServoSubsystem {
    * @param zeroPose encoder value to set when switch is pressed
    */
   public void withZeroSupplier(BooleanSupplier zeroSupplier, double zeroPose) {
-    new Trigger(zeroSupplier).whenActive(() -> encoder.setPose(zeroPose));
+    new Trigger(zeroSupplier).whenActive(() -> setPose(zeroPose));
   }
 
   /**

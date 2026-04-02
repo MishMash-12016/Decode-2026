@@ -42,7 +42,7 @@ public class LamLamSubsystem extends MMSubsystem {
 
 
     public LamLamSubsystem() {
-        super();
+        super("lamlam subsystem");
         MMRobot.getInstance().subsystems.add(this);
 
         camera = MMRobot.getInstance().currentOpMode.hardwareMap.get(Limelight3A.class, "limelight");
