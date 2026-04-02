@@ -123,7 +123,7 @@ public abstract class PidBaseSubsystem extends MotorOrCrServoSubsystem {
   }
 
   public void withEncoder(CuttleRevHub revHub, int port, double cpr, Direction direction) {
-    encoder = new CuttleEncoder(revHub, port, cpr);
+    encoder = new CuttleEncoder(revHub, port, cpr, direction);
   }
 
   /**

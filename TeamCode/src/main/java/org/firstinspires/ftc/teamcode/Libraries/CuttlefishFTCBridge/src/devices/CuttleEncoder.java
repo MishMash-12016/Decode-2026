@@ -15,11 +15,12 @@ public class CuttleEncoder {
    * @param port Motor port of the encoder
    * @param countsPerRevolution Number of counts per revolution of the encoder
    */
-  public CuttleEncoder(CuttleRevHub revHub, int port, double countsPerRevolution) {
+  public CuttleEncoder(CuttleRevHub revHub, int port, double countsPerRevolution, Direction direction) {
+    setDirection(direction);
     hub = revHub;
     encTicks = countsPerRevolution;
     mPort = port;
-    poseOffset += getPosition() * direction;
+    poseOffset += getPosition() * this.direction;
   }
 
   /** Get the rotation of the encoder in rotations */
