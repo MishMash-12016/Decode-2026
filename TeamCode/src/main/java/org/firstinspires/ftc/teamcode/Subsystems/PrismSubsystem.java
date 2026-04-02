@@ -103,6 +103,6 @@ public class PrismSubsystem extends MMSubsystem {
   }
 
   @Override
-  public void resetHub() {}
+  public void reset() {}
 
 }

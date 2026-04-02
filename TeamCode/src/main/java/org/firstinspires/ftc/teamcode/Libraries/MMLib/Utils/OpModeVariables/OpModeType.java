@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables;
+package org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables;
 
 import org.firstinspires.ftc.teamcode.MMRobot;
 

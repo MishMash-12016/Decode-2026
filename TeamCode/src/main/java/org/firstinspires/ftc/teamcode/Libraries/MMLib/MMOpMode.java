@@ -13,11 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMWebcamSubsystem;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceSide;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.AllianceColor;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 
 /**
  * this class represents a wrapper for the default Teleop.
@@ -32,9 +30,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.ShooterSubsystem;
 public abstract class MMOpMode extends LinearOpMode {
     List<LynxModule> hubs;
     public OpModeType opModeType;
-
     public AllianceColor allianceColor;
-    public AllianceSide allianceSide;
 
     private final List<Runnable> runOnInit = new ArrayList<>();
     private final List<Command> commandsOnRun = new ArrayList<>();
@@ -51,13 +47,6 @@ public abstract class MMOpMode extends LinearOpMode {
     }
 
     private void robotInit() {
-//        if(opModeType == OpModeType.NonCompetition.DEBUG || opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION){
-//            KoalaLog.setup(hardwareMap);
-//            KoalaLog.start();
-//        }
-//        else {
-//            KoalaLog.setup(hardwareMap, true);
-//        }
         KoalaLog.setup(hardwareMap);
         KoalaLog.start();
 
@@ -90,7 +79,7 @@ public abstract class MMOpMode extends LinearOpMode {
         for (LynxModule module : hubs) {
             module.clearBulkCache();
         }
-        CommandScheduler.getInstance().run();                     //runs the scheduler
+        CommandScheduler.getInstance().run();
         MMDrivetrain.update();
 
         MMWebcamSubsystem.update();
@@ -98,10 +87,7 @@ public abstract class MMOpMode extends LinearOpMode {
 
         KoalaLog.log("looptime", System.currentTimeMillis() - lastLoopTime, true);
 
-        // TODO: move to the if below after check
-        telemetry.addData("looptime", System.currentTimeMillis() - lastLoopTime);
         lastLoopTime = System.currentTimeMillis();
-        telemetry.update();                                       //updates the telemetry
         if(opModeType == OpModeType.NonCompetition.DEBUG || opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION){
             AutoLogManager.periodic();
             FtcDashboard.getInstance().getTelemetry().update();       //updates the dashboard
@@ -125,10 +111,8 @@ public abstract class MMOpMode extends LinearOpMode {
      * Cancels all previous commands and deletes the {@link MMRobot Robot Singleton}
      */
     public void reset() {
-        //TODO reset also reset the default command
         CommandScheduler.getInstance().reset();
         KoalaLog.stop();
-        ShooterSubsystem.instance = null;
     }
 
     public void addRunnableOnInit(Runnable... runOnInit) {

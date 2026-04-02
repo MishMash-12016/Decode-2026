@@ -18,9 +18,8 @@ import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.Controllers.PIDController;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.AllianceColor;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.Drawing;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.HoldPointCommand;
 import org.firstinspires.ftc.teamcode.Libraries.pedroPathing.PinpointVisionLocalizer;
 import org.firstinspires.ftc.teamcode.MMRobot;
@@ -65,10 +64,6 @@ public class MMDrivetrain extends MMSubsystem {
         if (follower == null) {
             follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
         }
-
-        if (follower == null) {
-            follower = Constants.createFollower(MMRobot.getInstance().currentOpMode.hardwareMap);
-        }
         return instance;
     }
 
@@ -88,6 +83,7 @@ public class MMDrivetrain extends MMSubsystem {
     }
 
     public MMDrivetrain() {
+        super("drivetrain");
         headingPID = new PIDController(headingKP, headingKI, headingKD);
         headingPID.enableContinuousInput(0, 360);
         secondaryHeadingPID = new PIDController(secondaryHeadingKP, secondaryHeadingKI, secondaryHeadingKD);
@@ -101,11 +97,6 @@ public class MMDrivetrain extends MMSubsystem {
                 () -> secondaryHeadingKP, () -> secondaryHeadingKI,
                 () -> secondaryHeadingKD,()->headingKS,()->secondaryHeadingKS,
                 () -> headingTolerance, ()-> switchToSecondaryHeading);
-    }
-
-    @Override
-    public void resetHub() {
-        //        instance = null;
     }
 
     public CommandBase driveCommand(
@@ -260,7 +251,7 @@ public class MMDrivetrain extends MMSubsystem {
         return new double[]{
                 TargetPose.getX() * inches_to_meter,
                 TargetPose.getY() * inches_to_meter,
-                TargetPose.getHeading() * inches_to_meter
+                TargetPose.getHeading()
         };
     }
 
@@ -406,7 +397,7 @@ public class MMDrivetrain extends MMSubsystem {
         MMDrivetrain.headingKS = headingKS;
     }
     public static void setSecHeadingKS(double secHeadingKS) {
-        MMDrivetrain.secondaryHeadingKS = secondaryHeadingKS;
+        MMDrivetrain.secondaryHeadingKS = secHeadingKS;
     }
 
     int a = 0;

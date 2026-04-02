@@ -22,7 +22,7 @@ public class CuttleEncoder {
     poseOffset += getPosition() * direction;
   }
 
-  /** Get the rotation of the encoder in radians */
+  /** Get the rotation of the encoder in rotations */
   public double getPosition() {
     return (getCounts() / encTicks - poseOffset) * direction;
   }
@@ -50,5 +50,14 @@ public class CuttleEncoder {
     } else {
       this.direction = 1;
     }
+  }
+
+  /**
+   * Manually set the encoder's current position (in rotations, not radians).
+   *
+   * @param pose Desired position value
+   */
+  public void setPose(double pose) {
+    poseOffset = (getCounts() / encTicks) - (pose * direction);
   }
 }

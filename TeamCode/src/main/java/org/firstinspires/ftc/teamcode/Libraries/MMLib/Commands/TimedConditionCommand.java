@@ -6,15 +6,14 @@ import java.util.function.BooleanSupplier;
 
 public class TimedConditionCommand extends CommandBase {
 
-  private BooleanSupplier condition;
-  private ElapsedTime timer;
-  private double time;
-  private int counter = 0;
+  private final BooleanSupplier condition;
+  private final ElapsedTime timer;
+  private final double startTime;
 
-  public TimedConditionCommand(BooleanSupplier condition, double time) {
+  public TimedConditionCommand(BooleanSupplier condition, double startTime) {
     this.condition = condition;
     this.timer = new ElapsedTime();
-    this.time = time;
+    this.startTime = startTime;
   }
 
   @Override
@@ -26,12 +25,11 @@ public class TimedConditionCommand extends CommandBase {
   public void execute() {
     if (!condition.getAsBoolean()) {
       timer.reset();
-      counter++;
     }
   }
 
   @Override
   public boolean isFinished() {
-    return timer.milliseconds() >= time;
+    return timer.milliseconds() >= startTime;
   }
 }

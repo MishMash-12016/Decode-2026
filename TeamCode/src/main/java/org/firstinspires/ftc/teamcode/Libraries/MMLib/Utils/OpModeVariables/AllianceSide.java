@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables;
+package org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables;
 
 /**
  * this should represent the Side on the alliance (in this season it was far from backdrop or close

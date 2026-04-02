@@ -1,12 +1,11 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib;
 
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import java.util.ArrayList;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 public class MMRobotInner extends Robot {
@@ -37,7 +36,6 @@ public class MMRobotInner extends Robot {
   public void initializeSystems(OpModeType type) {
     CommandScheduler.getInstance().cancelAll();
     initBasics();
-    //        MMDrivetrain.getInstance().getFollower();
     initSubsystems();
 
     if (type == OpModeType.Competition.TELEOP) {
@@ -57,12 +55,11 @@ public class MMRobotInner extends Robot {
 
   public void initSubsystems() {
     for (MMSubsystem subsystem : subsystems) {
-      subsystem.resetHub();
+      subsystem.reset();
     }
   }
   private void initBasics() {
-    HardwareMap hardwareMap = MMRobot.getInstance().currentOpMode.hardwareMap;
-    gamepadEx1 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad1);
-    gamepadEx2 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad2);
+    gamepadEx1 = new GamepadEx(currentOpMode.gamepad1);
+    gamepadEx2 = new GamepadEx(currentOpMode.gamepad2);
   }
 }

@@ -130,7 +130,7 @@ public class LamLamSubsystem extends MMSubsystem {
     }
 
     @Override
-    public void resetHub() {}
+    public void reset() {}
 
     public boolean isDataOld(){
         return camera.getLatestResult().getStaleness() >= 100;

@@ -8,7 +8,7 @@ import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.PID.FeedForwards.SimpleMotorFeedforward;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.PidBaseSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 /**
@@ -29,9 +29,8 @@ public class VelocityPidSubsystem extends PidBaseSubsystem {
   /**
    * @param feedforward the feedforward
    */
-  public VelocityPidSubsystem withFeedForward(SimpleMotorFeedforward feedforward) {
+  public void withFeedForward(SimpleMotorFeedforward feedforward) {
     this.feedforward = feedforward;
-    return this;
   }
 
   /**
@@ -85,19 +84,17 @@ public class VelocityPidSubsystem extends PidBaseSubsystem {
    * @param kv velocity gain
    * @param ka acceleration gain
    */
-  public VelocityPidSubsystem withFeedforward(double ks, double kv, double ka) {
-    return withFeedForward(new SimpleMotorFeedforward(ks, kv, ka));
+  public void withFeedforward(double ks, double kv, double ka) {
+    withFeedForward(new SimpleMotorFeedforward(ks, kv, ka));
   }
 
   /** Sets tolerance for velocity error. */
-  public VelocityPidSubsystem withVelocityTolerance(double tolerance) {
+  public void withVelocityTolerance(double tolerance) {
     pidController.setTolerance(tolerance);
-    return this;
   }
 
-  public VelocityPidSubsystem withAccelerationTolerance(double tolerance) {
+  public void withAccelerationTolerance(double tolerance) {
     pidController.setTolerance(pidController.getErrorTolerance(), tolerance);
-    return this;
   }
 
   private DoubleSupplier debugKpSupplier;
@@ -159,7 +156,7 @@ public class VelocityPidSubsystem extends PidBaseSubsystem {
 
   @Override
   public void periodic() {
-    if (MMRobot.getInstance().currentOpMode == null
+    if (MMRobot.getInstance().currentOpMode != null
         && MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG) {
       try {
         MMUtils.updateIfChanged(debugKpSupplier, pidController::getP, pidController::setP);
@@ -170,11 +167,11 @@ public class VelocityPidSubsystem extends PidBaseSubsystem {
         MMUtils.updateIfChanged(
             debugAccelerationToleranceSupplier,
             pidController::getErrorTolerance,
-            this::withVelocityTolerance);
+            this::withAccelerationTolerance);
         MMUtils.updateIfChanged(
             debugVelocityToleranceSupplier,
             pidController::getErrorRateTolerance,
-            this::withAccelerationTolerance);
+            this::withVelocityTolerance);
 
         MMUtils.updateIfChanged(
             debugIntegralMinRangeSupplier,

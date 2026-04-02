@@ -49,7 +49,7 @@ public class MMWebcamSubsystem extends MMSubsystem {
     }
 
     @Override
-    public void resetHub() {
+    public void reset() {
         instance = null;
     }
 
