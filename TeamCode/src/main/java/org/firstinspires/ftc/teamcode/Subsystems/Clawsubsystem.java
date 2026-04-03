@@ -24,16 +24,10 @@ public class Clawsubsystem extends ServoSubsystem {
 
     public static synchronized Clawsubsystem getInstance() {
         if (instance == null) {
-            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new ClawsubsystemAutoLogged("Clawsubsystem");
-
-            } else {
                 instance = new ClawsubsystemAutoLogged("Clawsubsystem");
             }
-        }
-        return instance;
 
+        return instance;
     }
 
     public Clawsubsystem(String subsystemName) {
