@@ -3,29 +3,23 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import static edu.wpi.first.units.Units.Second;
 import static edu.wpi.first.units.Units.Seconds;
 import static edu.wpi.first.units.Units.Volts;
-
 import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.seattlesolvers.solverslib.command.Command;
-import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
 import com.seattlesolvers.solverslib.command.WaitUntilCommand;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.util.InterpLUT;
 import edu.wpi.first.sysid.SysIdRoutine;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Velocity.VelocityPidSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 
 @Config
 @AutoLog
 public class ShooterSubsystem extends VelocityPidSubsystem {
-  static Motor encoder;
-
   public static double KP = 0.045;
   public static double KI = 0;
   public static double KD = 0;
@@ -56,14 +50,7 @@ public class ShooterSubsystem extends VelocityPidSubsystem {
 
   public static synchronized ShooterSubsystem getInstance() {
     if (instance == null) {
-      if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG
-          || MMRobot.getInstance().currentOpMode.opModeType
-              == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-        instance = new ShooterSubsystemAutoLogged("ShooterSubsystem");
-        CommandScheduler.getInstance().registerSubsystem(instance);
-      } else {
-        instance = new ShooterSubsystem("ShooterSubsystem");
-      }
+      instance = new ShooterSubsystemAutoLogged("ShooterSubsystem");
     }
     return instance;
   }

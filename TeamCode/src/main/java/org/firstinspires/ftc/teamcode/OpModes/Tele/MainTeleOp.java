@@ -50,6 +50,7 @@ public class MainTeleOp extends MMOpMode {
         drivetrain.enableTeleopDriveDefaultCommand(() -> slow, allianceColor);
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
         GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()-> aligned = !aligned);
+
         new Trigger(() -> aligned).whileActiveOnce(drivetrain.enableDriveAligned(() -> slow, allianceColor));
         if(opModeType != OpModeType.Competition.TELEOP)
             GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(()->drivetrain.resetYaw(allianceColor));

@@ -62,10 +62,10 @@ public class ExtOpMode extends MMOpMode {
         /// Shooter
         new Trigger(() -> gamepad1.right_trigger > 0.1)
             .whenActive(new SequentialCommandGroup(
-                    BallStopperSubsystem.getInstance().open(),
+                    BallStopperSubsystem.getInstance().openCommand(),
                     new WaitCommand(200),
                     new ParallelCommandGroup(
-                            BallStopperSubsystem.getInstance().open(),
+                            BallStopperSubsystem.getInstance().openCommand(),
                             IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                             AccelSubsystem.getInstance().setPowerInstantCommand(1)
                     )
