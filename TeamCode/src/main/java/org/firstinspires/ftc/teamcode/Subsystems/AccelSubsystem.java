@@ -16,21 +16,13 @@ public class AccelSubsystem extends MotorOrCrServoSubsystem {
 
   public static synchronized AccelSubsystem getInstance() {
     if (instance == null) {
-      if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG
-          || MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-        instance = new AccelSubsystemAutoLogged("AccelSubsystem");
-
-      } else {
-        instance = new AccelSubsystem("AccelSubsystem");
-      }
+      instance = new AccelSubsystemAutoLogged("AccelSubsystem");
     }
     return instance;
   }
 
   public AccelSubsystem(String subsystemName) {
     super(subsystemName);
-    MMRobot mmRobot = MMRobot.getInstance();
-
     withMotor(MMRobot.getInstance().controlHub, 1, Direction.REVERSE);
   }
 

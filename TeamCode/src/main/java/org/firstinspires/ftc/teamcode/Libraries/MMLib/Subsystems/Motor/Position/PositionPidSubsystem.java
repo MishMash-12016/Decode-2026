@@ -9,13 +9,9 @@ import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.PidB
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class PositionPidSubsystem extends PidBaseSubsystem {
-
-    private static final Logger log = LoggerFactory.getLogger(PositionPidSubsystem.class);
-    double positiveKf = 0;
+  double positiveKf = 0;
   double negativeKf = 0;
 
   public PositionPidSubsystem(String subsystemName) {
@@ -108,8 +104,8 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
    * put null
    *
    * @param debugKpSupplier Kp
-   * @param debugKiSupplier Kd
-   * @param debugKdSupplier Ki
+   * @param debugKiSupplier Ki
+   * @param debugKdSupplier Kd
    * @param debugIZoneSupplier iZone
    * @param debugPositionToleranceSupplier position tolerance
    * @param debugVelocityToleranceSupplier velocity tolerance
@@ -166,7 +162,7 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
             pidController::getMaximumIntegral,
             this::withMaxIntegralRange);
       } catch (Exception e) {
-        log.error("e: ", e);
+          throw new RuntimeException(e);
       }
     }
   }
