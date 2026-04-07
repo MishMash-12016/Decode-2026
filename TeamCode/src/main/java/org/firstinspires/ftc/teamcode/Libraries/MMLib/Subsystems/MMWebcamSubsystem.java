@@ -45,11 +45,12 @@ public class MMWebcamSubsystem extends MMSubsystem {
     private double angle = 0;
     private Pose3D robotPose = new Pose3D(new Position(), new YawPitchRollAngles(AngleUnit.DEGREES, 0,0,0,0));
     public MMWebcamSubsystem(){
+        super("MMWebcamSubsystem");
         initAprilTag();
     }
 
     @Override
-    public void resetHub() {
+    public void reset() {
         instance = null;
     }
 

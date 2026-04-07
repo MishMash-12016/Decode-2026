@@ -11,8 +11,8 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.AllianceColor;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.Subsystems.AccelSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.BallStopperSubsystem;

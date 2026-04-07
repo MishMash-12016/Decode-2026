@@ -5,10 +5,12 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 
 public abstract class MMSubsystem extends SubsystemBase {
 
-  public MMSubsystem() {
+  public final String subsystemName;
+  public MMSubsystem(String subsystemName) {
     super();
     MMRobot.getInstance().subsystems.add(this);
+    this.subsystemName = subsystemName;
   }
 
-  public abstract void resetHub();
+  public void reset(){};
 }

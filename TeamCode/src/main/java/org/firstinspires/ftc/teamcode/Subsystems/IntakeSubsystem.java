@@ -6,18 +6,18 @@ import Ori.Coval.Logging.Logger.KoalaLog;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.seattlesolvers.solverslib.command.Command;
 
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleDigital;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 @Config
 @AutoLog
 public class IntakeSubsystem extends MotorOrCrServoSubsystem {
-    static DigitalChannel frstSensor;
-    static DigitalChannel scndSensor;
+    static CuttleDigital frstSensor;
+    static CuttleDigital scndSensor;
 
     // Singleton instance
     public static IntakeSubsystem instance;
@@ -27,13 +27,7 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
      */
     public static synchronized IntakeSubsystem getInstance() {
         if (instance == null) {
-            if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG ||
-                    MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-                instance = new IntakeSubsystemAutoLogged("IntakeSubsystem");
-
-            } else {
-                instance = new IntakeSubsystem("IntakeSubsystem");
-            }
+            instance = new IntakeSubsystemAutoLogged("IntakeSubsystem");
         }
         return instance;
     }
@@ -41,13 +35,10 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
 
     public IntakeSubsystem(String subsystemName) {
         super(subsystemName);
-        MMRobot mmRobot = MMRobot.getInstance();
-        HardwareMap hardwareMap = MMRobot.getInstance().currentOpMode.hardwareMap;
+        frstSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
+        scndSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 6);
 
-        frstSensor = hardwareMap.get(DigitalChannel.class, "CHDPort4");
-        scndSensor = hardwareMap.get(DigitalChannel.class, "CHDPort6");
-
-        withMotor("CHPort2",Direction.REVERSE);
+        withMotor(MMRobot.getInstance().controlHub, 2, Direction.REVERSE);
 
     }
 
@@ -61,7 +52,7 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
     }
 
     @Override
-    public void resetHub() {
+    public void reset() {
         instance = null;
     }
 }

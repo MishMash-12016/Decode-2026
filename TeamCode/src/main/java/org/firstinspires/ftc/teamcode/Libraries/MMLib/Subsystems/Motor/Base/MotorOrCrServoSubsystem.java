@@ -9,6 +9,10 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 
 import edu.wpi.first.units.measure.Voltage;
 import java.util.ArrayList;
+
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleCrServo;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMMotorOrCrServo;
@@ -17,15 +21,13 @@ import org.firstinspires.ftc.teamcode.MMRobot;
 public class MotorOrCrServoSubsystem extends MMSubsystem {
     // List of motors or crServos driven by this subsystem
     private final ArrayList<MMMotorOrCrServo> motorOrCrServoList = new ArrayList<>();
-    public final String subsystemName;
     public ZeroPowerBehavior zeroPowerBehavior;
 
     public double maxPower = 1.0;
     public double minPower = -1.0;
 
     public MotorOrCrServoSubsystem(String subsystemName){
-        super();
-        this.subsystemName = subsystemName;
+        super(subsystemName);
     }
 
     /**
@@ -92,71 +94,45 @@ public class MotorOrCrServoSubsystem extends MMSubsystem {
         return setPowerInstantCommand(0);
     }
 
-    /**
-     * adds a motor to this subsystem
-     * @param motorName
-     * @param direction
-     */
-    public MotorOrCrServoSubsystem withMotor(String motorName, Direction direction){
-        return withMotor(new Motor(MMRobot.getInstance().currentOpMode.hardwareMap, motorName), direction);
-    }
-
-    public MotorOrCrServoSubsystem withMotor(Motor motor, Direction direction){
-        MMMotorOrCrServo internalMotor = new MMMotorOrCrServo(motor);
-        internalMotor.setDirection(direction);
+    public void withMotor(CuttleRevHub revHub, int portNumber, Direction direction){
+    MMMotorOrCrServo internalMotor = new MMMotorOrCrServo(new CuttleMotor(revHub, portNumber, direction));
         if(zeroPowerBehavior != null){
             internalMotor.setZeroPowerBehavior(zeroPowerBehavior);
         }
-
         motorOrCrServoList.add(internalMotor);
-        return this;
     }
 
-//    public MotorOrCrServoSubsystem withCrServo(CuttleRevHub revHub, int port, Direction direction){
-//        MMMotorOrCrServo crServo = new MMMotorOrCrServo(new CuttleCrServo(revHub, port, direction));
-//
-//        motorOrCrServoList.add(crServo);
-//
-//        return this;
-//    }
+    public void withCrServo(CuttleRevHub revHub, int port, Direction direction){
+        MMMotorOrCrServo crServo = new MMMotorOrCrServo(new CuttleCrServo(revHub, port, direction));
+        motorOrCrServoList.add(crServo);
+    }
 
     @AutoLogOutput
     public double getPower(){
         return motorOrCrServoList.get(0).getPower();
     }
 
-    public MotorOrCrServoSubsystem withZeroPowerBehavior(ZeroPowerBehavior zeroPowerBehavior){
+    public void withZeroPowerBehavior(ZeroPowerBehavior zeroPowerBehavior){
         for (MMMotorOrCrServo motor: motorOrCrServoList){
             motor.setZeroPowerBehavior(zeroPowerBehavior);
         }
         this.zeroPowerBehavior = zeroPowerBehavior;
-        return this;
     }
 
-    public MotorOrCrServoSubsystem withSetDefaultCommand(Command defaultCommand){
+    public void withSetDefaultCommand(Command defaultCommand){
         setDefaultCommand(defaultCommand);
-        return this;
     }
 
-    public double withMaxPower(double maxPower){
+    public void withMaxPower(double maxPower){
         this.maxPower = maxPower;
-        return maxPower;
     }
 
-    public double withMinPower(double minPower){
+    public void withMinPower(double minPower){
         this.minPower = minPower;
-        return minPower;
     }
 
     public void withMaxPowerAndMinPower(double maxPower, double minPower){
         this.maxPower = maxPower;
         this.minPower = minPower;
-    }
-
-    @Override
-    public void resetHub(){
-/*        for(MMMotorOrCrServo motorOrCrServo : motorOrCrServoList){
-            motorOrCrServo.resetHub();
-        }*/
     }
 }

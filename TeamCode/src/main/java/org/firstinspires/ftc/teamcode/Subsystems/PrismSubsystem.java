@@ -26,6 +26,7 @@ public class PrismSubsystem extends MMSubsystem {
   private final GoBildaPrismDriver prism;
 
   public PrismSubsystem() {
+    super("prismSubsystem");
     prism = MMRobot.getInstance().currentOpMode.hardwareMap.get(GoBildaPrismDriver.class, "prism");
     prism.setStripLength(36);
     prism.setTargetFPS(60);
@@ -34,39 +35,39 @@ public class PrismSubsystem extends MMSubsystem {
 
   private void buildArtboards() {
 
-    //SOLID RED ARTBOARD
+    // SOLID RED ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.RED,15));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.RED, 15));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0);
 
-    //SOLID GREEN ARTBOARD
+    // SOLID GREEN ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.GREEN,8));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.GREEN, 8));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_1);
 
-    //SOLID BLUE ARTBOARD
+    // SOLID BLUE ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.BLUE,10));
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.BLUE, 10));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_2);
 
-    //BLINK GREEN ARTBOARD
-    prism.clearAllAnimations();
-    prism.insertAndUpdateAnimation(GoBildaPrismDriver.LayerHeight.LAYER_0,
-            new PrismAnimations.Blink(Color.GREEN, Color.TRANSPARENT, 400,800));
-    prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_4);
-
-    //BLANK ARTBOARD
+    // BLINK GREEN ARTBOARD
     prism.clearAllAnimations();
     prism.insertAndUpdateAnimation(
-            GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.TRANSPARENT,0));
+        GoBildaPrismDriver.LayerHeight.LAYER_0,
+        new PrismAnimations.Blink(Color.GREEN, Color.TRANSPARENT, 400, 800));
+    prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_4);
+
+    // BLANK ARTBOARD
+    prism.clearAllAnimations();
+    prism.insertAndUpdateAnimation(
+        GoBildaPrismDriver.LayerHeight.LAYER_0, new PrismAnimations.Solid(Color.TRANSPARENT, 0));
     prism.saveCurrentAnimationsToArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_5);
 
     prism.clearAllAnimations();
   }
-
 
   public Command green() {
     return new InstantCommand(
@@ -80,29 +81,32 @@ public class PrismSubsystem extends MMSubsystem {
 
   public Command off() {
     return new InstantCommand(
-            () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_5));
+        () -> prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_5));
   }
 
   private void blinkGreen() {
     prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_4);
   }
+
   private void red() {
     prism.loadAnimationsFromArtboard(GoBildaPrismDriver.Artboard.ARTBOARD_0);
   }
 
-  public Command isReady(){
-    return new RunCommand(() -> {
-      double shooterError = Math.abs(ShooterSubsystem.getInstance().getError());
-      double headingError = Math.abs(MMDrivetrain.getInstance().headingPID.getError());
-      double headingTol = MMDrivetrain.headingTolerance;
+  public Command isReady() {
+    return new RunCommand(
+        () -> {
+          double shooterError = Math.abs(ShooterSubsystem.getInstance().getError());
+          double headingError = Math.abs(MMDrivetrain.getInstance().headingPID.getError());
+          double headingTol = MMDrivetrain.headingTolerance;
 
-      if (KoalaLog.log("yitzhak is gay: " , Math.abs(shooterError) < 2 && headingError < headingTol,true))
-        blinkGreen();
-      else red();
-    }, this);
+          if (KoalaLog.log(
+              "yitzhak is gay: ", Math.abs(shooterError) < 2 && headingError < headingTol, true))
+            blinkGreen();
+          else red();
+        },
+        this);
   }
 
   @Override
-  public void resetHub() {}
-
+  public void reset() {}
 }

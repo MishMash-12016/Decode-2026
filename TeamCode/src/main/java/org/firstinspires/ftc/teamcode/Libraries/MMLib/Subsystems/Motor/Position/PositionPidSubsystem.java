@@ -7,11 +7,10 @@ import java.util.Set;
 import java.util.function.DoubleSupplier;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.PidBaseSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 public class PositionPidSubsystem extends PidBaseSubsystem {
-
   double positiveKf = 0;
   double negativeKf = 0;
 
@@ -72,28 +71,23 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
    * Sets the acceptable position error tolerance for the PID setpoint.
    *
    * @param tolerance allowable error range
-   * @return this subsystem for chaining
    */
-  public PositionPidSubsystem withPositionTolerance(double tolerance) {
+  public void withPositionTolerance(double tolerance) {
     pidController.setTolerance(tolerance, pidController.getErrorRateTolerance());
-    return this;
   }
 
   /**
    * Sets the acceptable velocity error tolerance for the PID setpoint.
    *
    * @param tolerance allowable error range
-   * @return this subsystem for chaining
    */
-  public PositionPidSubsystem withVelocityTolerance(double tolerance) {
+  public void withVelocityTolerance(double tolerance) {
     pidController.setTolerance(pidController.getErrorTolerance(), tolerance);
-    return this;
   }
 
-  public PositionPidSubsystem withKf(double positiveKf, double negativeKf) {
+  public void withKf(double positiveKf, double negativeKf) {
     this.positiveKf = positiveKf;
     this.negativeKf = negativeKf;
-    return this;
   }
 
   private DoubleSupplier debugKpSupplier;
@@ -110,8 +104,8 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
    * put null
    *
    * @param debugKpSupplier Kp
-   * @param debugKiSupplier Kd
-   * @param debugKdSupplier Ki
+   * @param debugKiSupplier Ki
+   * @param debugKdSupplier Kd
    * @param debugIZoneSupplier iZone
    * @param debugPositionToleranceSupplier position tolerance
    * @param debugVelocityToleranceSupplier velocity tolerance
@@ -119,7 +113,7 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
    * @param debugIntegralMaxRangeSupplier integral max range
    * @implNote !NOTICE THIS ONLY WORKS IF IN DEBUG MODE
    */
-  public PidBaseSubsystem withDebugPidSuppliers(
+  public void withDebugPidSuppliers(
       DoubleSupplier debugKpSupplier,
       DoubleSupplier debugKiSupplier,
       DoubleSupplier debugKdSupplier,
@@ -137,8 +131,6 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
     this.debugVelocityToleranceSupplier = debugVelocityToleranceSupplier;
     this.debugIntegralMinRangeSupplier = debugIntegralMinRangeSupplier;
     this.debugIntegralMaxRangeSupplier = debugIntegralMaxRangeSupplier;
-
-    return this;
   }
 
   @Override
@@ -170,7 +162,7 @@ public class PositionPidSubsystem extends PidBaseSubsystem {
             pidController::getMaximumIntegral,
             this::withMaxIntegralRange);
       } catch (Exception e) {
-        System.out.println(e);
+          throw new RuntimeException(e);
       }
     }
   }

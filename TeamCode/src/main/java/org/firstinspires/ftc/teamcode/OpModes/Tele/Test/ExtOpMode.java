@@ -18,10 +18,9 @@ import org.firstinspires.ftc.teamcode.CommandGroups.IntakeCommandGroup;
 import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.AllianceColor;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
-import org.firstinspires.ftc.teamcode.OpModes.Tele.MainTeleOp;
 import org.firstinspires.ftc.teamcode.Subsystems.AccelSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.BallStopperSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.IntakeSubsystem;
@@ -63,10 +62,10 @@ public class ExtOpMode extends MMOpMode {
         /// Shooter
         new Trigger(() -> gamepad1.right_trigger > 0.1)
             .whenActive(new SequentialCommandGroup(
-                    BallStopperSubsystem.getInstance().open(),
+                    BallStopperSubsystem.getInstance().openCommand(),
                     new WaitCommand(200),
                     new ParallelCommandGroup(
-                            BallStopperSubsystem.getInstance().open(),
+                            BallStopperSubsystem.getInstance().openCommand(),
                             IntakeSubsystem.getInstance().setPowerInstantCommand(1),
                             AccelSubsystem.getInstance().setPowerInstantCommand(1)
                     )

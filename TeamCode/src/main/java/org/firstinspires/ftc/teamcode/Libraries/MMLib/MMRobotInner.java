@@ -5,12 +5,18 @@ import com.seattlesolvers.solverslib.command.CommandScheduler;
 import com.seattlesolvers.solverslib.command.Robot;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import java.util.ArrayList;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 public class MMRobotInner extends Robot {
   public MMOpMode currentOpMode;
+  public CuttleRevHub controlHub;
+  public CuttleRevHub expansionHub;
+  public String controlHubName = "Control Hub";
+  public String expansionHubName = "Expansion Hub";
+
   public GamepadEx gamepadEx1;
   public GamepadEx gamepadEx2;
 
@@ -35,9 +41,8 @@ public class MMRobotInner extends Robot {
    * @param type the {@link OpModeType} chosen
    */
   public void initializeSystems(OpModeType type) {
-    CommandScheduler.getInstance().cancelAll();
+    CommandScheduler.getInstance().reset();
     initBasics();
-    //        MMDrivetrain.getInstance().getFollower();
     initSubsystems();
 
     if (type == OpModeType.Competition.TELEOP) {
@@ -49,6 +54,14 @@ public class MMRobotInner extends Robot {
     }
   }
 
+  public void setControlHubName(String controlHubName) {
+    this.controlHubName = controlHubName;
+  }
+
+  public void setExpansionHubName(String expansionHubName) {
+    this.expansionHubName = expansionHubName;
+  }
+
   public void initAuto() {}
 
   public void initTele() {}
@@ -57,12 +70,19 @@ public class MMRobotInner extends Robot {
 
   public void initSubsystems() {
     for (MMSubsystem subsystem : subsystems) {
-      subsystem.resetHub();
+      subsystem.reset();
     }
   }
+
   private void initBasics() {
     HardwareMap hardwareMap = MMRobot.getInstance().currentOpMode.hardwareMap;
-    gamepadEx1 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad1);
-    gamepadEx2 = new GamepadEx(MMRobot.getInstance().currentOpMode.gamepad2);
+    gamepadEx1 = new GamepadEx(currentOpMode.gamepad1);
+    gamepadEx2 = new GamepadEx(currentOpMode.gamepad2);
+
+    controlHub = new CuttleRevHub(hardwareMap, controlHubName);
+    if (MMRobot.getInstance().currentOpMode.opModeType
+        != OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
+      expansionHub = new CuttleRevHub(hardwareMap, expansionHubName);
+    }
   }
 }

@@ -1,18 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
 import Ori.Coval.Logging.AutoLogOutput;
-import Ori.Coval.Logging.Logger.KoalaLog;
 
-import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.Pose;
-import com.seattlesolvers.solverslib.command.WaitCommand;
 import com.seattlesolvers.solverslib.geometry.Pose2d;
 import com.seattlesolvers.solverslib.geometry.Rotation2d;
 import com.seattlesolvers.solverslib.geometry.Translation2d;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMPoint2D;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.AllianceColor;
 
 public class RobotUtils {
 

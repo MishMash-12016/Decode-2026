@@ -9,7 +9,7 @@ import com.seattlesolvers.solverslib.util.InterpLUT;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Servo.ServoSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 
@@ -54,22 +54,14 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
   public static synchronized ShooterHoodSubsystem getInstance() {
     if (instance == null) {
-      if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG
-          || MMRobot.getInstance().currentOpMode.opModeType
-              == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-        instance = new ShooterHoodSubsystemAutoLogged("ShooterHoodSubsystem");
-
-      } else {
-        instance = new ShooterHoodSubsystem("ShooterHoodSubsystem");
-      }
+      instance = new ShooterHoodSubsystemAutoLogged("ShooterHoodSubsystem");
     }
     return instance;
   }
 
   public ShooterHoodSubsystem(String subsystemName) {
     super(subsystemName);
-    ///port 1
-    withServo("SHPort1",Direction.FORWARD,0);
+    withServo(MMRobot.getInstance().expansionHub, 2, Direction.FORWARD,0);
   }
 
 
@@ -85,7 +77,7 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
   }
 
   @Override
-  public void resetHub() {
+  public void reset() {
     instance = null;
   }
 }

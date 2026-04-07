@@ -1,29 +1,23 @@
 package org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils;
 
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior;
-import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleCrServo;
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleMotor;
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
-import org.firstinspires.ftc.teamcode.MMRobot;
 
 /** A class that handles the interaction of motors and crServos as a single object */
 public class MMMotorOrCrServo {
 
-  private Motor motor;
-//  private CuttleCrServo crServo;
-  private String crServoName;
+  private CuttleMotor motor;
+  private CuttleCrServo crServo;
 
-  public MMMotorOrCrServo(Motor motor) {
+  public MMMotorOrCrServo(CuttleMotor motor) {
     this.motor = motor;
   }
 
-//  public MMMotorOrCrServo(CuttleCrServo crServo) {
-//    this.crServo = crServo;
-//  }
-
-//  public MMMotorOrCrServo(String crServoName) {
-//    this.crServoName = crServoName;
-//    this.crServo = new CuttleCrServo(MMRobot.getInstance().currentOpMode.hardwareMap, crServoName);
-//  }
+  public MMMotorOrCrServo(CuttleCrServo crServo) {
+    this.crServo = crServo;
+  }
 
   /**
    * sets the motor/crServo power
@@ -32,45 +26,35 @@ public class MMMotorOrCrServo {
    */
   public void setPower(double power) {
     if (motor != null) {
-      motor.set(power);
+      motor.setPower(power);
     }
-//    else if (crServo != null) {
-//      crServo.setPower(power);
-//    }
+    else if (crServo != null) {
+      crServo.setPower(power);
+    }
   }
 
   public void setDirection(Direction direction) {
     if (motor != null) {
-      if (direction == Direction.FORWARD){
-        motor.setInverted(false);
-      }else{
-        motor.setInverted(true);
-      }
+        motor.setDirection(direction);
     }
-//    else if (crServo != null) {
-//      crServo.setDirection(direction);
-//    }
+    else if (crServo != null) {
+      crServo.setDirection(direction);
+    }
   }
 
   /** sets the zero power behavior(!! this only effect motors !!) */
   public void setZeroPowerBehavior(ZeroPowerBehavior zeroPowerBehavior) {
     if (motor != null) {
-      if(zeroPowerBehavior == ZeroPowerBehavior.BRAKE){
-        motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-      }
-      else{
-        motor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
-      }
+      motor.setZeroPowerBehaviour(zeroPowerBehavior);
     }
   }
 
   public double getPower() {
-    return motor.getRawPower();
-//    if (motor != null) {
-//      return motor.getRawPower();
-//    }
-//    else {
-//      return crServo.getPower();
-//    }
+    if (motor != null) {
+      return motor.getPower();
+    }
+    else {
+      return crServo.getPower();
+    }
   }
 }

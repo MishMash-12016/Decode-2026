@@ -2,11 +2,10 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 
 import Ori.Coval.Logging.AutoLog;
 import com.acmerobotics.dashboard.config.Config;
-import com.seattlesolvers.solverslib.command.Command;
 
 import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.Motor.Base.MotorOrCrServoSubsystem;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 
 @Config
@@ -17,27 +16,19 @@ public class AccelSubsystem extends MotorOrCrServoSubsystem {
 
   public static synchronized AccelSubsystem getInstance() {
     if (instance == null) {
-      if (MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.DEBUG
-          || MMRobot.getInstance().currentOpMode.opModeType == OpModeType.NonCompetition.EXPERIMENTING_NO_EXPANSION) {
-        instance = new AccelSubsystemAutoLogged("AccelSubsystem");
-
-      } else {
-        instance = new AccelSubsystem("AccelSubsystem");
-      }
+      instance = new AccelSubsystemAutoLogged("AccelSubsystem");
     }
     return instance;
   }
 
   public AccelSubsystem(String subsystemName) {
     super(subsystemName);
-    MMRobot mmRobot = MMRobot.getInstance();
-
-    withMotor("CHPort3", Direction.REVERSE);
+    withMotor(MMRobot.getInstance().controlHub, 1, Direction.REVERSE);
   }
 
 
   @Override
-  public void resetHub() {
+  public void reset() {
     instance = null;
   }
 }

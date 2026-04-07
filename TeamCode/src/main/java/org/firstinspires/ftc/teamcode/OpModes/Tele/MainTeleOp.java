@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.CommandGroups.ShootCommandGroup;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.MMUtils;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.AllianceColor;
-import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVeriables.OpModeType;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.AllianceColor;
+import org.firstinspires.ftc.teamcode.Libraries.MMLib.Utils.OpModeVariables.OpModeType;
 import org.firstinspires.ftc.teamcode.MMRobot;
 import org.firstinspires.ftc.teamcode.Subsystems.PrismSubsystem;
 import org.firstinspires.ftc.teamcode.Subsystems.ShooterHoodSubsystem;
@@ -50,6 +50,7 @@ public class MainTeleOp extends MMOpMode {
         drivetrain.enableTeleopDriveDefaultCommand(() -> slow, allianceColor);
         GamepadEx1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(() -> slow = !slow);
         GamepadEx1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(()-> aligned = !aligned);
+
         new Trigger(() -> aligned).whileActiveOnce(drivetrain.enableDriveAligned(() -> slow, allianceColor));
         if(opModeType != OpModeType.Competition.TELEOP)
             GamepadEx1.getGamepadButton(GamepadKeys.Button.SHARE).whenPressed(()->drivetrain.resetYaw(allianceColor));

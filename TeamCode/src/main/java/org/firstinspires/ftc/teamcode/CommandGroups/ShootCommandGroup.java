@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.CommandGroups;
 
-import com.pedropathing.follower.Follower;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.ParallelCommandGroup;
 import com.seattlesolvers.solverslib.command.SequentialCommandGroup;
@@ -31,7 +30,7 @@ public class ShootCommandGroup {
 
   public static Command smartUpShoot() {
     return new SequentialCommandGroup(
-        BallStopperSubsystem.getInstance().open(),
+        BallStopperSubsystem.getInstance().openCommand(),
         new WaitCommand(200),
         upShoot(),
         new WaitUntilCommand(
@@ -44,7 +43,7 @@ public class ShootCommandGroup {
 
   public static Command twoOneShoot() {
     return new SequentialCommandGroup(
-            BallStopperSubsystem.getInstance().open(),
+            BallStopperSubsystem.getInstance().openCommand(),
             new WaitCommand(200),
             new ParallelCommandGroup(
                     AccelSubsystem.getInstance().setPowerInstantCommand(1),
