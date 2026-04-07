@@ -1,17 +1,15 @@
 package org.firstinspires.ftc.teamcode.Subsystems;
 
+import Ori.Coval.Logging.Logger.KoalaLog;
 import com.seattlesolvers.solverslib.command.Command;
 import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.RunCommand;
-
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.MMDrivetrain;
 import org.firstinspires.ftc.teamcode.Libraries.MMLib.Subsystems.MMSubsystem;
 import org.firstinspires.ftc.teamcode.Libraries.Prism.Color;
 import org.firstinspires.ftc.teamcode.Libraries.Prism.GoBildaPrismDriver;
 import org.firstinspires.ftc.teamcode.Libraries.Prism.PrismAnimations;
 import org.firstinspires.ftc.teamcode.MMRobot;
-
-import Ori.Coval.Logging.Logger.KoalaLog;
 
 public class PrismSubsystem extends MMSubsystem {
   private static PrismSubsystem instance;
@@ -108,5 +106,5 @@ public class PrismSubsystem extends MMSubsystem {
   }
 
   @Override
-  public void reset() {}
+  public void reset() {instance = null;}
 }
