@@ -27,6 +27,9 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.configuration.LynxConstants;
 import com.qualcomm.robotcore.hardware.usb.RobotArmingStateNotifier;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.utils.Direction;
+
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -188,7 +191,7 @@ public class CuttleRevHub  extends LynxCommExceptionHandler implements RobotArmi
     * @param port The motor port of the encoder
     * @param counts Number of encoder counts per revolution
     */
-   public CuttleEncoder getEncoder(int port,double counts) {return new CuttleEncoder(this,port,counts);}
+   public CuttleEncoder getEncoder(int port,double counts) {return new CuttleEncoder(this,port,counts, Direction.FORWARD);}
 
    /**
     * Return a configured analog encoder
