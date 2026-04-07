@@ -18,7 +18,7 @@ public class BallStopperSubsystem extends ServoSubsystem {
 
   public static synchronized BallStopperSubsystem getInstance() {
     if (instance == null) {
-      instance = new BallStopperSubsystemAutoLogged("BallStopperSubsystem");
+      instance = new BallStopperSubsystem("BallStopperSubsystem");
     }
     return instance;
   }
