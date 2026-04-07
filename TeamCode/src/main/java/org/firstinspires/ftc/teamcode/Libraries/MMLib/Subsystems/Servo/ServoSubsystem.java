@@ -43,7 +43,7 @@ public class ServoSubsystem extends MMSubsystem {
     return new InstantCommand(() -> setPosition(position), this);
   }
 
-  /**
+  /**6
    * Instantly moves all servos to the given position.
    *
    * @param position the target position [0.0, 1.0]
