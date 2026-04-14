@@ -52,5 +52,6 @@ public class TestOpMode extends MainTeleOp {
     ShooterSubsystem.getInstance().periodic();
 
     telemetry.addData("farSpeed: ", farSpeed);
+    telemetry.addData("4: ", 4);
   }
 }

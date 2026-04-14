@@ -35,10 +35,12 @@ public class IntakeSubsystem extends MotorOrCrServoSubsystem {
 
     public IntakeSubsystem(String subsystemName) {
         super(subsystemName);
-        frstSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 4);
-        scndSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 6);
+        //lower sen
+        frstSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 2);
+        //upper sen
+        scndSensor = new CuttleDigital(MMRobot.getInstance().controlHub, 0);
 
-        withMotor(MMRobot.getInstance().controlHub, 2, Direction.REVERSE);
+        withMotor(MMRobot.getInstance().controlHub, 3, Direction.FORWARD);
 
     }
 

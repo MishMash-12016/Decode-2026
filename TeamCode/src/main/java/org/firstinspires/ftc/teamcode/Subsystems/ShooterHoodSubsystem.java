@@ -61,7 +61,9 @@ public class ShooterHoodSubsystem extends ServoSubsystem {
 
   public ShooterHoodSubsystem(String subsystemName) {
     super(subsystemName);
-    withServo(MMRobot.getInstance().expansionHub, 2, Direction.FORWARD,0);
+
+    ///port 5
+    withServo("shooterHood",Direction.FORWARD,0);
   }
 
 

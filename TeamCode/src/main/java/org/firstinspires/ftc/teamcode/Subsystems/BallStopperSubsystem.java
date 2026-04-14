@@ -27,7 +27,7 @@ public class BallStopperSubsystem extends ServoSubsystem {
     super(subsystemName);
 
     /// port 0
-    withServo(MMRobot.getInstance().expansionHub, 0, Direction.FORWARD, 0);
+    withServo("ballStopper",Direction.FORWARD,0);
   }
 
   public Command closeCommand() {
