@@ -76,8 +76,9 @@ public abstract class MMOpMode extends LinearOpMode {
      * and {@link org.firstinspires.ftc.teamcode.Libraries.CuttlefishFTCBridge.src.devices.CuttleRevHub Control & Expansion Hub} on Play Loop.
      */
     public void onPlayLoopUpdates() {
-        for (LynxModule module : hubs) {
-            module.clearBulkCache();
+        MMRobot.getInstance().controlHub.pullBulkData();
+        if (MMRobot.getInstance().expansionHub != null){
+            MMRobot.getInstance().expansionHub.pullBulkData();
         }
         CommandScheduler.getInstance().run();
         MMDrivetrain.update();
