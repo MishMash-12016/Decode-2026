@@ -56,7 +56,7 @@ public class LamlamCommands {
                 new WaitUntilCommand(() -> LamLamSubsystem.getInstance().getPipelineIndex() == LamLamSubsystem.getInstance().currentPipeline)
         );
     }
-    @AutoLogOutput
+
     public static boolean isResult(){
         LLResult last = LamLamSubsystem.getInstance().getLatestResult();
         if (last == null || last.getDetectorResults().isEmpty())

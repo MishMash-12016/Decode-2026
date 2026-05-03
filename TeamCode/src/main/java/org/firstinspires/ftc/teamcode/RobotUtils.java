@@ -65,7 +65,6 @@ public class RobotUtils {
     }
 
 
-    @AutoLogOutput
     public static double getDistanceToTarget() {
         Pose2d robotPose = MMUtils.PedroPoseToSolversPose2d(
                 MMDrivetrain.getInstance().getFollower().getPose());
